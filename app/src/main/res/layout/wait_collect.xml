@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:background="@drawable/main_bg_send_search"
+    android:layout_marginBottom="10dp"
+    android:orientation="vertical">
+    
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:minHeight="50dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/ic_deliver"
+            android:scaleType="fitCenter"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+        
+        <RelativeLayout
+            android:paddingTop="5dp"
+            android:paddingLeft="15dp"
+            android:minHeight="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/id_send_person"
+                android:textColor="@color/grey_7"
+                android:textSize="14sp"
+                android:text="令狐冲"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_marginLeft="20dp"
+                android:id="@+id/id_send_phone"
+                android:layout_toRightOf="@+id/id_send_person"
+                android:textColor="@color/grey_7"
+                android:textSize="14sp"
+                android:text="18435151842"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_send_time"
+                android:layout_marginRight="10dp"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp"
+                android:text="18:32"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tv_send_person_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/id_send_person"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="20dp"
+                android:text="详细地址"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="10dp"
+        android:background="@color/grey_6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp">
+
+        <TextView
+            android:gravity="center_vertical"
+            android:text="收件人: "
+            android:layout_width="55dp"
+            android:textSize="13sp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_receive_person"
+            android:gravity="center_vertical"
+            android:text="马云"
+            android:textSize="13sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:minHeight="30dp"
+        android:textSize="13sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginTop="5dp"
+            android:text="地址: "
+            android:layout_width="55dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_receive_address"
+            android:gravity="center_vertical"
+            android:text="马云"
+            android:textSize="13sp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:gravity="center_vertical"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        
+        <Button
+            android:id="@+id/bt_immediately_seal"
+            android:background="@drawable/bt_bg_1"
+            android:textSize="13sp"
+            android:textColor="@color/whilte"
+            android:text="立即打印"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_width="65dp"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/bt_first_save"
+            android:layout_toLeftOf="@+id/bt_immediately_seal"
+            android:background="@drawable/bt_bg_1"
+            android:textSize="13sp"
+            android:textColor="@color/whilte"
+            android:text="先存后打"
+            android:layout_marginRight="10dp"
+            android:layout_width="65dp"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/bt_cannel_order"
+            android:layout_toLeftOf="@+id/bt_first_save"
+            android:background="@drawable/bt_bg_2"
+            android:textSize="13sp"
+            android:textColor="@color/grey_7"
+            android:text="取消订单"
+            android:layout_marginRight="10dp"
+            android:layout_width="65dp"
+            android:layout_height="30dp" />
+    </RelativeLayout>
+
+</LinearLayout>

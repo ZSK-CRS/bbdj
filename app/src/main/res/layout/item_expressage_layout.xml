@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:background="@color/whilte"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_item_expressage_logo"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/iv_send_one"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:id="@+id/tv_item_expressage_name"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:text="快递名称"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

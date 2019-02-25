@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/blank"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/grey_6"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:text="title"
+        android:textSize="14sp" />
+
+    <com.mt.bbdj.baseconfig.view.GridViewForScrollView
+        android:id="@+id/gridView"
+        android:listSelector="@android:color/transparent"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
+        android:numColumns="2" />
+
+
+</LinearLayout>

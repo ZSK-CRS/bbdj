@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whilte"
+    android:orientation="vertical"
+    tools:context=".community.activity.IdentificationActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_address_title"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/mainColor">
+
+        <RelativeLayout
+            android:id="@+id/iv_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="身份认证"
+            android:textColor="@color/whilte"
+            android:textSize="15sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_main_point" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:gravity="center_vertical"
+            android:text="根据国家规定，寄快递需要实名认证"
+            android:textColor="@color/blue"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="7dp"
+        android:background="@color/grey_6" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/ic_id_front"
+                android:layout_width="150dp"
+                android:layout_height="94dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_stroke_rl" />
+
+            <ImageView
+                android:id="@+id/iv_add_front"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/ic_add" />
+
+            <TextView
+                android:id="@+id/tv_front_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_add_front"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:text="上传身份证正面"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/ic_id_back"
+                android:layout_width="150dp"
+                android:layout_height="94dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bg_stroke_rl" />
+
+            <ImageView
+                android:id="@+id/iv_add_back"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:src="@drawable/ic_add" />
+
+            <TextView
+                android:id="@+id/tv_back_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_add_back"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:text="上传身份证反面"
+                android:textColor="@color/grey_2"
+                android:textSize="13sp" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_4" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="姓名:"
+            android:textColor="@color/grey_7"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/tv_person_name"
+            android:layout_width="match_parent"
+            android:background="@null"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:hint="请输入姓名"
+            android:text=""
+            android:textColor="@color/grey_7"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_4" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:layout_width="100dp"
+            android:background="@null"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="身份证号:"
+            android:textColor="@color/grey_7"
+            android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/tv_person_number"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:hint="请输入身份证号码"
+            android:background="@null"
+            android:text=""
+            android:textColor="@color/grey_7"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_4" />
+
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="25dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="说明: "
+            android:textColor="@color/grey_2"
+            android:textSize="13sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="选择上传身份证照片或者填写身份证号和姓名二选一，首次寄件需要认证一次即可!"
+            android:textColor="@color/grey_2"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/bt_commit_next"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/bt_bg"
+        android:text="提交认证"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
+
+</LinearLayout>

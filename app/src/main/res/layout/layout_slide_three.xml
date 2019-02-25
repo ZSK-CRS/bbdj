@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/whilte"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center_horizontal">
+
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="100dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_slide_three" />
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <TextView
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="@color/grey_7"
+        android:gravity="center"
+        android:text="随时随地查询寄收件"
+        android:layout_marginBottom="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp" />
+
+   <Button
+       android:id="@+id/bt_start"
+       android:background="@drawable/bt_bg_8"
+       android:text="立刻体验"
+       android:textColor="#ffffff"
+       android:textSize="15sp"
+       android:layout_marginBottom="60dp"
+       android:layout_width="150dp"
+       android:layout_height="45dp" />
+
+</LinearLayout>

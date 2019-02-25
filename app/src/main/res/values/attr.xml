@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    Copyright 2017 Yan Zhenjie
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <declare-styleable name="SlidingMenu">
+        <attr name="mode">
+            <enum name="left" value="0" />
+            <enum name="right" value="1" />
+        </attr>
+        <attr name="viewAbove" format="reference" />
+        <attr name="viewBehind" format="reference" />
+        <attr name="behindOffset" format="dimension" />
+        <attr name="behindWidth" format="dimension" />
+        <attr name="behindScrollScale" format="float" />
+        <attr name="touchModeAbove">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+        </attr>
+        <attr name="touchModeBehind">
+            <enum name="margin" value="0" />
+            <enum name="fullscreen" value="1" />
+        </attr>
+        <attr name="shadowDrawable" format="reference" />
+        <attr name="shadowWidth" format="dimension" />
+        <attr name="fadeEnabled" format="boolean" />
+        <attr name="fadeDegree" format="float" />
+        <attr name="selectorEnabled" format="boolean" />
+        <attr name="selectorDrawable" format="reference" />
+    </declare-styleable>
+
+    <attr name="toolbar" format="reference" />
+    <attr name="album.dropdown.title.color" format="reference|color" />
+    <attr name="album.dropdown.count.color" format="reference|color" />
+    <attr name="album.element.color" format="reference|color" />
+    <attr name="album.thumbnail.placeholder" format="reference|color" />
+    <attr name="album.emptyView" format="reference" />
+    <attr name="album.emptyView.textColor" format="reference|color" />
+    <attr name="listPopupWindowStyle" format="reference" />
+    <attr name="page.bg" format="reference|color" />
+    <attr name="bottomToolbar.bg" format="reference|color" />
+    <attr name="bottomToolbar.preview.textColor" format="reference|color" />
+    <attr name="bottomToolbar.apply.textColor" format="reference|color" />
+    <attr name="preview.bottomToolbar.back.textColor" format="reference|color" />
+    <attr name="preview.bottomToolbar.apply.textColor" format="reference|color" />
+    <attr name="item.placeholder" format="reference|color" />
+    <attr name="item.checkCircle.backgroundColor" format="reference|color" />
+    <attr name="item.checkCircle.borderColor" format="reference|color" />
+    <attr name="capture.textColor" format="reference|color" />
+    <declare-styleable name="Search_View">
+        <attr name="textSizeSearch" format="dimension" />
+        <attr name="textColorSearch" format="color" />
+        <attr name="textHintSearch" format="string" />
+        <attr name="searchBlockHeight" format="integer" />
+        <attr name="searchBlockColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="NodeProgressView">
+        <attr name="width" format="dimension" />
+        <attr name="nodeRadius" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="LazyViewPager">
+        <attr name="init_lazy_item_offset" format="float" />
+    </declare-styleable>
+
+    <!-- 条形控制控件自定义属性 -->
+    <declare-styleable name="LineControllerView">
+        <!-- 名称 -->
+        <attr name="name" format="string" />
+        <!-- 内容或当前状态 -->
+        <attr name="content_" format="string" />
+        <!-- 是否是列表中最后一个 -->
+        <attr name="isBottom" format="boolean" />
+        <!-- 是否可以跳转 -->
+        <attr name="canNav" format="boolean" />
+        <!-- 是否是开关 -->
+        <attr name="isSwitch" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="AvatarImageBehavior">
+        <attr name="finalYPosition" format="dimension" />
+        <attr name="startXPosition" format="dimension" />
+        <attr name="startToolbarPosition" format="dimension" />
+        <attr name="startHeight" format="dimension" />
+        <attr name="finalHeight" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="RatioImageView">
+        <attr name="ratio" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="NineGridLayout">
+        <attr name="sapcing" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="TimeLineMarker">
+        <attr name="markerSize" format="dimension" />
+        <attr name="marker" format="color|reference" />
+        <attr name="beginLine" format="color|reference" />
+        <attr name="endLine" format="color|reference" />
+        <attr name="lineSize" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="HorizontalProgressBarWithNumber">
+        <attr name="progress_unreached_color" format="color" />
+        <attr name="progress_reached_color" format="color" />
+        <attr name="progress_reached_bar_height" format="dimension" />
+        <attr name="progress_unreached_bar_height" format="dimension" />
+        <attr name="progress_text_size" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+        <attr name="progress_text_offset" format="dimension" />
+        <attr name="progress_text_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="WaterMaskView">
+        <!--栏背景色-->
+        <attr name="title_background_color" format="color" />
+        <!--左边按钮是否可见-->
+        <attr name="left_button_visible" format="boolean" />
+        <!--公司文字-->
+        <attr name="company_text" format="string" />
+        <!--公司文字颜色-->
+        <attr name="title_text_color" format="color" />
+        <!--logo文字-->
+        <attr name="logo_button_text" format="string" />
+        <!--左边按钮文字颜色-->
+        <attr name="logo_button_text_color" format="color" />
+        <!--左边按钮图标-->
+        <attr name="logo_button_drawable" format="reference|integer" />
+        <!--相关信息文字-->
+        <attr name="info_text" format="string" />
+        <!--相关信息文字颜色-->
+        <attr name="info_text_color" format="color" />
+        <!--右边按钮图标-->
+        <attr name="right_button_drawable" format="reference|integer" />
+    </declare-styleable>
+    <declare-styleable name="VelocimeterView">
+        <attr name="inside_progress_color" format="color" />
+        <attr name="external_progress_color" format="color" />
+        <attr name="progress_blur_color" format="color" />
+        <attr name="bottom_velocimeter_color" format="color" />
+        <attr name="internal_velocimeter_color" format="color" />
+        <attr name="needle_image" format="reference" />
+        <attr name="needle_blur_color" format="color" />
+        <attr name="digital_number_color" format="color" />
+        <attr name="digital_number_blur_color" format="color" />
+        <attr name="max" format="integer" />
+        <attr name="units" format="string" />
+        <attr name="show_bottom_bar" format="boolean" />
+    </declare-styleable>
+    <declare-styleable name="ArrowTextView">
+        <attr name="circle" format="boolean" />
+        <attr name="radius" format="dimension" />
+        <attr name="arrowWidth" format="dimension" />
+        <attr name="arrowHeight" format="dimension" />
+        <attr name="bg" format="color" />
+    </declare-styleable>
+    <declare-styleable name="CirclePercentBar">
+        <attr name="arcColor" format="color" />
+        <attr name="arcWidth" format="dimension" />
+        <attr name="centerTextColor" format="color" />
+        <attr name="centerTextSize" format="dimension" />
+        <attr name="circleRadius" format="dimension" />
+        <attr name="arcStartColor" format="color" />
+        <attr name="arcEndColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="ContactItemView">
+        <attr name="contactItemImage" format="reference" />
+        <attr name="contactItemName" format="string" />
+    </declare-styleable>
+    <declare-styleable name="BannerView">
+        <!-- 是否支持循环, 默认 true -->
+        <attr name="bvIsLoop" format="boolean" />
+        <!-- 是否支持自动滚动, 默认 true -->
+        <attr name="bvIsAuto" format="boolean" />
+        <!-- 滚动延时, 默认5000ms -->
+        <attr name="bvDelay" format="integer" />
+        <!-- 滚动间隔, 默认5000ms -->
+        <attr name="bvInterval" format="integer" />
+        <!-- 高宽比(height/width)-->
+        <attr name="bvAspectRatio" format="float" />
+
+        <!-- 底部背景条颜色, 默认透明 -->
+        <attr name="bvBarColor" format="color" />
+        <!-- 底部背景条在滚动到最后一个item时是否可见, 默认 true -->
+        <attr name="bvBarVisibleWhenLast" format="boolean" />
+
+        <!-- 底部背景条padding, 默认10dp -->
+        <attr name="bvBarPaddingLeft" format="dimension" />
+        <attr name="bvBarPaddingTop" format="dimension" />
+        <attr name="bvBarPaddingRight" format="dimension" />
+        <attr name="bvBarPaddingBottom" format="dimension" />
+
+        <!-- 标题文字颜色, 默认 #ffffff -->
+        <attr name="bvTitleColor" format="color" />
+        <!-- 标题文字大小, 默认 14sp -->
+        <attr name="bvTitleSize" format="dimension" />
+        <!-- 标题是否可见, 默认 false  -->
+        <attr name="bvTitleVisible" format="boolean" />
+
+
+        <!-- 指示器是否可见, 默认 auto  -->
+        <attr name="bvIndicatorVisible" format="integer">
+            <enum name="auto" value="0" />
+            <enum name="always" value="1" />
+            <enum name="never" value="2" />
+        </attr>
+
+        <!-- 指示器位置, 默认 center-->
+        <attr name="bvIndicatorGravity">
+            <enum name="center" value="17" />
+            <enum name="left" value="3" />
+            <enum name="right" value="5" />
+        </attr>
+
+        <!-- 指示器项的 宽度/高度/间距, 默认 6dp -->
+        <attr name="bvIndicatorWidth" format="dimension" />
+        <attr name="bvIndicatorHeight" format="dimension" />
+        <attr name="bvIndicatorGap" format="dimension" />
+
+        <!-- 指示器未选中颜色, 默认 #88ffffff  -->
+        <attr name="bvIndicatorColor" format="color" />
+        <!-- 指示器选中颜色, 默认 #ffffff -->
+        <attr name="bvIndicatorColorSelected" format="color" />
+
+        <!-- 指示器未选中drawable资源 -->
+        <attr name="bvIndicatorDrawable" format="reference" />
+        <!-- 指示器选中drawable资源 -->
+        <attr name="bvIndicatorDrawableSelected" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="MaterialSpinner" tools:ignore="ResourceName">
+        <attr name="ms_arrow_tint" format="color" />
+        <attr name="ms_hide_arrow" format="boolean" /><!--spinner箭头隐藏，默认不隐藏-->
+        <attr name="ms_background_color" format="color" /><!--背景色-->
+        <attr name="ms_text_color" format="color" /><!--item字体颜色-->
+        <attr name="ms_background_selector" format="integer" /><!--spinner的item设置最底层的颜色（一般会被表层颜色覆盖，效果不大）-->
+        <attr name="ms_popupwindow_maxheight" format="dimension" /> <!--spinner下拉框最高高度-->
+        <attr name="ms_popupwindow_height" format="dimension"><!--spinner下拉框高度,list高度不够，默认伸展长度-->
+            <enum name="fill_parent" value="-1" />
+            <enum name="match_parent" value="-1" />
+            <enum name="wrap_content" value="-2" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="durban_CropView">
+
+        <!--Durban image view-->
+        <attr name="durban_aspect_ratio_x" format="float" />
+        <attr name="durban_aspect_ratio_y" format="float" />
+
+        <!--Overlay view-->
+        <attr name="durban_show_oval_crop_frame" format="boolean" />
+        <attr name="durban_circle_dimmed_layer" format="boolean" />
+        <attr name="durban_dimmed_color" format="color" />
+
+        <attr name="durban_grid_stroke_size" format="dimension" />
+        <attr name="durban_grid_color" format="color" />
+        <attr name="durban_grid_row_count" format="integer" />
+        <attr name="durban_grid_column_count" format="integer" />
+        <attr name="durban_show_grid" format="boolean" />
+
+        <attr name="durban_frame_stroke_size" format="dimension" />
+        <attr name="durban_frame_color" format="color" />
+        <attr name="durban_show_frame" format="boolean" />
+
+    </declare-styleable>
+    <!--<declare-styleable name="RoundImageView">-->
+        <!--<attr name="circle" format="boolean" />-->
+        <!--&lt;!&ndash;<attr name="radius" format="dimension" />&ndash;&gt;-->
+    <!--</declare-styleable>-->
+
+</resources>

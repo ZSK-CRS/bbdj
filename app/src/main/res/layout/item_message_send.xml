@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:paddingBottom="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="订单号: "
+            android:textColor="@color/grey_7"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_message_dingdan"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="4552122052222232"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_message_state"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="发送失败"
+            android:textColor="@color/red"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/ll_yundan"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="运单号: "
+                android:textColor="@color/grey_7"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_message_yundan"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="4552122052222232"
+                android:textColor="@color/grey_2"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/ll_yundan"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="手机号: "
+                android:textColor="@color/grey_7"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_message_phone"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="18435151846"
+                android:textColor="@color/grey_2"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/tv_message_again"
+            android:layout_width="65dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bt_bg_1"
+            android:text="重新发送"
+            android:textColor="@color/whilte"
+            android:textSize="14sp" />
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="寄件人: "
+            android:textColor="@color/grey_7"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_message_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="李楠"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
+            android:paddingTop="3dp"
+            android:text="内    容: "
+            android:textColor="@color/grey_7"
+            android:textSize="14sp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/tv_message_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="2dp"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:layout_marginBottom="5dp"
+            android:text="您的快件已经被中通快递揽件成功，感谢使用兵兵到家为您服务,期待您再次光临！"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp" />
+        />
+
+    </LinearLayout>
+    
+    <View
+        android:background="@color/grey_4"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</LinearLayout>

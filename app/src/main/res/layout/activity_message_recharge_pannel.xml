@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whilte"
+    android:orientation="vertical"
+    tools:context=".community.activity.MessageRechargePannelActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/mainColor">
+
+        <RelativeLayout
+            android:layout_centerVertical="true"
+            android:id="@+id/iv_back"
+            android:gravity="center"
+            android:layout_width="35dp"
+            android:layout_height="35dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="短信充值"
+            android:textColor="@color/whilte"
+            android:textSize="@dimen/standardtitleSize" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:textSize="15sp"
+        android:gravity="center_vertical"
+        android:text="充值中心:"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/com_rl_recharge_pannel"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+
+    <Button
+        android:id="@+id/bt_recharge"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_height="40dp"
+        android:background="@drawable/bt_bg"
+        android:text="立即充值"
+        android:textColor="#ffffff"
+        android:textSize="15sp" />
+
+
+    <LinearLayout
+        android:layout_marginRight="25dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:textSize="13sp"
+            android:textColor="@color/grey_2"
+            android:text="购买说明: "
+            android:layout_width="65dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:textSize="13sp"
+            android:textColor="@color/grey_2"
+            android:text="1."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:padding="3dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="13sp"
+            android:textColor="@color/grey_2"
+            android:text="短信用于寄件收短信通知客户"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_marginRight="25dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="85dp"
+            android:text="2."
+            android:textColor="@color/grey_2"
+            android:textSize="13sp" />
+
+        <TextView
+            android:padding="3dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="13sp"
+            android:textColor="@color/grey_2"
+            android:text="支付费用直接从账户余额中扣除，请保证账户余额充足！"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginRight="25dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginLeft="85dp"
+            android:textSize="13sp"
+            android:textColor="@color/grey_2"
+            android:text="3."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:padding="3dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="13sp"
+            android:textColor="@color/grey_2"
+            android:text="支付成功后若未到账，请与客服联系\n联系电话: 010 - 53682031"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

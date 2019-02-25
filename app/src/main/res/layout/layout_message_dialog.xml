@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dialog_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/shape1"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="8dp"
+        android:text="title"
+        android:textSize="13sp" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="#000000"
+        android:textSize="13sp" />
+
+    <View
+        android:id="@+id/dialog_line1"
+        android:layout_width="match_parent"
+        android:layout_height="0.5px"
+        android:background="#2c000000"
+      />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+        <TextView
+            android:id="@+id/dialog_negative"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button1"
+            android:gravity="center"
+            android:textColor="#007aff"
+            android:text="取消"
+            android:textSize="13sp" />
+
+        <View
+            android:id="@+id/split_vertical"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="#2c000000" />
+
+        <TextView
+            android:id="@+id/dialog_positive"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/selector_button2"
+            android:gravity="center"
+            android:textColor="#007aff"
+            android:text="确定"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/dialog_positive_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/selector_button_one"
+            android:gravity="center"
+            android:visibility="gone"
+            android:textColor="#007aff"
+            android:text="知道了"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

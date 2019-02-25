@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">兵兵到家</string>
+    <string name="title_select">兵兵到家</string>
+    <string name="main_tab_first_page">首页</string>
+    <string name="main_tab_first_order">订单</string>
+    <string name="main_tab_first_data">数据</string>
+    <string name="main_tab_first_my">我的</string>
+
+    <string name="durban_title_crop">图片裁剪</string>
+    <string name="durban_menu_crop">OK</string>
+
+    <string name="durban_controller_title_rotation">Rotation</string>
+    <string name="durban_controller_title_scale">Scale</string>
+
+    <string name="touch_to_focus">触摸屏幕对焦</string>
+    <string name="crop_fail">裁剪失败</string>
+
+    <string name="timepicker_year">年</string>
+    <string name="timepicker_month">月</string>
+    <string name="timepicker_day">日</string>
+    <string name="timepicker_hour">时</string>
+    <string name="timepicker_min">分</string>
+    <string name="timepicker_title">选择时间</string>
+    <string name="timepicker_finish">确认</string>
+    <string name="timepicker_title_default">设置</string>
+</resources>

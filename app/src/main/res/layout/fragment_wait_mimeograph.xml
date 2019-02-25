@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/whilte"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/rl_mimeogra_title"
+        android:background="@color/grey_6"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:paddingLeft="20dp"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:text="前一天"
+            android:layout_width="70dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:textSize="14sp"
+            android:gravity="center"
+            android:text="今日"
+            android:textColor="@color/mainColor"
+            android:layout_centerInParent="true"
+            android:layout_width="70dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:paddingRight="20dp"
+            android:layout_alignParentRight="true"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:text="后一天"
+            android:layout_width="70dp"
+            android:layout_height="match_parent" />
+    </RelativeLayout>
+
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:layout_below="@+id/rl_mimeogra_title"
+        android:id="@+id/rl_wait_print"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="2dp"
+        android:paddingBottom="15dp">
+
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
+
+    <TextView
+        android:id="@+id/tv_no_address"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:paddingTop="150dp"
+        android:text="暂无数据哦~"
+        android:textColor="@color/grey_2"
+        android:textSize="14sp" />
+
+</RelativeLayout>

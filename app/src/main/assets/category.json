@@ -1,0 +1,239 @@
+{
+  "code": 0,
+  "data": [
+    {
+      "menuTitle": "信封",
+      "dataList": [
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "顺丰信封",
+          "imgURL": "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1550481938&di=b7d5cb4290576f6cc4561f05e6967b0b&src=http://www.gdtengen.com/sysadm/products/uploadfiles/20160112031442_img2.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "中通信封",
+          "imgURL": "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1550481938&di=b7d5cb4290576f6cc4561f05e6967b0b&src=http://www.gdtengen.com/sysadm/products/uploadfiles/20160112031442_img2.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "申通信封",
+          "imgURL": "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1550481938&di=b7d5cb4290576f6cc4561f05e6967b0b&src=http://www.gdtengen.com/sysadm/products/uploadfiles/20160112031442_img2.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "韵达信封",
+          "imgURL": "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1550481938&di=b7d5cb4290576f6cc4561f05e6967b0b&src=http://www.gdtengen.com/sysadm/products/uploadfiles/20160112031442_img2.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "中国邮政信封",
+          "imgURL": "https://timgsa.baidu.com/timg?image&quality=80&size=b10000_10000&sec=1550481938&di=b7d5cb4290576f6cc4561f05e6967b0b&src=http://www.gdtengen.com/sysadm/products/uploadfiles/20160112031442_img2.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        }
+      ]
+    },
+    {
+      "menuTitle": "编织袋",
+      "dataList": [
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "顺丰编织袋",
+          "imgURL": "http://dimg.52bjw.cn/image/upload/e5/81/c1/6f/e581c16f57ad38c0846893d38dcf6b0a.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "中通编织袋",
+          "imgURL": "http://dimg.52bjw.cn/image/upload/e5/81/c1/6f/e581c16f57ad38c0846893d38dcf6b0a.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "申通编织袋",
+          "imgURL": "http://dimg.52bjw.cn/image/upload/e5/81/c1/6f/e581c16f57ad38c0846893d38dcf6b0a.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "韵达编织袋",
+          "imgURL": "http://dimg.52bjw.cn/image/upload/e5/81/c1/6f/e581c16f57ad38c0846893d38dcf6b0a.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "圆通编织袋",
+          "imgURL": "http://dimg.52bjw.cn/image/upload/e5/81/c1/6f/e581c16f57ad38c0846893d38dcf6b0a.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "优速编织袋",
+          "imgURL": "http://dimg.52bjw.cn/image/upload/e5/81/c1/6f/e581c16f57ad38c0846893d38dcf6b0a.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "中国邮政编织袋",
+          "imgURL": "http://dimg.52bjw.cn/image/upload/e5/81/c1/6f/e581c16f57ad38c0846893d38dcf6b0a.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        }
+      ]
+    },
+    {
+      "menuTitle": "防水袋",
+      "dataList": [
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "顺丰防水袋",
+          "imgURL": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3695539943,3689451791&fm=26&gp=0.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "中通防水袋",
+          "imgURL": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3695539943,3689451791&fm=26&gp=0.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "申通防水袋",
+          "imgURL": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3695539943,3689451791&fm=26&gp=0.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "优速防水袋",
+          "imgURL": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3695539943,3689451791&fm=26&gp=0.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        },
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "中国邮政防水袋",
+          "imgURL": "https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3695539943,3689451791&fm=26&gp=0.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        }
+      ]
+    },
+    {
+      "menuTitle": "面单",
+      "dataList": [
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "面单",
+          "imgURL": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550488240494&di=325357d58b4bd8bf634205a190e3400d&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D3749116693%2C418685456%26fm%3D214%26gp%3D0.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        }
+      ]
+    },
+    {
+      "menuTitle": "短信",
+      "dataList": [
+        {
+          "id": "",
+          "desc": "",
+          "type": "category",
+          "title": "快递短信",
+          "imgURL": "https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1550483707144&di=610e3dbd2ad675177e7509eec7795c94&imgtype=jpg&src=http%3A%2F%2Fimg3.imgtn.bdimg.com%2Fit%2Fu%3D1799017013%2C1643565576%26fm%3D214%26gp%3D0.jpg",
+          "linkType": "storeTags",
+          "linkParam": "",
+          "online_time": "",
+          "offline_time": ""
+        }
+      ]
+    }
+  ]
+}

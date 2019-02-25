@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/whilte"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dp_5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_select_ic"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/main_shap_cirle" />
+
+        <TextView
+            android:id="@+id/item_tv_cause"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:text="重复订单"
+            android:textColor="@color/grey_2"
+            android:textSize="13sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_remark_layout"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="-5dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="10dp"
+            android:layout_marginLeft="40dp"
+            android:src="@drawable/ic_select_mark" />
+
+        <EditText
+            android:id="@+id/item_et_marke"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="-2dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/bg_et_mark"
+            android:gravity="top"
+            android:hint="请说明"
+            android:paddingLeft="10dp"
+            android:paddingTop="8dp"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
