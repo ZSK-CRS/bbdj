@@ -254,6 +254,11 @@ public class InterApi {
      */
      public static final String ACTION_CONSUME_RECORD_REQUEST = "getConsumelist700";
 
+    /**
+     * 获取客户列表
+     */
+    public static final String ACTION_CLIENT_LIST_REQUEST = "getCustomerlist800";
+
 
 
 
