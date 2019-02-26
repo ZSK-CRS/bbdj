@@ -1336,4 +1336,147 @@ public class NoHttpRequest {
         request.add("user_id", user_id);
         return request;
     }
+
+    /**
+     * 获取客户管理列表
+     * @param user_id
+     * @return
+     */
+    public static Request<String> getClientManagerListRequest(String user_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_CLIENT_MANAGER_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CLIENT_MANAGER_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        return request;
+    }
+
+    /**
+     * 添加客户信息
+     * @param user_id   用户id
+     * @param realname   姓名
+     * @param telephone   联系电话
+     * @param region   地区
+     * @param address 详细地址
+     * @param company_name   公司名称
+     * @param content  备注
+     * @return
+     */
+    public static Request<String> addClientRequest(String user_id,String realname,
+                                                   String telephone,String region,
+                                                   String address,String company_name,String content) {
+
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_ADD_CLIENT_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_ADD_CLIENT_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("realname", realname);
+        request.add("telephone", telephone);
+        request.add("region", region);
+        request.add("address", address);
+        request.add("company_name", company_name);
+        request.add("content", content);
+        return request;
+    }
+
+    /**
+     * 编辑客户信息
+     * @param user_id   用户id
+     * @param realname  姓名
+     * @param telephone  电话号码
+     * @param region  地区
+     * @param address  地址
+     * @param company_name   公司名称
+     * @param content  备注
+     * @param customer_id  地址的id
+     * @return
+     */
+    public static Request<String> editClientMessage(String user_id,String realname,
+                                                    String telephone,String region,
+                                                    String address,String company_name,String content,String customer_id) {
+
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_EDIT_CLIENT_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_EDIT_CLIENT_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("realname", realname);
+        request.add("telephone", telephone);
+        request.add("region", region);
+        request.add("address", address);
+        request.add("company_name", company_name);
+        request.add("content", content);
+        request.add("customer_id", customer_id);
+        return request;
+    }
+
+    /**
+     * 删除客户信息
+     * @param user_id   用户id
+     * @param customer_id  地址id
+     * @return
+     */
+    public static Request<String> deleteClientRequest(String user_id,String customer_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_DELETE_CLIENT_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_DELETE_CLIENT_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("customer_id", customer_id);
+        return request;
+    }
+
+    /**
+     * 获取客户订单
+     * @param user_id
+     * @param customer_id  客户id
+     * @param page 页码
+     * @return
+     */
+    public static Request<String> getClientOrderDetailRequest(String user_id,String customer_id,int page) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GET_CLIENT_ORDER_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GET_CLIENT_ORDER_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("customer_id", customer_id);
+        request.add("page", page);
+        return request;
+    }
 }

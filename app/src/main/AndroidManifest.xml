@@ -256,7 +256,10 @@
         <activity android:name=".community.activity.GoodsDetailActivity" />
         <activity android:name=".community.activity.SystemMessageAboutActivity" />
         <activity android:name=".community.activity.WebDetailActivity" />
-        <activity android:name=".community.activity.ClientManagerActivity"></activity>
+        <activity android:name=".community.activity.ClientManagerActivity" />
+        <activity android:name=".community.activity.ClientMessageDetail" />
+        <activity android:name=".community.activity.ClientMessageChangeActivity" />
+        <activity android:name=".community.activity.OrderDetailActivity"></activity>
     </application>
 
 </manifest>

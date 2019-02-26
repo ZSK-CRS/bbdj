@@ -255,10 +255,34 @@ public class InterApi {
      public static final String ACTION_CONSUME_RECORD_REQUEST = "getConsumelist700";
 
     /**
-     * 获取客户列表
+     * 获取客户含订单列表
      */
-    public static final String ACTION_CLIENT_LIST_REQUEST = "getCustomerlist800";
+    public static final String ACTION_CLIENT_LIST_REQUEST = "getCustomerdata800";
 
+    /**
+     * 获取客户管理列表
+     */
+    public static final String ACTION_CLIENT_MANAGER_REQUEST = "getCustomerlist800";
+
+    /**
+     *  添加客户信息
+     */
+    public static final String ACTION_ADD_CLIENT_REQUEST = "addCustomer800";
+
+    /**
+     * 删除客户信息
+     */
+    public static final String ACTION_DELETE_CLIENT_REQUEST = "deleteCustomer800";
+
+    /**
+     * 编辑客户信息
+     */
+    public static final String ACTION_EDIT_CLIENT_REQUEST = "saveCustomer800";
+
+    /**
+     * 获取客户订单
+     */
+    public static final String ACTION_GET_CLIENT_ORDER_REQUEST = "getCustomerMailing800";
 
 
 

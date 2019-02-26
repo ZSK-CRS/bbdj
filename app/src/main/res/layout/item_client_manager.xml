@@ -5,6 +5,7 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:id="@+id/tv_name"
         android:gravity="center"
         android:text="张三"
         android:textColor="@color/grey_2"
@@ -21,6 +22,7 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tv_today_sume"
             android:gravity="center"
             android:text="张三"
             android:textColor="@color/grey_2"
@@ -29,6 +31,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tv_today_money"
             android:gravity="center"
             android:text="张三"
             android:textColor="@color/grey_2"
@@ -46,6 +49,7 @@
         android:layout_height="match_parent">
 
         <TextView
+            android:id="@+id/tv_month_sum"
             android:gravity="center"
             android:text="张三"
             android:textColor="@color/grey_2"
@@ -54,6 +58,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tv_month_money"
             android:gravity="center"
             android:text="张三"
             android:textColor="@color/grey_2"
@@ -64,6 +69,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tv_content"
         android:gravity="center"
         android:text="每月8号结账"
         android:textColor="@color/grey_2"
