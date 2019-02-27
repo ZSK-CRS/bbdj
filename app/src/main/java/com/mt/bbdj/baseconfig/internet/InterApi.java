@@ -284,7 +284,15 @@ public class InterApi {
      */
     public static final String ACTION_GET_CLIENT_ORDER_REQUEST = "getCustomerMailing800";
 
+    /**
+     * 我的订单
+     */
+    public static final String ACTION_MY_ORDER_REQUEST = "getmyOrders960";
 
+    /**
+     * 获取订单详情
+     */
+    public static final String ACTION_MY_ORDER_DETAIL_REQUEST = "getmyOrdersdetails960";
 
 
 

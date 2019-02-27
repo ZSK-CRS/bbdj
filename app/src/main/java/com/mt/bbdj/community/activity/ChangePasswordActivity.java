@@ -66,8 +66,6 @@ public class ChangePasswordActivity extends BaseActivity {
             userBaseMessage = userBaseMessages.get(0);
             user_id = userBaseMessage.getUser_id();
         }
-        //初始化请求队列
-        mRequestQueue = NoHttp.newRequestQueue();
     }
 
 

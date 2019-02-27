@@ -1479,4 +1479,50 @@ public class NoHttpRequest {
         request.add("page", page);
         return request;
     }
+
+    /**
+     * 个人中心订单
+     * @param user_id
+     * @param type
+     * @return
+     */
+    public static Request<String> getMyOrderList(String user_id,int type) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_MY_ORDER_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_MY_ORDER_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("type", type);
+        return request;
+    }
+
+    /**
+     * 获取订单详情
+     * @param user_id   用户id
+     * @param order_id  订单详情
+     * @return
+     */
+    public static Request<String> getMyOrderDetailRequest(String user_id,String order_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_MY_ORDER_DETAIL_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_MY_ORDER_DETAIL_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("order_id", order_id);
+        return request;
+    }
 }

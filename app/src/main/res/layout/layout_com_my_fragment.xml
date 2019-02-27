@@ -80,7 +80,7 @@
         android:paddingRight="10dp">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="20dp"
             android:layout_height="20dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_base_message" />
@@ -130,6 +130,82 @@
             android:gravity="center_vertical"
             android:paddingLeft="10dp"
             android:text="我的钱包"
+            android:textColor="@color/grey_7"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_right" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_6" />
+
+    <LinearLayout
+        android:id="@+id/ll_my_order"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_order" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="我的订单"
+            android:textColor="@color/grey_7"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_arrow_right" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_6" />
+
+    <LinearLayout
+        android:id="@+id/ll_address_manager"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_address" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:text="地址管理"
             android:textColor="@color/grey_7"
             android:textSize="16sp" />
 

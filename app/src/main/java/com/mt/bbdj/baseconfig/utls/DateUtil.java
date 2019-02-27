@@ -121,7 +121,7 @@ public class DateUtil {
 
     //转化时间戳位标准时间格式
     public static String changeStampToStandrdTime(String dataFormat, String timeStr) {
-        if (timeStr == null || "".equals(timeStr)) {
+        if (timeStr == null || "".equals(timeStr) || "null".equals(timeStr)) {
             return "";
         }
         long time = Long.parseLong(timeStr);

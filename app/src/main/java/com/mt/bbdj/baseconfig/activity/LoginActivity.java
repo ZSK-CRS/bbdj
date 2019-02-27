@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
         mCityDao = mDaoSession.getCityDao();
         mCountyDao = mDaoSession.getCountyDao();
         mMingleAreaDao = mDaoSession.getMingleAreaDao();
-
+        editor = SharedPreferencesUtil.getEditor();
         editor.putBoolean("isPlaySound",true);
         editor.commit();
     }
@@ -192,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
         JSONObject dataObject = jsonObject.getJSONObject("data");
         //保存登录信息
         saveUserMessage(dataObject);
-        SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
+
         editor.putString("userName",userName);
         editor.putString("password",password);
         editor.putBoolean("update",true);
