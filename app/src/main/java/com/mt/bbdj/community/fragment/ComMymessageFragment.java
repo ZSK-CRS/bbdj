@@ -28,6 +28,7 @@ import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.activity.AboutAppActivity;
 import com.mt.bbdj.community.activity.BaseMessageActivity;
+import com.mt.bbdj.community.activity.MyAddressActivity;
 import com.mt.bbdj.community.activity.MyOrderActivity;
 import com.mt.bbdj.community.activity.MywalletActivity;
 import com.mt.bbdj.community.activity.SettingCenterActivity;
@@ -109,7 +110,7 @@ public class ComMymessageFragment extends BaseFragment {
 
     @OnClick({R.id.ll_base_message, R.id.ll_my_wallet, R.id.ll_center_sitting,
             R.id.ll_about_app, R.id.ll_connect_service, R.id.ll_connect_manager,
-            R.id.bt_cannel,R.id.ll_my_order})
+            R.id.bt_cannel,R.id.ll_my_order,R.id.ll_address_manager})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_message:
@@ -120,6 +121,9 @@ public class ComMymessageFragment extends BaseFragment {
                 break;
             case R.id.ll_my_order:
                 showOrderPannel();        //我的订单
+                break;
+            case R.id.ll_address_manager:
+                showAddressManagerPannel();   //地址管理
                 break;
             case R.id.ll_center_sitting:
                 showSettingPannel();     //设置中心
@@ -138,8 +142,6 @@ public class ComMymessageFragment extends BaseFragment {
                 break;
         }
     }
-
-
 
     private void showConnectMaster() {
         SelectDialog.show(getActivity(), "联系管家", "010-5838292", "呼叫", new DialogInterface.OnClickListener() {
@@ -173,6 +175,11 @@ public class ComMymessageFragment extends BaseFragment {
 
             }
         }).setCanCancel(true);
+    }
+
+    private void showAddressManagerPannel() {
+        Intent intent = new Intent(getActivity(),MyAddressActivity.class);
+        startActivity(intent);
     }
 
     private void showAboutAppPannel() {

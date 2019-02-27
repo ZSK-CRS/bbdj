@@ -253,15 +253,39 @@
         <activity
             android:name=".community.activity.ShowPackageMessageActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".community.activity.GoodsDetailActivity" />
-        <activity android:name=".community.activity.SystemMessageAboutActivity" />
-        <activity android:name=".community.activity.WebDetailActivity" />
-        <activity android:name=".community.activity.ClientManagerActivity" />
-        <activity android:name=".community.activity.ClientMessageDetail" />
-        <activity android:name=".community.activity.ClientMessageChangeActivity" />
-        <activity android:name=".community.activity.OrderDetailActivity" />
-        <activity android:name=".community.activity.MyOrderActivity" />
-        <activity android:name=".community.activity.MyOrderDetailActivity"></activity>
+        <activity
+            android:name=".community.activity.GoodsDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.SystemMessageAboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.WebDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ClientManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ClientMessageDetail"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ClientMessageChangeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.OrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.MyOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.MyOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.MyAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.EditAddressActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

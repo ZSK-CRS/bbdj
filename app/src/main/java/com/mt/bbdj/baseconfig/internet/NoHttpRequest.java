@@ -312,6 +312,27 @@ public class NoHttpRequest {
     }
 
     /**
+     * 获取我的地址
+     * @param user_id
+     * @return
+     */
+    public static Request<String> getMyAddressRequest(String user_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GET_MY_ADDRESS, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GET_MY_ADDRESS);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        return request;
+    }
+
+    /**
      * 获取地区地址
      *
      * @param user_id
@@ -369,6 +390,40 @@ public class NoHttpRequest {
     }
 
     /**
+     * 修改收获地址
+     *
+     * @param user_id   用户id
+     * @param realName  姓名
+     * @param telephone 电话
+     * @param address   详细地址
+     * @param book_id   地址id
+     * @return
+     */
+    public static Request<String> changeMyAddressBook(String user_id, String realName, String telephone,
+                                                    String province, String city, String area, String address, String book_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_CHNAGE_MY_ADDRESS, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CHNAGE_MY_ADDRESS);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("realname", realName);
+        request.add("telephone", telephone);
+        request.add("user_id", user_id);
+        request.add("province", province);
+        request.add("city", city);
+        request.add("area", area);
+        request.add("address", address);
+        request.add("book_id", book_id);
+        return request;
+    }
+
+    /**
      * 添加地址
      *
      * @param user_id   用户id
@@ -398,6 +453,64 @@ public class NoHttpRequest {
         request.add("city", city);
         request.add("type", type);
         request.add("address", address);
+        return request;
+    }
+
+    /**
+     * 添加收获地址
+     *
+     * @param user_id   用户id
+     * @param realName  姓名
+     * @param telephone 电话
+     * @param address   详细地址
+     * @return
+     */
+    public static Request<String> addMyAddressBook(String user_id, String realName, String telephone,
+                                                 String province, String city, String county, String address, String type) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_ADD_MY_ADDRESS, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_ADD_MY_ADDRESS);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("realname", realName);
+        request.add("telephone", telephone);
+        request.add("user_id", user_id);
+        request.add("area", county);
+        request.add("province", province);
+        request.add("city", city);
+        request.add("type", type);
+        request.add("address", address);
+        return request;
+    }
+
+
+    /**
+     * 删除我的地址
+     *
+     * @param user_id 用户id
+     * @param book_id 地址id
+     * @return
+     */
+    public static Request<String> deleteMyAddressRequest(String user_id, String book_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_DELETE_MY_ADDRESS, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_DELETE_MY_ADDRESS);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("book_id", book_id);
         return request;
     }
 

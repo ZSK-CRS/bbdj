@@ -75,6 +75,11 @@ public class InterApi {
     public static final String ACTION_STAGE_ADDRESS = "getAddressBook300";
 
     /**
+     * 收货地址
+     */
+    public static final String ACTION_GET_MY_ADDRESS = "getAddress960";
+
+    /**
      * 获取省市县
      */
     public static final String ACTION_GET_AREA = "getRegion400";
@@ -85,14 +90,29 @@ public class InterApi {
     public static final String ACTION_CHNAGE_ADDRESS = "saveAddressBook300";
 
     /**
+     * 修改收货地址
+     */
+    public static final String ACTION_CHNAGE_MY_ADDRESS = "saveAddress960";
+
+    /**
      * 添加地址
      */
     public static final String ACTION_ADD_ADDRESS = "addAddressBook300";
 
     /**
+     * 添加收获地址
+     */
+    public static final String ACTION_ADD_MY_ADDRESS = "addAddress960";
+
+    /**
      * 删除地址簿
      */
     public static final String ACTION_DELETE_ADDRESS = "deleteAddressBook300";
+
+    /**
+     * 删除收货地址
+     */
+    public static final String ACTION_DELETE_MY_ADDRESS = "deleteAddress960";
 
     /**
      * 物流公司

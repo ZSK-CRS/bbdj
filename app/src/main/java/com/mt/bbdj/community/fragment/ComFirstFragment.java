@@ -370,7 +370,7 @@ public class ComFirstFragment extends BaseFragment {
             }
             if (i == 11) {
                 item.put("id", "11");
-                item.put("name", "更多");
+                item.put("name", "财务管理");
                 item.put("ic", R.drawable.ic_main_more);
             }
             mList.add(item);
