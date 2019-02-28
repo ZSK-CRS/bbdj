@@ -28,9 +28,13 @@ LINE 290 1295 290 1325 2
 LINE 435 1295 435 1325 2
 
 CENTER
+SETBOLD 3
+SETMAG 2 2
+TEXT 0 0 0 233 [packageCode]
+;Restore default font sizes
+SETMAG 1 1
 SETBOLD 1
-TEXT 4 0 0 233 [packageCode]
-TEXT 2 0 360 45 驿站代码 [stageCode]
+TEXT 5 0 360 45 驿站代码 [stageCode]
 BARCODE 128 3 3 90 0 90 [barcode]
 TEXT 8 0 0 185 [barcode]
 CENTER 280

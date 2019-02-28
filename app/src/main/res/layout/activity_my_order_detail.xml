@@ -102,7 +102,7 @@
         <ImageView
             android:layout_marginTop="10dp"
             android:id="@+id/iv_logo"
-            android:background="@drawable/ic_order"
+            android:background="@drawable/ic_xinfeng"
             android:scaleType="fitCenter"
             android:layout_width="80dp"
             android:layout_height="80dp" />
@@ -159,7 +159,6 @@
                     android:textColor="@color/mainColor"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent" />
-
             </LinearLayout>
 
             <LinearLayout
