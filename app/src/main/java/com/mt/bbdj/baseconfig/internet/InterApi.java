@@ -314,6 +314,56 @@ public class InterApi {
      */
     public static final String ACTION_MY_ORDER_DETAIL_REQUEST = "getmyOrdersdetails960";
 
+    /**
+     * 获取物料商城列表
+     */
+    public static final String ACTION_GOODS_LIST_REQUEST = "getProductdata950";
+
+    /**
+     * 获取商品详情
+     */
+    public static final String ACTION_GOODS_DETAIL_LIST = "getProductdetails950";
+
+    /**
+     * 加入购物车
+     */
+    public static final String ACTION_JOIN_GOODS = "addProductcart950";
+
+    /**
+     * 立刻清算
+     */
+    public static final String ACTION_PAYFOR_ATONCE = "buyProductonce950";
+
+    /**
+     * 批量购买
+     */
+    public static final String ACTION_PAYFOR_MORE = "buyProductcart950";
+
+    /**
+     * 获取购物车列表
+     */
+    public static final String ACTION_GET_SHOP_CAR_REQUEST = "getProductcart950";
+
+    /**
+     * 删除购物车商品
+     */
+    public static final String ACTION_DELETE_GOODS_REQUEST = "deleteProductcart950";
+
+    /**
+     * 修改商品的数量
+     */
+    public static final String ACTION_CHANGE_GOODS_NUMBER = "saveCartnumber950";
+
+    /**
+     * 获取交接管理
+     */
+    public static final String ACTION_CHANGE_MANAGER_REQUEST = "getHandoverlist980";
+
+    /**
+     * 确认交接
+     */
+    public static final String ACTION_CHANGE_SNED_REQUEST = "getConfirmHandover980";
+
 
 
 

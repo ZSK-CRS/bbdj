@@ -1,6 +1,7 @@
 package com.mt.bbdj.community.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.adapter.FastmailMessageAdapter;
 import com.mt.bbdj.community.adapter.MyAddressAdapter;
@@ -64,6 +66,8 @@ public class MyAddressActivity extends BaseActivity implements XRecyclerView.Loa
     private final int TYPE_ADD_ADDRESS = 2;    //新添地址
     private final int TYPE_DELETE_ADDRESS = 3;   //删除地址
     private final int TYPE_GET_ADDRESS = 4;   //获取地址列表
+    private SharedPreferences.Editor mEditor;
+    private SharedPreferences mSharedPreferences;
 
 
     @Override
@@ -71,10 +75,17 @@ public class MyAddressActivity extends BaseActivity implements XRecyclerView.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fastmail_message);
         ButterKnife.bind(this);
-
+        initParams();
         initData();
 
         requestData();
+    }
+
+    private void initParams() {
+        mEditor = SharedPreferencesUtil.getEditor();
+        mSharedPreferences = SharedPreferencesUtil.getSharedPreference();
+
+
     }
 
     private void requestData() {
@@ -111,17 +122,14 @@ public class MyAddressActivity extends BaseActivity implements XRecyclerView.Loa
             @Override
             public void onItemSelectClick(int position) {
                 messageAdapter.setCheckPosition(position);
-              /* Intent intent = new Intent();
-                HashMap<String,String> item = mList.get(position);
-                intent.putExtra("book_id",item.get("book_id"));
-                intent.putExtra("book_name",item.get("book_name"));
-                intent.putExtra("book_telephone",item.get("book_telephone"));
-                intent.putExtra("book_region",item.get("book_region"));
-                intent.putExtra("book_address",item.get("book_address"));
-                intent.putExtra("book_province",item.get("book_province"));
-                intent.putExtra("book_city",item.get("book_city"));
-                setResult(RESULT_OK,intent);
-                finish();*/
+                mEditor.putString("myaddress_id",mList.get(position).get("book_id"));
+                mEditor.putString("myaddress_name",mList.get(position).get("book_name"));
+                mEditor.putString("myaddress_phone",mList.get(position).get("book_telephone"));
+                String address = mList.get(position).get("book_province")
+                        + mList.get(position).get("book_city")+mList.get(position).get("book_region")
+                        +mList.get(position).get("book_address");
+                mEditor.putString("myaddress_address",address);
+                mEditor.commit();
             }
         });
     }

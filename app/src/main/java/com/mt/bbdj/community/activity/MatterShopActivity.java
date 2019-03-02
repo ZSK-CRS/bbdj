@@ -14,15 +14,31 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
+import com.mt.bbdj.baseconfig.db.UserBaseMessage;
+import com.mt.bbdj.baseconfig.db.gen.DaoSession;
+import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
+import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.CategoryBean;
+import com.mt.bbdj.baseconfig.model.TargetEvent;
+import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.adapter.GoodsHomeAdapter;
 import com.mt.bbdj.community.adapter.GoodsMenuAdapter;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.rest.OnResponseListener;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.RequestQueue;
+import com.yanzhenjie.nohttp.rest.Response;
 
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,20 +49,28 @@ public class MatterShopActivity extends BaseActivity {
     private RecyclerView homeList;
     private RecyclerView menuLIst;
     private RelativeLayout icBack;
+    private RelativeLayout shopCart;      //购物车
+    private RelativeLayout rlGoodsWants;
     private TextView mTitile;
     private List<String> menuData = new ArrayList<>();
     private List<CategoryBean.DataBean> homeData = new ArrayList<>();
     private GoodsMenuAdapter mGoodsMenuAdapter;
     private GoodsHomeAdapter mGoodsHomeAdapter;
-    private ArrayList<Integer> showTitle;
+    private ArrayList<Integer> showTitle = new ArrayList<>();
     private LinearLayoutManager mHomeLayoutManager;
     private int currentItem;
+    private UserBaseMessageDao mUserMessageDao;
+    private RequestQueue mRequestQueue;
+
+    private final int REQUEST_GOODS = 100;    //获取商品列表
+    private WaitDialog waitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_matter_shop);
         initView();
+        initParams();
         loadData();
         initListener();
     }
@@ -59,6 +83,15 @@ public class MatterShopActivity extends BaseActivity {
                 mGoodsMenuAdapter.setSelectItem(position);
                 mHomeLayoutManager.scrollToPositionWithOffset(showTitle.get(position), 0);
                 mTitile.setText(menuData.get(position));
+            }
+        });
+
+        //购物车
+        rlGoodsWants.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MatterShopActivity.this,ShopCarActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -90,8 +123,8 @@ public class MatterShopActivity extends BaseActivity {
                     mTitile.setText(menuData.get(0));
                     mGoodsMenuAdapter.setSelectItem(0);
                 }
-
             }
+
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -117,27 +150,90 @@ public class MatterShopActivity extends BaseActivity {
                     startActivity(intent);
                 } else {
                     //商品详情
-                    GoodsDetailActivity.startAction(MatterShopActivity.this);
+                    GoodsDetailActivity.startAction(MatterShopActivity.this,dataListBean.getId());
                 }
-
             }
         });
 
     }
 
+    private void initParams() {
+        DaoSession daoSession = GreenDaoManager.getInstance().getSession();
+        mUserMessageDao = daoSession.getUserBaseMessageDao();
+        mRequestQueue = NoHttp.newRequestQueue();
+    }
+
+
     private void loadData() {
-        String json = StringUtil.getJson(this, "category.json");
-        CategoryBean categoryBean = JSONObject.parseObject(json, CategoryBean.class);
-        showTitle = new ArrayList<>();
-        for (int i = 0; i < categoryBean.getData().size(); i++) {
-            CategoryBean.DataBean dataBean = categoryBean.getData().get(i);
-            menuData.add(dataBean.getMenuTitle());
-            showTitle.add(i);
-            homeData.add(dataBean);
+        String user_id = "";
+        List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
+        if (list != null && list.size() != 0) {
+            user_id = list.get(0).getUser_id();
         }
-        mGoodsMenuAdapter.setSelectItem(0);
-        mTitile.setText(categoryBean.getData().get(0).getMenuTitle());
-        mGoodsHomeAdapter.notifyDataSetChanged();
+        Request<String> request = NoHttpRequest.getGoodsListRequest(user_id);
+        mRequestQueue.add(REQUEST_GOODS, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                waitDialog = WaitDialog.show(MatterShopActivity.this,"加载中...").setCanCancel(true);
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                LogUtil.i("photoFile", "MatterShopActivity::" + response.get());
+                try {
+                    org.json.JSONObject jsonObject = new org.json.JSONObject(response.get());
+                    String code = jsonObject.getString("code");
+                    JSONArray dataArray = jsonObject.getJSONArray("data");
+                    for (int i = 0; i < dataArray.length(); i++) {
+                        org.json.JSONObject jsonObject1 = dataArray.getJSONObject(i);
+                        String type_Name = jsonObject1.getString("type_name");
+                        menuData.add(type_Name);    //信封、面单、编织袋、
+
+                        JSONArray productlist =  jsonObject1.getJSONArray("productlist");
+                        CategoryBean.DataBean product = new CategoryBean.DataBean();
+                        List<CategoryBean.DataBean.DataListBean> dataListBeans = new ArrayList<>();
+                        for (int j = 0;j < productlist.length();j++) {
+                            org.json.JSONObject productListObj = productlist.getJSONObject(j);
+                            String product_name = productListObj.getString("product_name");
+                            String id = productListObj.getString("id");
+                            String thumb = productListObj.getString("thumb");
+                            CategoryBean.DataBean.DataListBean productList = new CategoryBean.DataBean.DataListBean();
+                            productList.setId(id);
+                            productList.setImgURL(thumb);
+                            productList.setTitle(product_name);
+                            dataListBeans.add(productList);
+                            productList = null;
+                        }
+                        product.setDataList(dataListBeans);
+                        product.setMenuTitle(type_Name);
+                        homeData.add(product);
+                        showTitle.add(i);
+                    }
+
+                    mGoodsMenuAdapter.setSelectItem(0);
+                    mTitile.setText(homeData.get(0).getMenuTitle());
+                    mGoodsHomeAdapter.notifyDataSetChanged();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                waitDialog.doDismiss();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                waitDialog.doDismiss();
+            }
+
+            @Override
+            public void onFinish(int what) {
+                waitDialog.doDismiss();
+            }
+        });
+
+      /*  String json = StringUtil.getJson(this, "category.json");
+        CategoryBean categoryBean = JSONObject.parseObject(json, CategoryBean.class);*/
+
     }
 
     private void initView() {
@@ -149,13 +245,23 @@ public class MatterShopActivity extends BaseActivity {
     private void initOther() {
         icBack = findViewById(R.id.iv_back);
         mTitile = findViewById(R.id.tv_titile);
+        rlGoodsWants = findViewById(R.id.rl_goods_want);
+        shopCart = findViewById(R.id.rl_goods_want);
         icBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        shopCart = findViewById(R.id.rl_goods_want);
+        shopCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Intent intent = new Intent(MatterShopActivity.this,PayforOrderFromShopingCardActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initMenuList() {

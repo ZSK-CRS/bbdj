@@ -53,7 +53,11 @@ public class GoodsHomeAdapter extends RecyclerView.Adapter<GoodsHomeAdapter.Good
         holder.menuName.setText(dataBean.getMenuTitle());
         HomeItemAdapter homeItemAdapter = new HomeItemAdapter(context,dataBean.getDataList());
         holder.gridViewForScrollView.setAdapter(homeItemAdapter);
-
+        if (dataBean.getDataList().size() == 0) {
+            holder.menuName.setVisibility(View.GONE);
+        } else {
+            holder.menuName.setVisibility(View.VISIBLE);
+        }
         holder.gridViewForScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int itemPosition, long id) {

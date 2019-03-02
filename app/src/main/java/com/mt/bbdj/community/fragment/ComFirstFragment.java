@@ -36,6 +36,7 @@ import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MyGridView;
+import com.mt.bbdj.community.activity.ChangeManagerdActivity;
 import com.mt.bbdj.community.activity.ClientManagerActivity;
 import com.mt.bbdj.community.activity.CommunityActivity;
 import com.mt.bbdj.community.activity.ComplainManagerdActivity;
@@ -248,29 +249,36 @@ public class ComFirstFragment extends BaseFragment {
                 handleSearchPackageEvent();
                 break;
             case "3":       //交接管理
+                handleChangeManagerEvent();
                 break;
             case "4":       //入库管理
                 break;
             case "5":       //出库管理
                 break;
-            case "6":       //客户管理
+            case "6":       //财务管理
+
+                break;
+            case "7":       //客户管理
                 handleClientManagerEvent();
                 break;
-            case "7":       //短信管理
+            case "8":       //短信管理
                 handleMessageEvent();
                 break;
-            case "8":       //物料商城
+            case "9":       //物料商城
                 handleShopEvent();
                 break;
-            case "9":       //投诉管理
+            case "10":      //投诉
                 handleComplainEvent();
                 break;
-            case "10":      //操作手册
-                break;
-            case "11":      //更多
+            case "11":      //操作手册
                 break;
         }
 
+    }
+
+    private void handleChangeManagerEvent() {
+        Intent intent = new Intent(getActivity(),ChangeManagerdActivity.class);
+        startActivity(intent);
     }
 
     private void handleClientManagerEvent() {
@@ -345,34 +353,35 @@ public class ComFirstFragment extends BaseFragment {
             }
             if (i == 6) {
                 item.put("id", "6");
-                item.put("name", "客户管理");
-                item.put("ic", R.drawable.ic_main_kehuguanli);
+                item.put("name", "财务管理");
+                item.put("ic", R.drawable.ic_money_manager);
             }
             if (i == 7) {
                 item.put("id", "7");
-                item.put("name", "短信管理");
-                item.put("ic", R.drawable.ic_main_duanxin);
+                item.put("name", "客户管理");
+                item.put("ic", R.drawable.ic_main_kehuguanli);
             }
             if (i == 8) {
                 item.put("id", "8");
-                item.put("name", "物料商城");
-                item.put("ic", R.drawable.ic_main_wuliao);
+                item.put("name", "短信管理");
+                item.put("ic", R.drawable.ic_main_duanxin);
             }
             if (i == 9) {
                 item.put("id", "9");
-                item.put("name", "投诉管理");
-                item.put("ic", R.drawable.ic_main_tousu);
+                item.put("name", "物料商城");
+                item.put("ic", R.drawable.ic_main_wuliao);
             }
             if (i == 10) {
                 item.put("id", "10");
-                item.put("name", "操作手册");
-                item.put("ic", R.drawable.ic_main_caozuo);
+                item.put("name", "投诉管理");
+                item.put("ic", R.drawable.ic_main_tousu);
             }
             if (i == 11) {
                 item.put("id", "11");
-                item.put("name", "财务管理");
-                item.put("ic", R.drawable.ic_main_more);
+                item.put("name", "操作手册");
+                item.put("ic", R.drawable.ic_main_caozuo);
             }
+
             mList.add(item);
         }
         MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter(mList);
@@ -399,7 +408,7 @@ public class ComFirstFragment extends BaseFragment {
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
-                //    dialogLoading.cancel();
+                // dialogLoading.cancel();
                 ToastUtil.showShort("更新失败！");
             }
             //  dialogLoading.cancel();

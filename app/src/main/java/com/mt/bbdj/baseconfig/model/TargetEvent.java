@@ -17,6 +17,8 @@ public class TargetEvent {
     public static int BIND_ALI_ACCOUNT = 410;     //表示只绑定了支付宝
     public static int BIND_BANK_ACCOUNT = 411;    //绑定了银行卡号
     public static int BIND_ACCOUNT_NONE = 412;   //表示没有绑定一个
+    public static int DESTORY_GOODS_DETAIL = 413;   //销毁商品详情界面
+    public static int DESTORY_GOODS_FROM_CART = 414;    //销毁购物车界面
 
     private int target;
 

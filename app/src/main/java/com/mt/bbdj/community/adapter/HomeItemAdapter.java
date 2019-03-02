@@ -64,7 +64,7 @@ public class HomeItemAdapter extends BaseAdapter {
             viewHold = (ViewHold) convertView.getTag();
         }
         viewHold.tv_name.setText(subcategory.getTitle());
-        Glide.with(context).load(subcategory.getImgURL()).into(viewHold.iv_icon);
+        Glide.with(context).load(subcategory.getImgURL()).error(R.drawable.ic_no_picture).into(viewHold.iv_icon);
         return convertView;
     }
 

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_marginTop="7dp"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <TextView
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="运单号:"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_yundan"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="454785622.0232323"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_dingdan_time"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="2019-01-02"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <TextView
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="快递公司:"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_kuaidi"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="中通快递"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <TextView
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="寄件人/收件人:"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_persson"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="张三/李四"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <TextView
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="始发地/目的地："
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_address"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="北京/上海"
+            android:singleLine="true"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <TextView
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="重量:"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="2.5kg"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_change_time"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="20dp">
+
+        <TextView
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="交接时间:"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_change_time"
+            android:layout_marginLeft="10dp"
+            android:textColor="@color/grey_2"
+            android:textSize="14sp"
+            android:text="2019-01-02 09:45"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+    
+    <View
+        android:layout_marginTop="7dp"
+        android:background="@color/grey_6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+</LinearLayout>

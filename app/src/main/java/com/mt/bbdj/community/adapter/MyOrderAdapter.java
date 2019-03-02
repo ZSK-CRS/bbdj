@@ -50,7 +50,7 @@ public class MyOrderAdapter extends RecyclerView.Adapter<MyOrderAdapter.MyOrderV
         holder.goodsNumber.setText("×"+map.get("number"));
         holder.goodsType.setText(map.get("genre_name"));
         holder.goodsMoney.setText(map.get("money"));
-        Glide.with(context).load(map.get("thumb")).into(holder.goodsLogo);
+        Glide.with(context).load(map.get("thumb")).error(R.drawable.ic_no_picture).into(holder.goodsLogo);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

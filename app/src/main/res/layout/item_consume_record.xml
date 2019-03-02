@@ -39,6 +39,7 @@
         android:paddingRight="15dp">
 
         <TextView
+            android:visibility="invisible"
             android:id="@+id/item_consume_overplus"
             android:layout_width="0dp"
             android:layout_height="match_parent"

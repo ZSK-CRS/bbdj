@@ -286,6 +286,18 @@
         <activity
             android:name=".community.activity.EditAddressActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.PayforOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.PayforOrderFromShopingCardActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ShopCarActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ChangeManagerdActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

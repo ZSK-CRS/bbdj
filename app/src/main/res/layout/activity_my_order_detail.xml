@@ -100,6 +100,7 @@
         android:layout_height="120dp">
 
         <ImageView
+            android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:id="@+id/iv_logo"
             android:background="@drawable/ic_xinfeng"

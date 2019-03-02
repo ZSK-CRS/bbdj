@@ -8,30 +8,58 @@
     android:orientation="vertical"
     tools:context=".community.activity.MatterShopActivity">
 
-    <RelativeLayout
-        android:id="@+id/iv_back"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/mainColor"
-        android:gravity="center_vertical">
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/mainColor">
+
+        <RelativeLayout
+            android:id="@+id/iv_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/startardspace"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_arrow_left" />
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left" />
+
+        </RelativeLayout>
 
         <TextView
-            android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
             android:layout_centerInParent="true"
             android:gravity="center"
             android:text="物料商城"
             android:textColor="@color/whilte"
-            android:textSize="@dimen/standardtitleSize" />
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:id="@+id/rl_goods_want"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp">
+
+            <ImageView
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_centerInParent="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_gouwu" />
+
+        </RelativeLayout>
+
+
     </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,10 +67,10 @@
         android:orientation="horizontal">
 
         <LinearLayout
-            android:visibility="gone"
             android:layout_width="90dp"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/com_tv_shop_miandan"
@@ -104,9 +132,9 @@
                 android:background="@color/grey_6" />
 
             <RelativeLayout
-                android:layout_marginLeft="5dp"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
                 android:layout_weight="3"
                 android:background="@color/white">
 
@@ -127,8 +155,8 @@
                     android:background="@color/grey_6"
                     android:gravity="center_vertical"
                     android:paddingLeft="20dp"
-                    android:textSize="14sp"
-                    android:text="标题" />
+                    android:text="标题"
+                    android:textSize="14sp" />
 
             </RelativeLayout>
         </LinearLayout>

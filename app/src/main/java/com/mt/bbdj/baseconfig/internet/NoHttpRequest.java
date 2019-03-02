@@ -857,7 +857,7 @@ public class NoHttpRequest {
     }
 
     /**
-     * 获取订单去洗哦啊怨言
+     * 获取订单
      *
      * @param user_id
      * @return
@@ -1638,4 +1638,250 @@ public class NoHttpRequest {
         request.add("order_id", order_id);
         return request;
     }
+
+    /**
+     * 获取物料商城
+     * @param user_id  用户id
+     * @return
+     */
+    public static Request<String> getGoodsListRequest(String user_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GOODS_LIST_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GOODS_LIST_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        return request;
+    }
+
+    /**
+     * 获取商品详情接口
+     * @param user_id
+     * @param product_id
+     * @return
+     */
+    public static Request<String> getGoodsListDetailRequest(String user_id,String product_id){
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GOODS_DETAIL_LIST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GOODS_DETAIL_LIST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("product_id", product_id);
+        return request;
+    }
+
+    /**
+     * 加入购物车
+     * @param user_id   用户id
+     * @param product_id   商品id
+     * @param genre_id  型号id
+     * @return
+     */
+    public static Request<String> joinGoodsRequest(String user_id,String product_id,String genre_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_JOIN_GOODS, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_JOIN_GOODS);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("product_id", product_id);
+        request.add("genre_id", genre_id);
+        return request;
+    }
+
+    /**
+     * 立即购买
+     * @param user_id   用户id
+     * @param product_id   产品id
+     * @param genre_id   型号id
+     * @param address_id  地址id
+     * @param number  数量
+     * @return
+     */
+    public static Request<String> payForMoneyRightNowRequest(String user_id,String product_id,
+                                                             String genre_id,String address_id,int number) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_PAYFOR_ATONCE, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_PAYFOR_ATONCE);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("product_id", product_id);
+        request.add("genre_id", genre_id);
+        request.add("address_id", address_id);
+        request.add("number", number);
+        return request;
+    }
+
+    /**
+     * 批量购买
+     * @param user_id   用户id
+     * @param cart_id   购物车记录id
+     * @param address_id  地址id
+     * @param content  备注
+     * @return
+     */
+    public static  Request<String> payForMoreGoodsRequest(String user_id,String cart_id,
+                                                         String address_id,String content) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_PAYFOR_MORE, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_PAYFOR_MORE);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("cart_id", cart_id);
+        request.add("address_id", address_id);
+        request.add("content", content);
+        return request;
+    }
+
+    /**
+     * 获取购物车列表
+     * @param user_id
+     * @return
+     */
+    public static Request<String> getShopCarGoodsRequest(String user_id){
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GET_SHOP_CAR_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GET_SHOP_CAR_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        return request;
+    }
+
+    /**
+     * 删除购物车数据
+     * @param user_id  用户id
+     * @param cart_id  购物车记录id
+     * @return
+     */
+    public static Request<String> deleteGoodsRequest(String user_id,String cart_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_DELETE_GOODS_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_DELETE_GOODS_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("cart_id", cart_id);
+        return request;
+    }
+
+    /**
+     * 修改商品的数量
+     * @param user_id   用户id
+     * @param cart_id  购物车id
+     * @param number  数量
+     * @return
+     */
+    public static Request<String> changeGoodsNumberRequest(String user_id,String cart_id,int number) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_CHANGE_GOODS_NUMBER, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CHANGE_GOODS_NUMBER);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("cart_id", cart_id);
+        return request;
+    }
+
+    /**
+     * 获取交接管理
+     * @param user_id   用户id
+     * @param express_id  快递公司id
+     * @param type   1: 表示待交接  2：已交接
+     * @return
+     */
+    public static Request<String> getChangeManagerRequest(String user_id,String express_id,int type) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_CHANGE_MANAGER_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CHANGE_MANAGER_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("express_id", express_id);
+        request.add("type", type);
+        return request;
+    }
+
+    /**
+     * 确认交接
+     * @param user_id   用户id
+     * @param handto  签名文件
+     * @param mailing_id   寄件id
+     * @return
+     */
+    public static Request<String> sendChangeRequest(String user_id,String handto,String mailing_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_CHANGE_SNED_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CHANGE_SNED_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("mailing_id", mailing_id);
+        request.add("handto", handto);
+        return request;
+    }
+
 }

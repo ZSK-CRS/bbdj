@@ -43,7 +43,7 @@ public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.
         holder.time.setText(map.get("time"));
         holder.send.setText(map.get("send_name"));
         holder.receive.setText(map.get("collect_name"));
-        Glide.with(context).load(map.get("expressLogo")).into(holder.logo);
+        Glide.with(context).load(map.get("expressLogo")).error(R.drawable.ic_no_picture).into(holder.logo);
     }
 
     @Override
