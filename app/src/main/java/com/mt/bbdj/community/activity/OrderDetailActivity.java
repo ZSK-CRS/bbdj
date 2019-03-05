@@ -162,7 +162,7 @@ public class OrderDetailActivity extends BaseActivity implements XRecyclerView.L
             map.put("collect_name",collect_name);
             map.put("money",money);
             map.put("time",time);
-            map.put("expressLogo",expressLogo.getLogoLocalPath());
+            map.put("expressLogo",expressLogo == null?"":expressLogo.getLogoLocalPath());
             mList.add(map);
             map = null;
         }

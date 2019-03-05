@@ -292,6 +292,10 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
             }
         }
         cartId = sb.toString();
+        if ("".equals(cartId) || cartId == null) {
+            ToastUtil.showShort("请先选择商品！");
+            return ;
+        }
         cartId = cartId.substring(0, cartId.lastIndexOf(","));
         if (goodsList.size() == 0) {
             ToastUtil.showShort("请选择要购买的商品");

@@ -43,6 +43,7 @@ import com.mt.bbdj.community.activity.ComplainManagerdActivity;
 import com.mt.bbdj.community.activity.MatterShopActivity;
 import com.mt.bbdj.community.activity.MessageAboutActivity;
 import com.mt.bbdj.community.activity.MessageManagerdActivity;
+import com.mt.bbdj.community.activity.MoneyFormatManagerActivity;
 import com.mt.bbdj.community.activity.SearchPackageActivity;
 import com.mt.bbdj.community.activity.SendManagerActivity;
 import com.mt.bbdj.community.activity.SendResByHandActivity;
@@ -256,7 +257,7 @@ public class ComFirstFragment extends BaseFragment {
             case "5":       //出库管理
                 break;
             case "6":       //财务管理
-
+                handleMoneyManagerEvent();
                 break;
             case "7":       //客户管理
                 handleClientManagerEvent();
@@ -274,6 +275,11 @@ public class ComFirstFragment extends BaseFragment {
                 break;
         }
 
+    }
+
+    private void handleMoneyManagerEvent() {
+        Intent intent = new Intent(getActivity(),MoneyFormatManagerActivity.class);
+        startActivity(intent);
     }
 
     private void handleChangeManagerEvent() {

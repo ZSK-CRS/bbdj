@@ -34,6 +34,14 @@ public class IntegerUtil {
         return number;
     }
 
+    public static float getStringChangeToFloat(String date) {
+        if (date == null || "".equals(date)) {
+            return 0;
+        }
+        float number = Float.parseFloat(date);
+        return number;
+    }
+
     /**
      * 转换日期字符串
      * @param temporaryString

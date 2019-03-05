@@ -56,6 +56,8 @@ android {
         implementation 'com.contrarywind:Android-PickerView:4.1.6'
         androidTestImplementation 'com.android.support.test:runner:1.0.2'
         androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+        implementation 'com.github.PhilJay:MPAndroidChart-Realm:v3.0.3@aar'
+        implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
         implementation 'com.jakewharton:butterknife:8.8.1'
         annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
         implementation 'org.greenrobot:eventbus:3.0.0'

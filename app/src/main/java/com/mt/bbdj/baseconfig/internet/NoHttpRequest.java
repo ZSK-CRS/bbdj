@@ -1884,4 +1884,54 @@ public class NoHttpRequest {
         return request;
     }
 
+    /**
+     * 数据中心
+     * @param user_id   用户id
+     * @param starttime   开始时间时间戳
+     * @param endtime  结束时间时间戳
+     * @return
+     */
+    public static Request<String> getDataCenterRequest(String user_id,String starttime,String endtime) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_DATA_CENTER_rEQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_DATA_CENTER_rEQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
+        return request;
+    }
+
+    /**
+     * 财务管理
+     * @param user_id   用户id
+     * @param starttime  开始时间
+     * @param endtime 结束时间
+     * @return
+     */
+    public static Request<String> getMoneyManagerRequest(String user_id,String starttime,String endtime) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_MONEY_MANAGER_REQEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_MONEY_MANAGER_REQEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
+        return request;
+    }
+
 }

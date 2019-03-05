@@ -364,6 +364,16 @@ public class InterApi {
      */
     public static final String ACTION_CHANGE_SNED_REQUEST = "getConfirmHandover980";
 
+    /**
+     * 数据中心
+     */
+    public static final String ACTION_DATA_CENTER_rEQUEST = "getFinancialData980";
+
+    /**
+     * 财务管理
+     */
+    public static final String ACTION_MONEY_MANAGER_REQEST = "getFinanceData990";
+
 
 
 
