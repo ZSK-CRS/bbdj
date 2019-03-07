@@ -552,7 +552,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     private void printPanel() {
         try {
             HashMap<String, String> pum = new HashMap<String, String>();
-            pum.put("[packageCode]", "800-045-016 02");
+            pum.put("[packageCode]", packageCode);
             pum.put("[barcode]", barcode);
             pum.put("[date]", date);
             pum.put("[siteName]", siteName);
@@ -579,6 +579,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
                 String string = (String) iterator.next();
                 path = path.replace(string, pum.get(string));
             }
+            LogUtil.i("数据",pum.toString());
             HPRTPrinterHelper.printText(path);
             InputStream inbmp = this.getResources().getAssets().open("ic_logo_mini.png");
             Bitmap bitmap = BitmapFactory.decodeStream(inbmp);
@@ -631,43 +632,43 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
 
     private void setLogoData() {
         switch (express_id) {
-            case "201":    //中通
+            case "100101":    //中通
+                fastLogoBig = "ic_zrhongtong_big.png";
+                fastLogoMini = "ic_zhongtong_mini.png";
+                break;
+            case "100102":    //顺丰
                 fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
                 break;
-            case "202":    //顺丰
+            case "100103":    //韵达
                 fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
                 break;
-            case "203":    //韵达
-                fastLogoBig = "ic_zhongtong_big.png";
-                fastLogoMini = "ic_zhongtong_mini.png";
-                break;
-            case "204":    //申通
+            case "100104":    //申通
                 fastLogoBig = "ic_shentong_big.png";
                 fastLogoMini = "ic_shentong_mini.png";
                 break;
-            case "205":    //德邦
+            case "100105":    //德邦
                 fastLogoBig = "ic_shentong_big.png";
                 fastLogoMini = "ic_shentong_mini.png";
                 break;
-            case "206":    //天天
+            case "100106":    //天天
                 fastLogoBig = "ic_tiantian_big.png";
                 fastLogoMini = "ic_tiantian_mini.png";
                 break;
-            case "207":    //EMS
+            case "100107":    //EMS
                 fastLogoBig = "ic_tiantian_big.png";
                 fastLogoMini = "ic_tiantian_mini.png";
                 break;
-            case "208":    //优速
+            case "100108":    //优速
                 fastLogoBig = "ic_yousu_big.png";
                 fastLogoMini = "ic_yousu_mini.png";
                 break;
-            case "209":    //圆通
+            case "100109":    //圆通
                 fastLogoBig = "ic_yuantong_big.png";
                 fastLogoMini = "ic_yuantong_mini.png";
                 break;
-            case "210":    //百世
+            case "100110":    //百世
                 fastLogoBig = "ic_baishi_big.png";
                 fastLogoMini = "ic_baishi_mini.png";
                 break;
@@ -713,6 +714,10 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             HPRTPrinterHelper.PortClose();
             if (mReceiver != null) {
                 unregisterReceiver(mReceiver);
+            }
+
+            if (mScaneceiver != null) {
+                unregisterReceiver(mScaneceiver);
             }
         } catch (Exception e) {
             // TODO Auto-generated catch block

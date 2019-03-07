@@ -232,7 +232,7 @@ public class RecordSheetActivity extends BaseActivity {
         editor.putString("weight",StringUtil.handleNullResultForString(weight));
         editor.putString("content",etMark.getText().toString());
         editor.putString("money",etGoodsMoney.getText().toString());
-        editor.apply();
+        editor.commit();
     }
 
     private boolean isCompleteData(String goods_name, String goods_weight, String goods_money) {

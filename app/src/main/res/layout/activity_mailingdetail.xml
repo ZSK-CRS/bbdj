@@ -465,18 +465,38 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/bt_first_save"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+    
+    <LinearLayout
         android:layout_marginBottom="20dp"
-        android:layout_toLeftOf="@+id/bt_immediately_seal"
-        android:background="@drawable/bt_bg_1"
-        android:text="原单重打"
-        android:textColor="@color/whilte"
-        android:textSize="13sp" />
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+        <Button
+            android:id="@+id/bt_first_save"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+
+            android:layout_toLeftOf="@+id/bt_immediately_seal"
+            android:background="@drawable/bt_bg_1"
+            android:text="原单重打"
+            android:textColor="@color/whilte"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/bt_cannel_order"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/bt_immediately_seal"
+            android:background="@drawable/bt_bg_1"
+            android:text="取消订单"
+            android:textColor="@color/whilte"
+            android:textSize="13sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

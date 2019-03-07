@@ -173,8 +173,13 @@ public class ExpressageFragment extends BaseFragment implements XRecyclerView.Lo
                             String states = jsonObject1.getString("states");
                             String express_logo = jsonObject1.getString("express_logo");
                             HashMap<String,String> map = new HashMap<>();
-                            ExpressLogo expressLogo = mExpressLogoDao.queryBuilder()
-                                    .where(ExpressLogoDao.Properties.Express_id.eq(express_id)).unique();
+                            List<ExpressLogo> expressLogos = mExpressLogoDao.queryBuilder()
+                                    .where(ExpressLogoDao.Properties.Express_id.eq(express_id)).list();
+
+                            if (expressLogos == null || expressLogos.size() == 0){
+                                return;
+                            }
+                            ExpressLogo expressLogo = expressLogos.get(0);
                             if (expressLogo == null) {
                                 map.put("express_logo",express_logo);
                             } else {

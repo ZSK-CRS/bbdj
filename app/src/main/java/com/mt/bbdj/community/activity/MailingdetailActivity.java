@@ -5,11 +5,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
+import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
@@ -22,6 +24,9 @@ import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,6 +67,9 @@ public class MailingdetailActivity extends AppCompatActivity {
     TextView tvGoodsMark;     //备注
     @BindView(R.id.bt_first_save)
     TextView btPrintAgain;      //原单重打
+    @BindView(R.id.bt_cannel_order)
+    TextView btCannel;    //取消订单
+
 
     private String user_id;    //用户id
     private String mail_id;    //订单id
@@ -75,10 +83,18 @@ public class MailingdetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mailingdetail);
         ButterKnife.bind(this);
+        EventBus.getDefault().register(this);
         initParams();
         initData();
         initView();
         requestOrederDetail();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveMessage(TargetEvent targetEvent) {
+        if (1 == targetEvent.getTarget()) {
+            finish();
+        }
     }
 
     private void initView() {
@@ -141,7 +157,7 @@ public class MailingdetailActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.iv_back,R.id.bt_first_save})
+    @OnClick({R.id.iv_back,R.id.bt_first_save,R.id.bt_cannel_order})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -153,7 +169,18 @@ public class MailingdetailActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
                 break;
+            case R.id.bt_cannel_order:
+                selectCannelReason();
+                break;
         }
+    }
+
+    private void selectCannelReason() {
+        Intent intent1 = new Intent(MailingdetailActivity.this,CauseForcannelOrderActivity.class);
+        intent1.putExtra("user_id",user_id);
+        intent1.putExtra("mail_id",mail_id);
+        intent1.putExtra("type","MailingdetailActivity");
+        startActivity(intent1);
     }
 
     private void savePannelMessage(JSONObject jsonObject) throws JSONException {
@@ -215,5 +242,13 @@ public class MailingdetailActivity extends AppCompatActivity {
         editor.putString("weight", StringUtil.handleNullResultForString(weight));
         editor.putString("content", StringUtil.handleNullResultForString(content));
         editor.apply();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+        mRequestQueue.cancelAll();
+        mRequestQueue.stop();
     }
 }

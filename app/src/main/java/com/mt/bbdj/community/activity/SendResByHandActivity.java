@@ -548,12 +548,18 @@ public class SendResByHandActivity extends BaseActivity {
             mGoodsData.add(map);
         }
 
-        for (int j = 0; j < expressArray.length() && j < 5; j++) {
+        int account  = expressArray.length() > 5?5:expressArray.length();
+
+        for (int j = 0; j < account; j++) {
             JSONObject expressObj = expressArray.getJSONObject(j);
             String expressPaht = expressObj.getString("express_logo");
             String expressId = expressObj.getString("express_id");
-            ExpressLogo expressLogo = mExpressLogoDao.queryBuilder()
-                    .where(ExpressLogoDao.Properties.Express_id.eq(expressId)).unique();
+            List<ExpressLogo> expressLogos = mExpressLogoDao.queryBuilder()
+                    .where(ExpressLogoDao.Properties.Express_id.eq(expressId)).list();
+            if (expressLogos == null || expressLogos.size() == 0) {
+                return ;
+            }
+            ExpressLogo expressLogo = expressLogos.get(0);
             if (expressLogo == null) {
                 logoPaths[j] = expressPaht;
             } else {

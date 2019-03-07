@@ -298,7 +298,8 @@
         <activity
             android:name=".community.activity.ChangeManagerdActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".community.activity.MoneyFormatManagerActivity"></activity>
+        <activity android:name=".community.activity.MoneyFormatManagerActivity" />
+        <activity android:name=".community.activity.EnterManagerActivity"></activity>
     </application>
 
 </manifest>

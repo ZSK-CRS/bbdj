@@ -31,6 +31,7 @@ public class ExpressLogoDao extends AbstractDao<ExpressLogo, Long> {
         public final static Property Express_name = new Property(4, String.class, "express_name", false, "EXPRESS_NAME");
         public final static Property Flag = new Property(5, String.class, "flag", false, "FLAG");
         public final static Property States = new Property(6, String.class, "states", false, "STATES");
+        public final static Property Property = new Property(7, String.class, "property", false, "PROPERTY");
     }
 
 
@@ -52,7 +53,8 @@ public class ExpressLogoDao extends AbstractDao<ExpressLogo, Long> {
                 "\"LOGO_LOCAL_PATH\" TEXT," + // 3: logoLocalPath
                 "\"EXPRESS_NAME\" TEXT," + // 4: express_name
                 "\"FLAG\" TEXT," + // 5: flag
-                "\"STATES\" TEXT);"); // 6: states
+                "\"STATES\" TEXT," + // 6: states
+                "\"PROPERTY\" TEXT);"); // 7: property
     }
 
     /** Drops the underlying database table. */
@@ -99,6 +101,11 @@ public class ExpressLogoDao extends AbstractDao<ExpressLogo, Long> {
         if (states != null) {
             stmt.bindString(7, states);
         }
+ 
+        String property = entity.getProperty();
+        if (property != null) {
+            stmt.bindString(8, property);
+        }
     }
 
     @Override
@@ -139,6 +146,11 @@ public class ExpressLogoDao extends AbstractDao<ExpressLogo, Long> {
         if (states != null) {
             stmt.bindString(7, states);
         }
+ 
+        String property = entity.getProperty();
+        if (property != null) {
+            stmt.bindString(8, property);
+        }
     }
 
     @Override
@@ -155,7 +167,8 @@ public class ExpressLogoDao extends AbstractDao<ExpressLogo, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // logoLocalPath
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // express_name
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // flag
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // states
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // states
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // property
         );
         return entity;
     }
@@ -169,6 +182,7 @@ public class ExpressLogoDao extends AbstractDao<ExpressLogo, Long> {
         entity.setExpress_name(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setFlag(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setStates(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setProperty(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

@@ -17,12 +17,14 @@ import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.City;
 import com.mt.bbdj.baseconfig.db.County;
+import com.mt.bbdj.baseconfig.db.ExpressLogo;
 import com.mt.bbdj.baseconfig.db.MingleArea;
 import com.mt.bbdj.baseconfig.db.Province;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.CityDao;
 import com.mt.bbdj.baseconfig.db.gen.CountyDao;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
+import com.mt.bbdj.baseconfig.db.gen.ExpressLogoDao;
 import com.mt.bbdj.baseconfig.db.gen.MingleAreaDao;
 import com.mt.bbdj.baseconfig.db.gen.ProvinceDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
@@ -40,6 +42,7 @@ import com.mt.bbdj.community.activity.ChangeManagerdActivity;
 import com.mt.bbdj.community.activity.ClientManagerActivity;
 import com.mt.bbdj.community.activity.CommunityActivity;
 import com.mt.bbdj.community.activity.ComplainManagerdActivity;
+import com.mt.bbdj.community.activity.EnterManagerActivity;
 import com.mt.bbdj.community.activity.MatterShopActivity;
 import com.mt.bbdj.community.activity.MessageAboutActivity;
 import com.mt.bbdj.community.activity.MessageManagerdActivity;
@@ -61,6 +64,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -121,7 +125,12 @@ public class ComFirstFragment extends BaseFragment {
 
     private final int REQUEST_UPLOAD_AREA = 2;    //下载省市区
 
+    private final int REQUEST_UPLOAD_LOGO = 3;    //下载没有图片的logo
+
     private final int REQUEST_PANNEL_MESSAGE = 101;    //获取面板信息
+    private String user_id;
+    private ExpressLogoDao mExpressLogoDao;
+    private List<ExpressLogo> mExpressLogoList;
 
     public static ComFirstFragment getInstance() {
         ComFirstFragment comFirstFragment = new ComFirstFragment();
@@ -133,12 +142,56 @@ public class ComFirstFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_com_first_fragment, container, false);
         unbinder = ButterKnife.bind(this, mView);
+        initParams();
         initData();
         initView();
         initClick();
-        requestAreaData();
-
+        requestAreaData();    //下载省市县
+        updataExpressState();   //更新快递公司状态
         return mView;
+    }
+
+    private void initParams() {
+
+        //初始化请求队列
+        mRequestQueue = NoHttp.newRequestQueue();
+        dialogLoading = new HkDialogLoading(getActivity(), "请稍后...");
+
+        mDaoSession = GreenDaoManager.getInstance().getSession();
+        mUserMessageDao = mDaoSession.getUserBaseMessageDao();
+        mProvinceDao = mDaoSession.getProvinceDao();
+        mExpressLogoDao = mDaoSession.getExpressLogoDao();
+        mCityDao = mDaoSession.getCityDao();
+        mCountyDao = mDaoSession.getCountyDao();
+        mMingleAreaDao = mDaoSession.getMingleAreaDao();
+
+        List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
+        if (list != null && list.size() != 0) {
+            user_id = list.get(0).getUser_id();
+        }
+    }
+
+    private void updataExpressState() {
+        mExpressLogoList = mExpressLogoDao.queryBuilder()
+                .where(ExpressLogoDao.Properties.LogoLocalPath.eq(""))
+                .where(ExpressLogoDao.Properties.States.eq(1)).list();
+        if (mExpressLogoList == null || mExpressLogoList.size() == 0) {
+            return ;
+        }
+        for (ExpressLogo expressLogo : mExpressLogoList) {
+            String localPath = expressLogo.getLogoLocalPath();
+            if ("".equals(localPath) || null == localPath) {
+                express_id = expressLogo.getExpress_id();
+                String type = expressLogo.getProperty();
+                uploadLogoPicture(type);
+            }
+        }
+
+    }
+
+    private void uploadLogoPicture(String type) {
+        Request<String> request = NoHttpRequest.updateExpressState(user_id, express_id,type);
+        mRequestQueue.add(REQUEST_UPLOAD_LOGO, request, mResponseListener);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -158,27 +211,13 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void requestPannelMessage() {
-        String user_id = "";
-        List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
-        if (list != null && list.size() != 0) {
-            user_id = list.get(0).getUser_id();
-        }
         Request<String> request = NoHttpRequest.getPannelmessageRequest(user_id);
         mRequestQueue.add(REQUEST_PANNEL_MESSAGE, request, mResponseListener);
     }
 
     private void initData() {
 
-        //初始化请求队列
-        mRequestQueue = NoHttp.newRequestQueue();
-        dialogLoading = new HkDialogLoading(getActivity(), "请稍后...");
 
-        mDaoSession = GreenDaoManager.getInstance().getSession();
-        mUserMessageDao = mDaoSession.getUserBaseMessageDao();
-        mProvinceDao = mDaoSession.getProvinceDao();
-        mCityDao = mDaoSession.getCityDao();
-        mCountyDao = mDaoSession.getCountyDao();
-        mMingleAreaDao = mDaoSession.getMingleAreaDao();
 
         tvTime.setText(DateUtil.getCurrentTimeFormat("yyyy-MM-dd"));
     }
@@ -188,11 +227,6 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void uploadGenealData() {
-        String user_id = "";
-        List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
-        if (list != null && list.size() != 0) {
-            user_id = list.get(0).getUser_id();
-        }
         Request<String> request = NoHttpRequest.getAreaRequest(user_id, express_id);
         mRequestQueue.add(REQUEST_UPLOAD_AREA, request, mResponseListener);
     }
@@ -253,6 +287,7 @@ public class ComFirstFragment extends BaseFragment {
                 handleChangeManagerEvent();
                 break;
             case "4":       //入库管理
+                handleEnterManagerEvent();
                 break;
             case "5":       //出库管理
                 break;
@@ -275,6 +310,11 @@ public class ComFirstFragment extends BaseFragment {
                 break;
         }
 
+    }
+
+    private void handleEnterManagerEvent() {
+        Intent intent = new Intent(getActivity(),EnterManagerActivity.class);
+        startActivity(intent);
     }
 
     private void handleMoneyManagerEvent() {
@@ -439,6 +479,8 @@ public class ComFirstFragment extends BaseFragment {
                 break;
             case REQUEST_PANNEL_MESSAGE:      //更新主界面的信息
                 chnagePannelMessage(jsonObject);
+                break;
+            case REQUEST_UPLOAD_LOGO:    //更新logo图片
                 break;
         }
     }

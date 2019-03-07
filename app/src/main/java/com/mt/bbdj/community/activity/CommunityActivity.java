@@ -172,6 +172,7 @@ public class CommunityActivity extends BaseActivity {
         executorService.execute(downLoadPictureService);
     }
 
+
     private void updateLogoAfterLoad(String express_id, String filePath) {
         if ("".equals(filePath)) {
             return ;
@@ -247,11 +248,14 @@ public class CommunityActivity extends BaseActivity {
     }
 
     private void setExpressLogoMessage(JSONObject jsonObject) throws JSONException {
-        JSONArray jsonArray = jsonObject.getJSONArray("data");
+        JSONObject data = jsonObject.getJSONObject("data");
+        JSONArray ji = data.getJSONArray("ji");
+        JSONArray pai = data.getJSONArray("pai");
+
         mExpressLogoDao.deleteAll();
-        List<ExpressLogo> expressLogos =  mExpressLogoDao.queryBuilder().list();
-        for (int i = 0; i < jsonArray.length(); i++) {
-            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+        for (int i = 0; i < ji.length(); i++) {
+            JSONObject jsonObject1 = ji.getJSONObject(i);
             ExpressLogo expressLogo = new ExpressLogo();
             expressLogo.setExpress_id(jsonObject1.getString("express_id"));
             expressLogo.setFlag(jsonObject1.getString("flag"));
@@ -259,6 +263,20 @@ public class CommunityActivity extends BaseActivity {
             expressLogo.setLogoInterPath(jsonObject1.getString("express_logo"));
             expressLogo.setExpress_name(jsonObject1.getString("express_name"));
             expressLogo.setLogoLocalPath("");
+            expressLogo.setProperty(jsonObject1.getString("type"));
+            mExpressLogoDao.save(expressLogo);
+        }
+
+        for (int i = 0; i < pai.length(); i++) {
+            JSONObject jsonObject1 = pai.getJSONObject(i);
+            ExpressLogo expressLogo = new ExpressLogo();
+            expressLogo.setExpress_id(jsonObject1.getString("express_id"));
+            expressLogo.setFlag(jsonObject1.getString("flag"));
+            expressLogo.setStates(jsonObject1.getString("states"));
+            expressLogo.setLogoInterPath(jsonObject1.getString("express_logo"));
+            expressLogo.setExpress_name(jsonObject1.getString("express_name"));
+            expressLogo.setLogoLocalPath("");
+            expressLogo.setProperty(jsonObject1.getString("type"));
             mExpressLogoDao.save(expressLogo);
         }
         //保存logo信息
@@ -271,15 +289,16 @@ public class CommunityActivity extends BaseActivity {
         SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
         boolean isUpdate = sharedPreferences.getBoolean("update", false);
         DaoSession daoSession = GreenDaoManager.getInstance().getSession();
+        initExpressLogo();
         //表示软件第一次运行，直接下载图标
-        if (isUpdate) {
+      /*  if (isUpdate) {
             //初始化快递公司logo
             initExpressLogo();
             editor.putBoolean("update", false);
             editor.commit();
         } else {
             updateLogo();
-        }
+        }*/
     }
 
     @OnClick({R.id.main_tab_imgbt_first, R.id.main_tab_tv_first, R.id.main_tab_ll_first,

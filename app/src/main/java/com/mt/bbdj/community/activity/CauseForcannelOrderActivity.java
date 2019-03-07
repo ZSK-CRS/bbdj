@@ -57,6 +57,7 @@ public class CauseForcannelOrderActivity extends BaseActivity {
 
     private final int REQUEST_CAUSE_CANNEL = 101;    //请求取消订单原因
     private final int REQUEST_COMMIT_CAUSE = 102;   //提交取消订单
+    private final int REQUEST_CANNEL_ORDER_FROM_SEN_MANAGER = 103;    //从寄件管理界面跳转过来取消订单
 
 
     private CauseForcannelOrderAdapter mAdapter;
@@ -64,6 +65,7 @@ public class CauseForcannelOrderActivity extends BaseActivity {
     private RequestQueue mRequestQueue;
     private HkDialogLoading dialogLoading;
     private EditText contentEt;
+    private String enterType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +96,8 @@ public class CauseForcannelOrderActivity extends BaseActivity {
             case REQUEST_CAUSE_CANNEL:
                 handleCannelCause(jsonObject);    //获取取消消息
                 break;
-            case REQUEST_COMMIT_CAUSE:
+            case REQUEST_COMMIT_CAUSE:     //取消
+            case REQUEST_CANNEL_ORDER_FROM_SEN_MANAGER:    //取消从寄件管理来的订单
                 ToastUtil.showShort("提交成功！");
                 EventBus.getDefault().post(new TargetEvent(1));
                 finish();
@@ -129,10 +132,11 @@ public class CauseForcannelOrderActivity extends BaseActivity {
             try {
                 JSONObject jsonObject = new JSONObject(response.get());
                 String code = jsonObject.get("code").toString();
+                String msg = jsonObject.get("msg").toString();
                 if ("5001".equals(code)) {
                     handleResult(what, jsonObject);
                 } else {
-                    ToastUtil.showShort("查询失败，请重试！");
+                    ToastUtil.showShort(msg);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -191,12 +195,18 @@ public class CauseForcannelOrderActivity extends BaseActivity {
         Intent intent = getIntent();
         user_id = intent.getStringExtra("user_id");
         mail_id = intent.getStringExtra("mail_id");
+        enterType = intent.getStringExtra("type");
     }
 
 
     private void commitCauseRequest() {
         content = contentEt.getText().toString();
-        Request<String> request = NoHttpRequest.commitCannelOrderCauseRequest(user_id, mail_id, reason_id, content);
-        mRequestQueue.add(REQUEST_COMMIT_CAUSE, request, onResponseListener);
+        if ("MailingdetailActivity".equals(enterType)) {
+            Request<String> request = NoHttpRequest.cannelOrderRequest(user_id, mail_id, reason_id, content);
+            mRequestQueue.add(REQUEST_CANNEL_ORDER_FROM_SEN_MANAGER, request, onResponseListener);
+        } else {
+            Request<String> request = NoHttpRequest.commitCannelOrderCauseRequest(user_id, mail_id, reason_id, content);
+            mRequestQueue.add(REQUEST_COMMIT_CAUSE, request, onResponseListener);
+        }
     }
 }

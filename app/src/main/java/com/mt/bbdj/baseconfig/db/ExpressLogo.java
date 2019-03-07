@@ -19,9 +19,11 @@ public class ExpressLogo {
     private String express_name;    //快递公司名称
     private String flag;   // 1 : 快递  2：物流
     private String states;    // 1：使用  2：禁用
-    @Generated(hash = 1779574911)
+    private String property;    //1：寄件  2：派件
+    @Generated(hash = 1975175317)
     public ExpressLogo(Long id, String express_id, String logoInterPath,
-            String logoLocalPath, String express_name, String flag, String states) {
+            String logoLocalPath, String express_name, String flag, String states,
+            String property) {
         this.id = id;
         this.express_id = express_id;
         this.logoInterPath = logoInterPath;
@@ -29,6 +31,7 @@ public class ExpressLogo {
         this.express_name = express_name;
         this.flag = flag;
         this.states = states;
+        this.property = property;
     }
     @Generated(hash = 943793390)
     public ExpressLogo() {
@@ -74,6 +77,12 @@ public class ExpressLogo {
     }
     public void setStates(String states) {
         this.states = states;
+    }
+    public String getProperty() {
+        return this.property;
+    }
+    public void setProperty(String property) {
+        this.property = property;
     }
 
 }

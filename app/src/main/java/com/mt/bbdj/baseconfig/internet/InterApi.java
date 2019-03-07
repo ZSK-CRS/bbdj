@@ -85,6 +85,11 @@ public class InterApi {
     public static final String ACTION_GET_AREA = "getRegion400";
 
     /**
+     * 更新快递公司状态
+     */
+    public static final String ACTION_UPDATE_EXPRESS = "getExpressInfo600";
+
+    /**
      * 修改地址
      */
     public static final String ACTION_CHNAGE_ADDRESS = "saveAddressBook300";
@@ -373,6 +378,11 @@ public class InterApi {
      * 财务管理
      */
     public static final String ACTION_MONEY_MANAGER_REQEST = "getFinanceData990";
+
+    /**
+     * 取消订单
+     */
+    public static final String ACTION_CANNEL_ORDER_REQUEST = "CancellationMail1010";
 
 
 
