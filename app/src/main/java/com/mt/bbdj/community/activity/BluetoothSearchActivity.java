@@ -533,7 +533,7 @@ public class BluetoothSearchActivity extends BaseActivity {
     private String Sender_Phone;
     private String Sender_address;
     private String Sender_address1;
-    private String number;     //驿站代码
+    private String number;     //"123123"
     private String goods_name;     //商品名称
     private String weight;     //计费重量
     private String express_id;     //快递公司id
@@ -576,14 +576,14 @@ public class BluetoothSearchActivity extends BaseActivity {
             pum.put("[Receiver_address_all]", Receiver_address + Receiver_address1);
             pum.put("[Receiver_address1]", Receiver_address1);
             pum.put("[Sender]", Sender);
-            pum.put("[Sender_Phone]", Sender_Phone);
-            pum.put("[Sender_address]", Sender_address);
+            pum.put("[Sender_Phone]",  Sender_Phone);
+            pum.put("[Sender_address]",  Sender_address);
             pum.put("[Sender_address_all]", Sender_address + Sender_address1);
             pum.put("[Sender_address1]", Sender_address1);
             pum.put("[servicePhone]", "4008 6666");
-            pum.put("[wight]", weight);
+            pum.put("[wight]",weight);
             pum.put("[printTime]", printTime);
-            pum.put("[stageCode]", number);
+            pum.put("[stageCode]",number);
             pum.put("[goodName]", goods_name);
             Set<String> keySet = pum.keySet();
             Iterator<String> iterator = keySet.iterator();
@@ -622,7 +622,6 @@ public class BluetoothSearchActivity extends BaseActivity {
             fastLogoMini = "";
 
             setLogoData();   //设置logo
-
             InputStream inbmp5 = this.getResources().getAssets().open(fastLogoMini);
             Bitmap bitmap5 = BitmapFactory.decodeStream(inbmp5);
             HPRTPrinterHelper.Expanded("410", "490", bitmap5, (byte) 0);//第一联 快递公司logo
@@ -635,9 +634,9 @@ public class BluetoothSearchActivity extends BaseActivity {
             Bitmap bitmap2 = BitmapFactory.decodeStream(inbmp2);
             HPRTPrinterHelper.Expanded("310", "1115", bitmap2, (byte) 0);//第三联 快递公司logo
 
-            /*  if ("1".equals(BluetoothSearchActivity.paper)) {
+            if ("1".equals(BluetoothSearchActivity.paper)) {
                 HPRTPrinterHelper.Form();
-            }*/
+            }
             HPRTPrinterHelper.Form();
             HPRTPrinterHelper.Print();
 
@@ -665,7 +664,7 @@ public class BluetoothSearchActivity extends BaseActivity {
     private void setLogoData() {
         switch (express_id) {
             case "100101":    //中通
-                fastLogoBig = "ic_zrhongtong_big.png";
+                fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
                 break;
             case "100102":    //顺丰

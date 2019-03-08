@@ -552,6 +552,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     private void printPanel() {
         try {
             HashMap<String, String> pum = new HashMap<String, String>();
+            // pum.put("[packageCode]", packageCode);
             pum.put("[packageCode]", packageCode);
             pum.put("[barcode]", barcode);
             pum.put("[date]", date);
@@ -562,14 +563,14 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             pum.put("[Receiver_address_all]", Receiver_address + Receiver_address1);
             pum.put("[Receiver_address1]", Receiver_address1);
             pum.put("[Sender]", Sender);
-            pum.put("[Sender_Phone]", Sender_Phone);
-            pum.put("[Sender_address]", Sender_address);
+            pum.put("[Sender_Phone]",  Sender_Phone);
+            pum.put("[Sender_address]",  Sender_address);
             pum.put("[Sender_address_all]", Sender_address + Sender_address1);
             pum.put("[Sender_address1]", Sender_address1);
             pum.put("[servicePhone]", "4008 6666");
-            pum.put("[wight]", weight);
+            pum.put("[wight]",weight);
             pum.put("[printTime]", printTime);
-            pum.put("[stageCode]", number);
+            pum.put("[stageCode]",number);
             pum.put("[goodName]", goods_name);
             Set<String> keySet = pum.keySet();
             Iterator<String> iterator = keySet.iterator();
@@ -618,10 +619,9 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             Bitmap bitmap2 = BitmapFactory.decodeStream(inbmp2);
             HPRTPrinterHelper.Expanded("310", "1115", bitmap2, (byte) 0);//第三联 快递公司logo
 
-
-            /*  if ("1".equals(BluetoothSearchActivity.paper)) {
+              if ("1".equals(BluetoothSearchActivity.paper)) {
                 HPRTPrinterHelper.Form();
-            }*/
+            }
             HPRTPrinterHelper.Form();
             HPRTPrinterHelper.Print();
 
@@ -633,7 +633,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     private void setLogoData() {
         switch (express_id) {
             case "100101":    //中通
-                fastLogoBig = "ic_zrhongtong_big.png";
+                fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
                 break;
             case "100102":    //顺丰
