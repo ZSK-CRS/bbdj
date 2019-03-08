@@ -369,6 +369,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             }
         } else {
             scanBluetooth();    //扫描蓝牙设备
+            //修正bug数据
         }
 
     }
