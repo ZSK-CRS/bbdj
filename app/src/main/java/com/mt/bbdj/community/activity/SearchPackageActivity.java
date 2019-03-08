@@ -116,6 +116,7 @@ public class SearchPackageActivity extends BaseActivity {
 
     private void searchPackageMessage() {
         String yundanhao = etDanhao.getText().toString();
+        yundanhao = "73221063002710";
         expressName = tvExpress.getText().toString();
         if ("".equals(yundanhao)) {
             ToastUtil.showShort("请输入运单号");
@@ -140,10 +141,10 @@ public class SearchPackageActivity extends BaseActivity {
                     JSONObject jsonObject = new JSONObject(response.get());
                     String code = jsonObject.get("code").toString();
                     if ("5001".equals(code)) {
-                        Intent intent = new Intent(SearchPackageActivity.this,ShowPackageMessageActivity.class);
+                       /* Intent intent = new Intent(SearchPackageActivity.this,ShowPackageMessageActivity.class);
                         intent.putExtra("express_id",expressId);
                         intent.putExtra("express",expressName);
-                        startActivity(intent);
+                        startActivity(intent);*/
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

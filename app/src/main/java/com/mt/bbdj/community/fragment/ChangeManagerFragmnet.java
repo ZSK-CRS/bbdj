@@ -118,6 +118,10 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
     }
 
     private void showSelectDialog() {
+        if (mData.size() == 0) {
+            ToastUtil.showShort("无交接数据！");
+            return;
+        }
         if (popupWindow != null && !popupWindow.isShowing()) {
             popupWindow.showAtLocation(buttonPanel, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         }
@@ -335,6 +339,7 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
                     if ("5001".equals(code)) {
                         mData.clear();
                         JSONArray list = data.getJSONArray("list");
+
                         String sum = data.getString("sum");
                         tv_number.setText(sum);
                         for (int i = 0; i < list.length(); i++) {
