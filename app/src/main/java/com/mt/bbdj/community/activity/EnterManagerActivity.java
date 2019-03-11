@@ -10,7 +10,9 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +60,7 @@ public class EnterManagerActivity extends CaptureActivity {
     private TextView tvWailNumber;     //运单号
     private TextView expressSelect;    //快递公司选择
     private RecyclerView recyclerView;
+    private RelativeLayout ivBack;    //返回
     private List<HashMap<String, String>> mList = new ArrayList<>();
 
     private boolean isContinuousScan = true;
@@ -97,10 +100,19 @@ public class EnterManagerActivity extends CaptureActivity {
             }
         });
 
+        //选择对话框
         expressSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectExpressDialog(v);
+            }
+        });
+
+        //返回
+        ivBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
     }
@@ -113,7 +125,7 @@ public class EnterManagerActivity extends CaptureActivity {
             view.getLocationOnScreen(location);
             int x = location[0];
             int y = location[1];
-            popupWindow.showAtLocation(view, Gravity.RIGHT | Gravity.TOP, 0, y + view.getHeight());
+            popupWindow.showAtLocation(view, Gravity.CENTER , x, y + view.getHeight());
         }
     }
 
@@ -125,6 +137,7 @@ public class EnterManagerActivity extends CaptureActivity {
             RecyclerView fastList = selectView.findViewById(R.id.tl_fast_list);
             initRecycler(fastList);
             popupWindow = new PopupWindow(selectView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
             //设置动画
             popupWindow.setAnimationStyle(R.style.popup_window_anim);
             //设置背景颜色
@@ -310,6 +323,7 @@ public class EnterManagerActivity extends CaptureActivity {
         tvWailNumber = findViewById(R.id.tv_yundan);
         recyclerView = findViewById(R.id.rl_order_list);
         expressSelect = findViewById(R.id.tv_expressage_select);
+        ivBack = findViewById(R.id.iv_back);
         initRecyclerView();    //初始化列表
     }
 

@@ -102,7 +102,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
                     camera.setParameters(parameters);
                     camera.startPreview();
                     focus();//首次对焦
-                    //mAutoFocusManager = new AutoFocusManager(camera);//定时对焦
+                   // mAutoFocusManager = new AutoFocusManager(camera);//定时对焦
                 } catch (Exception e1) {
                     e.printStackTrace();
                     camera = null;

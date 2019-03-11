@@ -1249,7 +1249,7 @@ public class NoHttpRequest {
         request.add("randomStr", randomStr);     //随机值
         request.add("Encryption", encryption);    //加密值
         request.add("user_id", user_id);
-        request.add("numberse", numberse);
+        request.add("numbers", numberse);
         request.add("express", express);
         return request;
     }

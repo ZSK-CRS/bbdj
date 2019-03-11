@@ -54,6 +54,8 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
 
     private TextView tvDeleteGoods;    //删除商品
 
+    private TextView allMoneyTV;    //合计金额
+
     private boolean isCheckAll = true;     //是否全选
     private ShopCardAdapter mAdapter;
 
@@ -68,6 +70,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
     private final int REQUEST_DELETE_GOODS = 200;    //删除物品
     private final int REQUEST_CHANGE_GOODS_NUMBER = 300;    //修改数量
     private String cartId;
+    private float allMoney;
 
 
     @Override
@@ -235,15 +238,35 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
                 String cart_id = map.get("cart_id");
                 map.put("number",value+"");
                 changeGoodsNumer(user_id,cart_id,value);
+                accountMoney(value);     //计算总金额
             }
         });
     }
 
+    private void accountMoney(int number) {
+        float singleMoney = 0;
+        for (HashMap<String,String> map : mList) {
+
+            String selectState = map.get("selectState");
+            //表示的是选中的计算价格
+            if ("1".equals(selectState)) {
+                String price = map.get("price");
+                if (price == null || "".equals(price)) {
+                    continue;
+                }
+                float money =  Float.parseFloat(price);
+                singleMoney = money*number;
+            }
+        }
+        allMoney+=singleMoney;
+        allMoneyTV.setText(allMoney +"");
+    }
 
 
     private void initView() {
         ivBack = findViewById(R.id.iv_back);
         rlShopGoodsName = findViewById(R.id.rl_goods_want);
+        allMoneyTV = findViewById(R.id.tv_all_money);
         btCommit = findViewById(R.id.tv_payfor);
         tvCheck = findViewById(R.id.tv_check);
         ivCheckSelect = findViewById(R.id.iv_select_check);

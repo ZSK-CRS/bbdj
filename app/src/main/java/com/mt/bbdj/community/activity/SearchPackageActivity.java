@@ -116,7 +116,6 @@ public class SearchPackageActivity extends BaseActivity {
 
     private void searchPackageMessage() {
         String yundanhao = etDanhao.getText().toString();
-        yundanhao = "73221063002710";
         expressName = tvExpress.getText().toString();
         if ("".equals(yundanhao)) {
             ToastUtil.showShort("请输入运单号");
@@ -138,13 +137,15 @@ public class SearchPackageActivity extends BaseActivity {
             public void onSucceed(int what, Response<String> response) {
                 LogUtil.i("photoFile", "SearchPackageActivity::" + response.get());
                 try {
-                    JSONObject jsonObject = new JSONObject(response.get());
+                    String result = response.get();
+                    JSONObject jsonObject = new JSONObject(result);
                     String code = jsonObject.get("code").toString();
                     if ("5001".equals(code)) {
-                       /* Intent intent = new Intent(SearchPackageActivity.this,ShowPackageMessageActivity.class);
+                        Intent intent = new Intent(SearchPackageActivity.this,ShowPackageMessageActivity.class);
                         intent.putExtra("express_id",expressId);
                         intent.putExtra("express",expressName);
-                        startActivity(intent);*/
+                        intent.putExtra("result",result);
+                        startActivity(intent);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
