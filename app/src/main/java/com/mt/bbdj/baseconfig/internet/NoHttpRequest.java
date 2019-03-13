@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.mt.bbdj.baseconfig.utls.DateUtil;
+import com.mt.bbdj.baseconfig.utls.MD5Util;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.yanzhenjie.nohttp.BasicBinary;
@@ -14,6 +15,7 @@ import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.Request;
 
 import java.io.File;
+import java.util.Base64;
 
 /**
  * Author : ZSK
@@ -1983,6 +1985,5 @@ public class NoHttpRequest {
         request.add("content", content);
         return request;
     }
-
 
 }

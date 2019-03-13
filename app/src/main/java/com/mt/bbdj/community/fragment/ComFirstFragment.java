@@ -47,6 +47,8 @@ import com.mt.bbdj.community.activity.MatterShopActivity;
 import com.mt.bbdj.community.activity.MessageAboutActivity;
 import com.mt.bbdj.community.activity.MessageManagerdActivity;
 import com.mt.bbdj.community.activity.MoneyFormatManagerActivity;
+import com.mt.bbdj.community.activity.OutManagerActivity;
+import com.mt.bbdj.community.activity.RepertoryActivity;
 import com.mt.bbdj.community.activity.SearchPackageActivity;
 import com.mt.bbdj.community.activity.SendManagerActivity;
 import com.mt.bbdj.community.activity.SendResByHandActivity;
@@ -101,7 +103,7 @@ public class ComFirstFragment extends BaseFragment {
     @BindView(R.id.tv_sms_number)
     TextView tvSmsNumber;    //短信余额
     @BindView(R.id.tv_abnormal_wait)
-    TextView tvAbnormalWait;   //异常件
+    TextView tvAbnormalWait;   //入库数
     @BindView(R.id.tv_abnormal_handle)
     TextView tvAbnormalHandle;  //异常件已处理的消息
     @BindView(R.id.tv_pannel_number)
@@ -217,8 +219,6 @@ public class ComFirstFragment extends BaseFragment {
 
     private void initData() {
 
-
-
         tvTime.setText(DateUtil.getCurrentTimeFormat("yyyy-MM-dd"));
     }
 
@@ -290,6 +290,7 @@ public class ComFirstFragment extends BaseFragment {
                 handleEnterManagerEvent();
                 break;
             case "5":       //出库管理
+                handleOutManagerEvent();
                 break;
             case "6":       //财务管理
                 handleMoneyManagerEvent();
@@ -310,6 +311,11 @@ public class ComFirstFragment extends BaseFragment {
                 break;
         }
 
+    }
+
+    private void handleOutManagerEvent() {
+        Intent intent = new Intent(getActivity(),OutManagerActivity.class);
+        startActivity(intent);
     }
 
     private void handleEnterManagerEvent() {
@@ -372,16 +378,19 @@ public class ComFirstFragment extends BaseFragment {
                 item.put("name", "寄件管理");
                 item.put("ic", R.drawable.ic_main_jijianguanli);
             }
+
             if (i == 1) {
                 item.put("id", "1");
                 item.put("name", "手动寄件");
                 item.put("ic", R.drawable.ic_main_shoudongjijian);
             }
+
             if (i == 2) {
                 item.put("id", "2");
                 item.put("name", "物流查询");
                 item.put("ic", R.drawable.ic_main_wuliuchaxun);
             }
+
             if (i == 3) {
                 item.put("id", "3");
                 item.put("name", "交接管理");
@@ -502,7 +511,7 @@ public class ComFirstFragment extends BaseFragment {
         tvReceiveWait.setText(StringUtil.handleNullResultForNumber(mail_stay));
         tvReceiveHandle.setText("已处理 " + StringUtil.handleNullResultForNumber(mail_processed));
         tvAbnormalWait.setText(StringUtil.handleNullResultForNumber(abnormal_stay));
-        tvAbnormalHandle.setText("已处理 " + StringUtil.handleNullResultForNumber(abnormal_processed));
+        tvAbnormalHandle.setText("入库数 " + StringUtil.handleNullResultForNumber(abnormal_processed));
         tvSmsNumber.setText("短信余额：" + StringUtil.handleNullResultForNumber(sms_number));
         tvPannelNumber.setText("面单余额：" + StringUtil.handleNullResultForNumber(face_number));
         tvAddress.setText(StringUtil.handleNullResultForString(username));
@@ -593,7 +602,7 @@ public class ComFirstFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.tv_address, R.id.tv_time, R.id.tv_receive_wait, R.id.tv_receive_handle, R.id.iv_message})
+    @OnClick({R.id.tv_address, R.id.tv_time, R.id.tv_receive_wait, R.id.tv_receive_handle, R.id.iv_message,R.id.tv_abnormal_wait})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_address:
@@ -609,7 +618,15 @@ public class ComFirstFragment extends BaseFragment {
             case R.id.iv_message:
                 actionToMessagePannel();      //跳转到消息界面
                 break;
+            case R.id.tv_abnormal_wait:     //仓库
+                actionToRepertoryPannel();
+                break;
         }
+    }
+
+    private void actionToRepertoryPannel() {
+        Intent intent = new Intent(getActivity(), RepertoryActivity.class);
+        startActivity(intent);
     }
 
     private void actionToMessagePannel() {

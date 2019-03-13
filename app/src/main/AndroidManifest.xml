@@ -298,8 +298,19 @@
         <activity
             android:name=".community.activity.ChangeManagerdActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".community.activity.MoneyFormatManagerActivity" />
-        <activity android:name=".community.activity.EnterManagerActivity"></activity>
+        <activity
+            android:name=".community.activity.MoneyFormatManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.EnterManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.OutManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.RepertoryActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".community.activity.RepertoryDetailActivity"></activity>
     </application>
 
 </manifest>

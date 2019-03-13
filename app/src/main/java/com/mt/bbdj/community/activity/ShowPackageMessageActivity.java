@@ -35,6 +35,7 @@ public class ShowPackageMessageActivity extends AppCompatActivity {
     private String express;
     private TextView expressMessage;
     private String result;
+    private String yundan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +51,7 @@ public class ShowPackageMessageActivity extends AppCompatActivity {
         express_id = intent.getStringExtra("express_id");
         express = intent.getStringExtra("express");
         result = intent.getStringExtra("result");
+        yundan = intent.getStringExtra("yundan");
     }
 
     private void initListView() {
@@ -61,13 +63,7 @@ public class ShowPackageMessageActivity extends AppCompatActivity {
         Glide.with(this).load(express.getLogoLocalPath())
                 .into(expressLogo);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;   //设置false 就是禁止RecyclerView滑动
-            }
-        };
-        rlMessage.setLayoutManager(linearLayoutManager);
+        rlMessage.setLayoutManager(new LinearLayoutManager(this));
 
         ArrayList<PackageMessage> logisticsBeans = setData();
         PackageMessageAdapter adapter = new PackageMessageAdapter(this, logisticsBeans);
@@ -90,9 +86,6 @@ public class ShowPackageMessageActivity extends AppCompatActivity {
                 String[] timeArray = time.split(" ");
                 String month = timeArray[0];
                 String hour = timeArray[1];
-                if (i == data.length()-1) {
-                    sate = 1;
-                }
                 PackageMessage packageMessage = new PackageMessage(month,hour,sate,title,content);
                 logisticsBeans.add(packageMessage);
             }
@@ -108,7 +101,7 @@ public class ShowPackageMessageActivity extends AppCompatActivity {
         rlMessage = findViewById(R.id.rl_package_message);
         expressLogo = findViewById(R.id.iv_item_expressage_logo);
         expressMessage = findViewById(R.id.tv_item_expressage_name);
-        expressMessage.setText(express+" 8455223233481121");
+        expressMessage.setText(express+" "+yundan);
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

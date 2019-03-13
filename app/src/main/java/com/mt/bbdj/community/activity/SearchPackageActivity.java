@@ -58,6 +58,7 @@ public class SearchPackageActivity extends BaseActivity {
     private int REQUEST_SEARCH_PACKAGE = 100;
     private WaitDialog waitDialog;
     private String expressName;
+    private String yundanhao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +116,7 @@ public class SearchPackageActivity extends BaseActivity {
     }
 
     private void searchPackageMessage() {
-        String yundanhao = etDanhao.getText().toString();
+        yundanhao = etDanhao.getText().toString();
         expressName = tvExpress.getText().toString();
         if ("".equals(yundanhao)) {
             ToastUtil.showShort("请输入运单号");
@@ -126,7 +127,7 @@ public class SearchPackageActivity extends BaseActivity {
             return;
         }
 
-        Request<String> request = NoHttpRequest.getSearchPackRequest(user_id,yundanhao,expressId);
+        Request<String> request = NoHttpRequest.getSearchPackRequest(user_id, yundanhao,expressId);
         mRequestQueue.add(REQUEST_SEARCH_PACKAGE, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -144,6 +145,7 @@ public class SearchPackageActivity extends BaseActivity {
                         Intent intent = new Intent(SearchPackageActivity.this,ShowPackageMessageActivity.class);
                         intent.putExtra("express_id",expressId);
                         intent.putExtra("express",expressName);
+                        intent.putExtra("yundan",yundanhao);
                         intent.putExtra("result",result);
                         startActivity(intent);
                     }

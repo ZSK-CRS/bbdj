@@ -225,7 +225,7 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center"
-                        android:text="异常件"
+                        android:text="出库数"
                         android:textColor="@color/black"
                         android:textSize="@dimen/standardtitleSize"
                         android:textStyle="bold" />
@@ -236,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="0"
-                        android:textColor="@color/red"
+                        android:textColor="@color/black"
                         android:textSize="38sp"
                         android:textStyle="bold" />
 
@@ -254,7 +254,7 @@
                         android:layout_height="30dp"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:text="已处理  0"
+                        android:text="入库数  0"
                         android:textColor="@color/grey_1"
                         android:textSize="@dimen/standardtitleSize" />
 

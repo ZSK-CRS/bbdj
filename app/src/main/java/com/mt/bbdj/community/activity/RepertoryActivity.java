@@ -24,8 +24,8 @@ import android.widget.RelativeLayout;
 import com.flyco.tablayout.SlidingTabLayout;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
-import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
+import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.ExpressLogoDao;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
@@ -34,6 +34,7 @@ import com.mt.bbdj.baseconfig.view.MyPopuwindow;
 import com.mt.bbdj.community.adapter.SimpleFragmentPagerAdapter;
 import com.mt.bbdj.community.adapter.SimpleStringAdapter;
 import com.mt.bbdj.community.fragment.FinishHandleFragment;
+import com.mt.bbdj.community.fragment.RepertoryFragment;
 import com.mt.bbdj.community.fragment.WaitCollectFragment;
 import com.mt.bbdj.community.fragment.WaitMimeographFragment;
 
@@ -49,20 +50,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SendManagerActivity extends BaseActivity {
+public class RepertoryActivity extends BaseActivity {
 
     @BindView(R.id.iv_back)
     RelativeLayout ivBack;
-    @BindView(R.id.textView_serach)
-    EditText textViewSerach;
     @BindView(R.id.slt_title)
     SlidingTabLayout sltTitle;
     @BindView(R.id.viewpager)
     ViewPager viewPager;
     @BindView(R.id.tv_fast_select)
     ImageView tvFastSelect;                   //筛选快递公司
-    @BindView(R.id.ll_title)
-    LinearLayout llTitle;
 
     private List<HashMap<String, String>> mFastData = new ArrayList<>();    //快递公司
 
@@ -77,50 +74,16 @@ public class SendManagerActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_send_manager);
+        setContentView(R.layout.activity_repertory);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initParams();
-        initListener();
         initData();
+        initListener();
         initView();
     }
 
-    private void initParams() {
-        DaoSession daoSession = GreenDaoManager.getInstance().getSession();
-        mExpressLogoDao = daoSession.getExpressLogoDao();
-    }
-
     private void initListener() {
-        //搜索栏
-        textViewSerach.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
-                    // 先隐藏键盘
-                    ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
-                            getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-
-                    String keywords = textViewSerach.getText().toString().trim();
-                    if (!"".equals(keywords)) {
-                        int target = 200;
-                        if (currentItem == 0) {
-                            target = 200;
-                        }
-                        if (currentItem == 1) {
-                            target = 201;
-                        }
-                        if (currentItem == 2) {
-                            target = 202;
-                        }
-                        EventBus.getDefault().post(new TargetEvent(target, keywords));
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-
         //筛选快递
         tvFastSelect.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,16 +95,14 @@ public class SendManagerActivity extends BaseActivity {
     }
 
     private void showSelectPop(View view) {
-        if (Build.VERSION.SDK_INT < 24) {
-            popupWindow.showAsDropDown(view);
-        } else {
-            int[] location = new int[2];
-            view.getLocationOnScreen(location);
-            int x = location[0];
-            int y = location[1];
-            popupWindow.showAtLocation(view, Gravity.RIGHT | Gravity.TOP, 0, y + view.getHeight());
-        }
+        popupWindow.showAsDropDown(view);
     }
+
+    private void initParams() {
+        DaoSession daoSession = GreenDaoManager.getInstance().getSession();
+        mExpressLogoDao = daoSession.getExpressLogoDao();
+    }
+
 
     private void initSelectPop() {
         if (popupWindow != null && popupWindow.isShowing()) {
@@ -214,9 +175,6 @@ public class SendManagerActivity extends BaseActivity {
         if (currentItem == 1) {
             target = 301;
         }
-        if (currentItem == 2) {
-            target = 302;
-        }
         EventBus.getDefault().post(new TargetEvent(target, express_id));
     }
 
@@ -228,15 +186,13 @@ public class SendManagerActivity extends BaseActivity {
 
     private void initFragment() {
         list_fragment.clear();
-        list_fragment.add(WaitCollectFragment.getInstance());    //待收件
-        list_fragment.add(FinishHandleFragment.getInstance());    //已处理
-        list_fragment.add(WaitMimeographFragment.getInstance());    //待打印
+        list_fragment.add(RepertoryFragment.getInstance(0));    //入库
+        list_fragment.add(RepertoryFragment.getInstance(1));    //出库
         list_title.clear();
-        list_title.add("待收件");
-        list_title.add("已处理");
-        list_title.add("待打印");
+        list_title.add("入库");
+        list_title.add("出库");
         pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(),
-                SendManagerActivity.this, list_fragment, list_title);
+                RepertoryActivity.this, list_fragment, list_title);
         viewPager.setAdapter(pagerAdapter);
 
         sltTitle.setViewPager(viewPager);

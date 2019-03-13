@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/ll_enter_mana"
+    android:id="@+id/ll_enter_manager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -38,19 +38,10 @@
             android:layout_height="30dp"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="中通快递"
+            android:text="极速出库"
             android:textColor="@color/whilte"
             android:textSize="16sp" />
 
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="5dp"
-            android:layout_toRightOf="@+id/tv_expressage_select"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_down" />
 
         <TextView
             android:id="@+id/tv_enter"
@@ -59,7 +50,7 @@
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/tv_enter_number"
             android:gravity="center"
-            android:text="全部入库"
+            android:text="全部出库"
             android:textColor="@color/whilte"
             android:textSize="14sp" />
 
@@ -71,7 +62,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:gravity="center"
-            android:text="(5)"
+            android:text="(2)"
             android:textColor="@color/whilte"
             android:textSize="15sp" />
 

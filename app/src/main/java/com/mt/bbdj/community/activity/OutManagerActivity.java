@@ -1,10 +1,11 @@
 package com.mt.bbdj.community.activity;
 
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,12 +16,10 @@ import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
 import com.mt.bbdj.R;
-import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
@@ -28,35 +27,37 @@ import com.mt.bbdj.baseconfig.db.gen.ExpressLogoDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
-import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SoundHelper;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MarginDecoration;
 import com.mt.bbdj.baseconfig.view.MyDecoration;
-import com.mt.bbdj.baseconfig.view.MyPopuwindow;
 import com.mt.bbdj.community.adapter.EnterManagerAdapter;
-import com.mt.bbdj.community.adapter.MyOrderAdapter;
 import com.mt.bbdj.community.adapter.SimpleStringAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.RequestMethod;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import static cn.jiguang.net.HttpUtils.ENCODING_UTF_8;
 
 
-public class EnterManagerActivity extends CaptureActivity {
+public class OutManagerActivity extends CaptureActivity {
 
     private TextView tvPackageCode;     //提货码
     private TextView tvWailNumber;     //运单号
@@ -71,15 +72,25 @@ public class EnterManagerActivity extends CaptureActivity {
     private RequestQueue mRequestQueue;
     private int packageCode = 1060204;
 
-    private MyPopuwindow popupWindow;
+    private PopupWindow popupWindow;
 
     private List<HashMap<String, String>> mFastData = new ArrayList<>();    //快递公司
     private ExpressLogoDao mExpressLogoDao;
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_enter_manager;
+        return R.layout.activity_out_manager;
     }
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 1) {
+                String result = (String) msg.obj;
+                ToastUtil.showShort(result);
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -89,7 +100,20 @@ public class EnterManagerActivity extends CaptureActivity {
         initParams();
         initView();
         initListener();
+
+
+      /*  new Thread(new Runnable() {
+            @Override
+            public void run() {
+                requestOut();
+            }
+        }).start();*/
+
         initSelectPop();
+    }
+
+    private void requestData() {
+
     }
 
     private void initListener() {
@@ -102,15 +126,6 @@ public class EnterManagerActivity extends CaptureActivity {
             }
         });
 
-        //选择对话框
-        expressSelect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectExpressDialog(v);
-            }
-        });
-
-
         //返回
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +136,15 @@ public class EnterManagerActivity extends CaptureActivity {
     }
 
     private void selectExpressDialog(View view) {
-        popupWindow.showAsDropDown(view);
+        if (Build.VERSION.SDK_INT < 24) {
+            popupWindow.showAsDropDown(view);
+        } else {
+            int[] location = new int[2];
+            view.getLocationOnScreen(location);
+            int x = location[0];
+            int y = location[1];
+            popupWindow.showAtLocation(view, Gravity.CENTER , x, y + view.getHeight());
+        }
     }
 
     private void initSelectPop() {
@@ -131,9 +154,8 @@ public class EnterManagerActivity extends CaptureActivity {
             View selectView = getLayoutInflater().inflate(R.layout.fast_layout_1, null);
             RecyclerView fastList = selectView.findViewById(R.id.tl_fast_list);
             initRecycler(fastList);
-            popupWindow = new MyPopuwindow(selectView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            popupWindow = new PopupWindow(selectView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-
             //设置动画
             popupWindow.setAnimationStyle(R.style.popup_window_anim);
             //设置背景颜色
@@ -186,8 +208,64 @@ public class EnterManagerActivity extends CaptureActivity {
         goodsAdapter.notifyDataSetChanged();
     }
 
-    private void requestEnter() {
-        Request<String> request = NoHttpRequest.getMyOrderList(user_id, 1);
+    private void requestOut() {
+        String pathUrl = "http://192.168.1.116/HzApi/pushWeight";
+        //建立连接
+        URL url= null;
+        try {
+            url = new URL(pathUrl);
+            HttpURLConnection httpConn=(HttpURLConnection)url.openConnection();
+            ////设置连接属性
+            httpConn.setDoOutput(true);//使用 URL 连接进行输出
+            httpConn.setDoInput(true);//使用 URL 连接进行输入
+            httpConn.setUseCaches(false);//忽略缓存
+            httpConn.setRequestMethod("POST");//设置URL请求方法
+            String requestString = "{\"companyCode\":\"GP1551345058\",\"scanType\":\"TRAN\",\"billCode\":\"73105882055131\",\"partnerCode\":\"50661551955673\",\"weight\":\"10\"}";
+
+            byte[] requestStringBytes = requestString.getBytes(ENCODING_UTF_8);
+            httpConn.setRequestProperty("Content-length", "" + requestStringBytes.length);
+            httpConn.setRequestProperty("Content-Type", "application/octet-stream");
+            httpConn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
+            httpConn.setRequestProperty("Charset", "UTF-8");
+            httpConn.setRequestProperty("x-companyid", "be0dbfb7f29742e99870ea449a79a55b");
+            httpConn.setRequestProperty("x-datadigest", "WSbdQpYR1fEBFuQaAiMB5Q==");
+
+            //建立输出流，并写入数据
+            OutputStream outputStream = httpConn.getOutputStream();
+            outputStream.write(requestStringBytes);
+            outputStream.close();
+
+            String result = "";
+
+            //获得响应状态
+            int responseCode = httpConn.getResponseCode();
+            if(HttpURLConnection.HTTP_OK == responseCode){//连接成功
+
+                //当正确响应时处理数据
+                StringBuffer sb = new StringBuffer();
+                String readLine;
+                BufferedReader responseReader;
+                //处理响应流，必须与服务器响应流输出的编码一致
+                responseReader = new BufferedReader(new InputStreamReader(httpConn.getInputStream(), ENCODING_UTF_8));
+                while ((readLine = responseReader.readLine()) != null) {
+                    sb.append(readLine).append("\n");
+                }
+                responseReader.close();
+                LogUtil.i("hah",sb.toString());
+                result = sb.toString();
+            } else {
+                LogUtil.i("hah","连接失败");
+                result = "连接失败";
+            }
+            Message msg = Message.obtain();
+            msg.what = 1;
+            msg.obj = result;
+            handler.sendMessage(msg);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    /*    Request<String> request = NoHttpRequest.getTest();
         mRequestQueue.add(1, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -199,14 +277,6 @@ public class EnterManagerActivity extends CaptureActivity {
                 LogUtil.i("photoFile", "OrderFragment::" + response.get());
                 try {
                     JSONObject jsonObject = new JSONObject(response.get());
-                    String code = jsonObject.get("code").toString();
-                    String msg = jsonObject.get("msg").toString();
-                    if ("5001".equals(code)) {
-
-                    } else {
-                        ToastUtil.showShort(msg);
-                    }
-                    mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -222,7 +292,7 @@ public class EnterManagerActivity extends CaptureActivity {
             public void onFinish(int what) {
                 //   dialogLoading.cancel();
             }
-        });
+        });*/
     }
 
     /**
