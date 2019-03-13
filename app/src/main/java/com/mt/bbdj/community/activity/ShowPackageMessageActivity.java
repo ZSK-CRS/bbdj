@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShowPackageMessageActivity extends AppCompatActivity {
 
@@ -58,10 +59,13 @@ public class ShowPackageMessageActivity extends AppCompatActivity {
 
         DaoSession daoSession = GreenDaoManager.getInstance().getSession();
         ExpressLogoDao expressLogoDao = daoSession.getExpressLogoDao();
-        ExpressLogo express = expressLogoDao.queryBuilder().where(ExpressLogoDao.Properties.Express_id.eq(express_id)).list().get(0);
+        List<ExpressLogo> expressList = expressLogoDao.queryBuilder().where(ExpressLogoDao.Properties.Express_id.eq(express_id)).list();
 
-        Glide.with(this).load(express.getLogoLocalPath())
-                .into(expressLogo);
+        if (expressList.size() != 0) {
+            ExpressLogo express = expressList.get(0);
+            Glide.with(this).load(express.getLogoLocalPath())
+                    .into(expressLogo);
+        }
 
         rlMessage.setLayoutManager(new LinearLayoutManager(this));
 

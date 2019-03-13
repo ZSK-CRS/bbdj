@@ -74,6 +74,8 @@ public class MyOrderDetailActivity extends BaseActivity {
     private String express_id;
     private String express_name;
     private int type = 1;
+    private String yundan;
+    private WaitDialog waitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,11 +88,11 @@ public class MyOrderDetailActivity extends BaseActivity {
     }
 
     private void requestData() {
-        Request<String> request = NoHttpRequest.getMyOrderDetailRequest(user_id,orders_id);
+        Request<String> request = NoHttpRequest.getMyOrderDetailRequest(user_id, orders_id);
         mRequestQueue.add(1, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-                dialogLoading = WaitDialog.show(MyOrderDetailActivity.this,"请稍后...").setCanCancel(true);
+                dialogLoading = WaitDialog.show(MyOrderDetailActivity.this, "请稍后...").setCanCancel(true);
             }
 
             @Override
@@ -103,7 +105,7 @@ public class MyOrderDetailActivity extends BaseActivity {
                     JSONObject data = jsonObject.getJSONObject("data");
                     if ("5001".equals(code)) {
                         setData(data);
-                    }  else {
+                    } else {
                         ToastUtil.showShort(msg);
                     }
                 } catch (JSONException e) {
@@ -126,24 +128,25 @@ public class MyOrderDetailActivity extends BaseActivity {
 
     private void setData(JSONObject jsonObject) throws JSONException {
         tvName.setText(jsonObject.getString("orders_realname"));
-      //  String logoPath = jsonObject.getString("thumb");
-        tvAddress.setText(jsonObject.getString("orders_region")+jsonObject.getString("orders_address"));
+        //  String logoPath = jsonObject.getString("thumb");
+        tvAddress.setText(jsonObject.getString("orders_region") + jsonObject.getString("orders_address"));
         tvGoodsName.setText(jsonObject.getString("product_name"));
-        tvGoodsMoney.setText("￥"+jsonObject.getString("orders_money"));
+        tvGoodsMoney.setText("￥" + jsonObject.getString("orders_money"));
         tvGoodsType.setText(jsonObject.getString("genre_name"));
-        tvTvGoodsNumber.setText("×"+jsonObject.getString("orders_number"));
+        tvTvGoodsNumber.setText("×" + jsonObject.getString("orders_number"));
         tvDingdan.setText(jsonObject.getString("order_number"));
         express_id = jsonObject.getString("express_id");
         express_name = jsonObject.getString("express_name");
-        tvCreateTime.setText(DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm:ss",jsonObject.getString("create_time")));
-        tvSendGoodsTime.setText(DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm:ss",jsonObject.getString("handle_time")));
+        yundan = jsonObject.getString("order_number");
+        tvCreateTime.setText(DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm:ss", jsonObject.getString("create_time")));
+        tvSendGoodsTime.setText(DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm:ss", jsonObject.getString("handle_time")));
     }
 
 
     private void initParams() {
         Intent intent = getIntent();
         orders_id = intent.getStringExtra("orders_id");
-        type = intent.getIntExtra("type",1);
+        type = intent.getIntExtra("type", 1);
         mRequestQueue = NoHttp.newRequestQueue();
         DaoSession daoSession = GreenDaoManager.getInstance().getSession();
         userBaseMessageDao = daoSession.getUserBaseMessageDao();
@@ -162,7 +165,7 @@ public class MyOrderDetailActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_find_package_message:
-                searchPackageMessage();
+                searchPackageMessage();     //查询物流信息
                 break;
             case R.id.id_call_service:
             case R.id.id_connact_service:
@@ -176,11 +179,52 @@ public class MyOrderDetailActivity extends BaseActivity {
             ToastUtil.showShort("暂无物流信息");
             return;
         }
-        Intent intent = new Intent(MyOrderDetailActivity.this,ShowPackageMessageActivity.class);
-        intent.putExtra("express_id",express_id);
-        intent.putExtra("express",express_name);
-        startActivity(intent);
+
+        searPackageMessage();
     }
+
+    private void searPackageMessage() {
+        Request<String> request = NoHttpRequest.getSearchPackRequest(user_id, yundan, express_id);
+        mRequestQueue.add(1, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                waitDialog = WaitDialog.show(MyOrderDetailActivity.this, "搜索中...");
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                LogUtil.i("photoFile", "SearchPackageActivity::" + response.get());
+                try {
+                    String result = response.get();
+                    JSONObject jsonObject = new JSONObject(result);
+                    String code = jsonObject.get("code").toString();
+                    if ("5001".equals(code)) {
+                        Intent intent = new Intent(MyOrderDetailActivity.this, ShowPackageMessageActivity.class);
+                        intent.putExtra("express_id", express_id);
+                        intent.putExtra("express", express_name);
+                        intent.putExtra("result", result);
+                        intent.putExtra("yundan", yundan);
+                        startActivity(intent);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    waitDialog.doDismiss();
+                }
+                waitDialog.doDismiss();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                waitDialog.doDismiss();
+            }
+
+            @Override
+            public void onFinish(int what) {
+                waitDialog.doDismiss();
+            }
+        });
+    }
+
 
     private void showConnectService() {
         SelectDialog.show(this, "客服热线", "010-5838292", "呼叫", new DialogInterface.OnClickListener() {

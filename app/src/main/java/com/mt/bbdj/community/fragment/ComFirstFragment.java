@@ -378,7 +378,7 @@ public class ComFirstFragment extends BaseFragment {
                 item.put("name", "寄件管理");
                 item.put("ic", R.drawable.ic_main_jijianguanli);
             }
-
+                
             if (i == 1) {
                 item.put("id", "1");
                 item.put("name", "手动寄件");

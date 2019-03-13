@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
@@ -27,6 +28,9 @@ import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MyDecoration;
 import com.mt.bbdj.community.activity.MyOrderDetailActivity;
+import com.mt.bbdj.community.activity.OrderDetailActivity;
+import com.mt.bbdj.community.activity.SearchPackageActivity;
+import com.mt.bbdj.community.activity.ShowPackageMessageActivity;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -55,6 +59,7 @@ public class OrderFragment extends BaseFragment implements XRecyclerView.Loading
     private RequestQueue mRequestQueue;
     private int type = 1;    //1 ： 未处理  2：已处理
     private boolean isFresh;
+    private WaitDialog waitDialog;
 
     @Nullable
     @Override
@@ -178,6 +183,7 @@ public class OrderFragment extends BaseFragment implements XRecyclerView.Loading
             }
         });
     }
+
 
     private void initRecycler() {
         recyclerView.setFocusable(false);

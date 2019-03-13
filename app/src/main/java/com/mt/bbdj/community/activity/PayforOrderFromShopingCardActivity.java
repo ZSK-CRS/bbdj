@@ -87,9 +87,9 @@ public class PayforOrderFromShopingCardActivity extends BaseActivity {
         initListener();
     }
 
-    public static void  getInstance(Context context, int payforType) {
-        Intent intent = new Intent(context,PayforOrderFromShopingCardActivity.class);
-        intent.putExtra("payforType",payforType);
+    public static void getInstance(Context context, int payforType) {
+        Intent intent = new Intent(context, PayforOrderFromShopingCardActivity.class);
+        intent.putExtra("payforType", payforType);
         context.startActivity(intent);
     }
 
@@ -103,11 +103,11 @@ public class PayforOrderFromShopingCardActivity extends BaseActivity {
     }
 
     private void commitOrder() {
-        Request<String> request = NoHttpRequest.payForMoreGoodsRequest(user_id,payforCart_id,myaddress_id,"");
+        Request<String> request = NoHttpRequest.payForMoreGoodsRequest(user_id, payforCart_id, myaddress_id, "");
         mRequestQueue.add(1, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-                dialogLoading = WaitDialog.show(PayforOrderFromShopingCardActivity.this,"提交中...").setCanCancel(true);
+                dialogLoading = WaitDialog.show(PayforOrderFromShopingCardActivity.this, "提交中...").setCanCancel(true);
             }
 
             @Override
@@ -152,8 +152,10 @@ public class PayforOrderFromShopingCardActivity extends BaseActivity {
 
     private void initParams() {
         Intent intent = getIntent();
-        payforType = intent.getIntExtra("payforType",0);
+        payforType = intent.getIntExtra("payforType", 0);
         payforCart_id = intent.getStringExtra("cart_id");
+        String payfor = intent.getStringExtra("payfor");
+        tvAllMoney.setText(payfor);
         GoodsMessage goodsMessage = (GoodsMessage) intent.getSerializableExtra("goods");
         mapList = goodsMessage.getGoodsList();
         mRequestQueue = NoHttp.newRequestQueue();
@@ -169,10 +171,10 @@ public class PayforOrderFromShopingCardActivity extends BaseActivity {
 
     private void initAddress() {
         SharedPreferences preferences = SharedPreferencesUtil.getSharedPreference();
-        String myaddress_name = preferences.getString("myaddress_name","");
-        String myaddress_phone = preferences.getString("myaddress_phone","");
-        String myaddress_address = preferences.getString("myaddress_address","");
-        myaddress_id = preferences.getString("myaddress_id","");
+        String myaddress_name = preferences.getString("myaddress_name", "");
+        String myaddress_phone = preferences.getString("myaddress_phone", "");
+        String myaddress_address = preferences.getString("myaddress_address", "");
+        myaddress_id = preferences.getString("myaddress_id", "");
         tvName.setText(myaddress_name);
         tvAddress.setText(myaddress_address);
     }

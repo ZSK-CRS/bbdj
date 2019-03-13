@@ -22,6 +22,7 @@ import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.GoodsMessage;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
+import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MyDecoration;
@@ -86,7 +87,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveMessage(TargetEvent targetEvent){
+    public void receiveMessage(TargetEvent targetEvent) {
         if (targetEvent.getTarget() == TargetEvent.DESTORY_GOODS_FROM_CART) {
             finish();
         }
@@ -127,6 +128,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     ToastUtil.showShort(msg);
                 }
+                accountMoney();
             } catch (JSONException e) {
                 e.printStackTrace();
                 dialogLoading.doDismiss();
@@ -178,6 +180,9 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
             String genre_name = goodsObj.getString("genre_name");
             String price = goodsObj.getString("price");
             String number = goodsObj.getString("number");
+            if ("0".equals(number) || "null".equals(number)) {
+                number = "1";
+            }
             HashMap<String, String> map = new HashMap<>();
             map.put("cart_id", cart_id);
             map.put("product_id", product_id);
@@ -225,8 +230,11 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     map.put("selectState", "0");
                 }
+
+                mAdapter.notifyDataSetChanged();
                 ((SimpleItemAnimator) rlShopGoodsName.getItemAnimator()).setSupportsChangeAnimations(false);
                 mAdapter.notifyItemRangeChanged(0, mList.size());
+                accountMoney();
             }
         });
 
@@ -234,32 +242,37 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
         mAdapter.setOnItemNumberChangeListener(new ShopCardAdapter.OnItemNumberChangeListener() {
             @Override
             public void onChange(int position, int value) {
-                HashMap<String,String> map = mList.get(position);
+                HashMap<String, String> map = mList.get(position);
                 String cart_id = map.get("cart_id");
-                map.put("number",value+"");
-                changeGoodsNumer(user_id,cart_id,value);
-                accountMoney(value);     //计算总金额
+                map.put("number", value + "");
+                changeGoodsNumer(user_id, cart_id, value);
+                mAdapter.notifyDataSetChanged();
+                accountMoney();     //计算总金额
             }
         });
     }
 
-    private void accountMoney(int number) {
+    private void accountMoney() {
+        allMoney = 0;
         float singleMoney = 0;
-        for (HashMap<String,String> map : mList) {
+        for (HashMap<String, String> map : mList) {
 
             String selectState = map.get("selectState");
             //表示的是选中的计算价格
             if ("1".equals(selectState)) {
                 String price = map.get("price");
+                String numberStr = map.get("number");
+                int number = Integer.parseInt(numberStr);
                 if (price == null || "".equals(price)) {
                     continue;
                 }
-                float money =  Float.parseFloat(price);
-                singleMoney = money*number;
+                float money = Float.parseFloat(price);
+                singleMoney = money * number;
+                allMoney += singleMoney;
             }
+
         }
-        allMoney+=singleMoney;
-        allMoneyTV.setText(allMoney +"");
+        allMoneyTV.setText(allMoney + "");
     }
 
 
@@ -297,7 +310,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
         List<GoodsMessage.Goods> goodsList = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         //找到所有的选中的商品
-        for (HashMap<String,String> map : mList) {
+        for (HashMap<String, String> map : mList) {
             String selectState = map.get("selectState");
             String cart_id = map.get("cart_id");
             if ("1".equals(selectState)) {
@@ -307,7 +320,8 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
                 product.setGoodsTypeName(map.get("genre_name"));
                 product.setGoodsPicture(map.get("thumb"));
                 product.setGoodsID(map.get("product_id"));
-                product.setGoodsNumber(map.get("number"));
+                String number = map.get("number");
+                product.setGoodsNumber(number);
                 product.setGenre_id(map.get("genre_id"));
                 goodsList.add(product);
                 sb.append(cart_id);
@@ -317,7 +331,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
         cartId = sb.toString();
         if ("".equals(cartId) || cartId == null) {
             ToastUtil.showShort("请先选择商品！");
-            return ;
+            return;
         }
         cartId = cartId.substring(0, cartId.lastIndexOf(","));
         if (goodsList.size() == 0) {
@@ -326,9 +340,10 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
         }
         goodsMessage.setGoodsList(goodsList);
 
-        Intent intent = new Intent(ShopCarActivity.this,PayforOrderFromShopingCardActivity.class);
-        intent.putExtra("goods",goodsMessage);
-        intent.putExtra("cart_id",cartId);
+        Intent intent = new Intent(ShopCarActivity.this, PayforOrderFromShopingCardActivity.class);
+        intent.putExtra("goods", goodsMessage);
+        intent.putExtra("cart_id", cartId);
+        intent.putExtra("payfor", allMoneyTV.getText().toString());
         startActivity(intent);
     }
 
@@ -346,7 +361,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
         cartId = sb.toString();
         cartId = cartId.substring(0, cartId.lastIndexOf(","));
         if ("".equals(cartId)) {
-            return ;
+            return;
         }
         Request<String> request = NoHttpRequest.deleteGoodsRequest(user_id, cartId);
         mRequestQueue.add(REQUEST_DELETE_GOODS, request, onResponseListener);
@@ -360,6 +375,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
             setAllunCheck();
             ivCheckSelect.setBackgroundResource(R.drawable.shap_circle_grey);
         }
+        accountMoney();    //设置价格
         isCheckAll = !isCheckAll;
     }
 
@@ -380,7 +396,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void changeGoodsNumer(String user_id, String cart_id, int value) {
-        Request<String> request = NoHttpRequest.changeGoodsNumberRequest(user_id, cart_id,value);
+        Request<String> request = NoHttpRequest.changeGoodsNumberRequest(user_id, cart_id, value);
         mRequestQueue.add(REQUEST_CHANGE_GOODS_NUMBER, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -403,6 +419,7 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
