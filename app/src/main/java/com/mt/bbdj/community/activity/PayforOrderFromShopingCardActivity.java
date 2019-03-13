@@ -71,6 +71,7 @@ public class PayforOrderFromShopingCardActivity extends BaseActivity {
     private int type = 1;
     private GoodsOrderAdapter mAdapter;
     private List<GoodsMessage.Goods> mapList = new ArrayList<>();
+    private final int SELECT_ADDRESS = 1;    //选择地址
 
     private int payforType = 0;     //表示的是立即结算（单个清算）
     private String payforCart_id;
@@ -179,13 +180,27 @@ public class PayforOrderFromShopingCardActivity extends BaseActivity {
         tvAddress.setText(myaddress_address);
     }
 
-    @OnClick({R.id.iv_back})
+    @OnClick({R.id.iv_back,R.id.ll_select_receive_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.ll_select_receive_address:    //选择地址
+                Intent intent = new Intent(PayforOrderFromShopingCardActivity.this,MyAddressActivity.class);
+                intent.putExtra("type",true);
+                startActivityForResult(intent,SELECT_ADDRESS);
+                break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return ;
+        }
+        if (requestCode == SELECT_ADDRESS) {
+            initAddress();
+        }
+    }
 }

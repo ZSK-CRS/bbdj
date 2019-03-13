@@ -68,6 +68,7 @@ public class MyAddressActivity extends BaseActivity implements XRecyclerView.Loa
     private final int TYPE_GET_ADDRESS = 4;   //获取地址列表
     private SharedPreferences.Editor mEditor;
     private SharedPreferences mSharedPreferences;
+    private boolean mType1;
 
 
     @Override
@@ -84,8 +85,9 @@ public class MyAddressActivity extends BaseActivity implements XRecyclerView.Loa
     private void initParams() {
         mEditor = SharedPreferencesUtil.getEditor();
         mSharedPreferences = SharedPreferencesUtil.getSharedPreference();
-
-
+        Intent intent = getIntent();
+        //在订单支付界面的选择地址
+        mType1 = intent.getBooleanExtra("type",false);
     }
 
     private void requestData() {
@@ -130,6 +132,10 @@ public class MyAddressActivity extends BaseActivity implements XRecyclerView.Loa
                         +mList.get(position).get("book_address");
                 mEditor.putString("myaddress_address",address);
                 mEditor.commit();
+                if (mType1) {
+                    setResult(RESULT_OK);
+                    finish();
+                }
             }
         });
     }

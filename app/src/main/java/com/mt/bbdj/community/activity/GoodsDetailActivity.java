@@ -1,7 +1,9 @@
 package com.mt.bbdj.community.activity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.kongzue.dialog.v2.SelectDialog;
 import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
@@ -25,6 +28,7 @@ import com.mt.bbdj.baseconfig.model.GoodsMessage;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MarginDecoration;
 import com.mt.bbdj.community.adapter.GoodsAdapter;
@@ -132,20 +136,51 @@ public class GoodsDetailActivity extends BaseActivity {
     }
 
     private void handlePayforAtonce() {
-        GoodsMessage goodsMessage = new GoodsMessage();
-        GoodsMessage.Goods goods = new GoodsMessage.Goods();
-        goods.setGoodsName(product_name);
-        goods.setGoodsPrice(goods_price);
-        goods.setGoodsTypeName(goodsType);
-        goods.setGoodsPicture(show_images);
-        goods.setGoodsID(product_id);
-        goods.setGenre_id(genre_id);
-        List<GoodsMessage.Goods> goodsList = new ArrayList<>();
-        goodsList.add(goods);
-        goodsMessage.setGoodsList(goodsList);
-        Intent intent = new Intent(GoodsDetailActivity.this,PayforOrderActivity.class);
-        intent.putExtra("goods",goodsMessage);
-        startActivity(intent);
+        if (!isHaveAddress()) {    //判断有没有设置地址
+            showAddressDialog();
+        } else {
+            GoodsMessage goodsMessage = new GoodsMessage();
+            GoodsMessage.Goods goods = new GoodsMessage.Goods();
+            goods.setGoodsName(product_name);
+            goods.setGoodsPrice(goods_price);
+            goods.setGoodsTypeName(goodsType);
+            goods.setGoodsPicture(show_images);
+            goods.setGoodsID(product_id);
+            goods.setGenre_id(genre_id);
+            List<GoodsMessage.Goods> goodsList = new ArrayList<>();
+            goodsList.add(goods);
+            goodsMessage.setGoodsList(goodsList);
+            Intent intent = new Intent(GoodsDetailActivity.this,PayforOrderActivity.class);
+            intent.putExtra("goods",goodsMessage);
+            startActivity(intent);
+        }
+    }
+
+
+    private void showAddressDialog() {
+        SelectDialog.show(this, "提示", "请先添加收货地址！", "确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(GoodsDetailActivity.this, MyAddressActivity.class);
+                        startActivityForResult(intent, 1);
+                    }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setCanCancel(true);
+    }
+
+
+    private boolean isHaveAddress() {
+        SharedPreferences preferences = SharedPreferencesUtil.getSharedPreference();
+        String addres = preferences.getString("myaddress_address", "");
+        if ("".equals(addres)) {
+            return false;
+        }
+        return true;
     }
 
     private void handleJoinGoods() {

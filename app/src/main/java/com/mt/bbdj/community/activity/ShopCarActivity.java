@@ -1,6 +1,8 @@
 package com.mt.bbdj.community.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,8 +15,10 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kongzue.dialog.v2.SelectDialog;
 import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
+import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
@@ -24,6 +28,7 @@ import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MyDecoration;
 import com.mt.bbdj.community.adapter.HaveFinishAdapter;
@@ -45,7 +50,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class ShopCarActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShopCarActivity extends BaseActivity implements View.OnClickListener {
 
     private RelativeLayout ivBack;   //返回界面
     private RecyclerView rlShopGoodsName;  // 购物车列表
@@ -59,6 +64,8 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
 
     private boolean isCheckAll = true;     //是否全选
     private ShopCardAdapter mAdapter;
+
+    private final int SELECT_ADDRESS = 1;     //选择收货地址
 
     private List<HashMap<String, String>> mList = new ArrayList<>();
     private RequestQueue mRequestQueue;
@@ -338,13 +345,51 @@ public class ShopCarActivity extends AppCompatActivity implements View.OnClickLi
             ToastUtil.showShort("请选择要购买的商品");
             return;
         }
-        goodsMessage.setGoodsList(goodsList);
 
-        Intent intent = new Intent(ShopCarActivity.this, PayforOrderFromShopingCardActivity.class);
-        intent.putExtra("goods", goodsMessage);
-        intent.putExtra("cart_id", cartId);
-        intent.putExtra("payfor", allMoneyTV.getText().toString());
-        startActivity(intent);
+        if (!isHaveAddress()) {    //判断有没有设置地址
+            showAddressDialog();
+        } else {
+            goodsMessage.setGoodsList(goodsList);
+            Intent intent = new Intent(ShopCarActivity.this, PayforOrderFromShopingCardActivity.class);
+            intent.putExtra("goods", goodsMessage);
+            intent.putExtra("cart_id", cartId);
+            intent.putExtra("payfor", allMoneyTV.getText().toString());
+            startActivity(intent);
+        }
+    }
+
+    private boolean isHaveAddress() {
+        SharedPreferences preferences = SharedPreferencesUtil.getSharedPreference();
+        String addres = preferences.getString("myaddress_address", "");
+        if ("".equals(addres)) {
+            return false;
+        }
+        return true;
+    }
+
+    private void showAddressDialog() {
+        SelectDialog.show(this, "提示", "请先添加收货地址！", "确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(ShopCarActivity.this, MyAddressActivity.class);
+                        startActivityForResult(intent, SELECT_ADDRESS);
+                    }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setCanCancel(true);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
     }
 
     private void deleteGoods() {

@@ -21,7 +21,7 @@ public class MyAddressAdapter extends RecyclerView.Adapter<MyAddressAdapter.MyAd
 
     private List<HashMap<String, String>> mData = new ArrayList<>();
 
-    private int selectPosiion = 0;
+    private int selectPosiion = -1;
 
     public MyAddressAdapter(List<HashMap<String, String>> data) {
         this.mData = data;

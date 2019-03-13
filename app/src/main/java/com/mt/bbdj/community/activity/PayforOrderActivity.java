@@ -78,7 +78,7 @@ public class PayforOrderActivity extends BaseActivity {
     TextView tvGoodsType;    //商品类型
     @BindView(R.id.tv_goods_money)
     TextView tvGoodsMoney;     //价格
-
+    private final int SELECT_ADDRESS = 1;    //选择地址
 
     private String orders_id;
     private RequestQueue mRequestQueue;
@@ -108,9 +108,9 @@ public class PayforOrderActivity extends BaseActivity {
     }
 
 
-    public static void  getInstance(Context context, int payforType) {
-        Intent intent = new Intent(context,PayforOrderActivity.class);
-        intent.putExtra("payforType",payforType);
+    public static void getInstance(Context context, int payforType) {
+        Intent intent = new Intent(context, PayforOrderActivity.class);
+        intent.putExtra("payforType", payforType);
         context.startActivity(intent);
     }
 
@@ -126,19 +126,23 @@ public class PayforOrderActivity extends BaseActivity {
             @Override
             public void onValueChange(int value) {
                 goodsNumber = value;
+
+                float singlePrice = Float.parseFloat(payForGoods.getGoodsPrice());
+                float allprice = value * singlePrice;
+                tvAllMoney.setText(allprice+"");
             }
         });
     }
 
 
     private void commitOrder() {
-        Request<String> request = NoHttpRequest.payForMoneyRightNowRequest(user_id,payForGoods.getGoodsID()
-                ,payForGoods.getGenre_id(),myaddress_id,goodsNumber);
+        Request<String> request = NoHttpRequest.payForMoneyRightNowRequest(user_id, payForGoods.getGoodsID()
+                , payForGoods.getGenre_id(), myaddress_id, goodsNumber);
 
         mRequestQueue.add(1, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-                dialogLoading = WaitDialog.show(PayforOrderActivity.this,"提交中...").setCanCancel(true);
+                dialogLoading = WaitDialog.show(PayforOrderActivity.this, "提交中...").setCanCancel(true);
             }
 
             @Override
@@ -173,7 +177,7 @@ public class PayforOrderActivity extends BaseActivity {
 
     private void initParams() {
         Intent intent = getIntent();
-        payforType = intent.getIntExtra("payforType",0);
+        payforType = intent.getIntExtra("payforType", 0);
         GoodsMessage goodsMessage = (GoodsMessage) intent.getSerializableExtra("goods");
         mapList = goodsMessage.getGoodsList();
         payForGoods = mapList.get(0);
@@ -195,26 +199,49 @@ public class PayforOrderActivity extends BaseActivity {
         Glide.with(this).load(payForGoods.getGoodsPicture()).error(R.drawable.ic_no_picture).into(ivLogo);
         tvGoodName.setText(payForGoods.getGoodsName());
         tvGoodsType.setText(payForGoods.getGoodsTypeName());
-        tvGoodsMoney.setText("￥"+payForGoods.getGoodsPrice());
+        tvGoodsMoney.setText("￥" + payForGoods.getGoodsPrice());
+        String goodsNumber = payForGoods.getGoodsNumber();
+        int number = 1;
+        if (null != goodsNumber && !"".equals(goodsNumber) && !"null".equals(goodsNumber)) {
+            number = Integer.parseInt(payForGoods.getGoodsNumber());
+        }
+        float singlePrice = Float.parseFloat(payForGoods.getGoodsPrice());
+        float allprice = number * singlePrice;
+        tvAllMoney.setText(allprice+"");
     }
 
     private void initAddress() {
         SharedPreferences preferences = SharedPreferencesUtil.getSharedPreference();
-        String myaddress_name = preferences.getString("myaddress_name","");
-        String myaddress_phone = preferences.getString("myaddress_phone","");
-        String myaddress_address = preferences.getString("myaddress_address","");
-        myaddress_id = preferences.getString("myaddress_id","");
+        String myaddress_name = preferences.getString("myaddress_name", "");
+        String myaddress_phone = preferences.getString("myaddress_phone", "");
+        String myaddress_address = preferences.getString("myaddress_address", "");
+        myaddress_id = preferences.getString("myaddress_id", "");
         tvName.setText(myaddress_name);
         tvAddress.setText(myaddress_address);
     }
 
-    @OnClick({R.id.iv_back})
+    @OnClick({R.id.iv_back,R.id.ll_select_receive_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.ll_select_receive_address:   //选择地址
+                Intent intent = new Intent(PayforOrderActivity.this,MyAddressActivity.class);
+                intent.putExtra("type",true);
+                startActivityForResult(intent,SELECT_ADDRESS);
+                break;
         }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            return ;
+        }
+        if (requestCode == SELECT_ADDRESS) {
+            initAddress();
+        }
+    }
+
 
 }

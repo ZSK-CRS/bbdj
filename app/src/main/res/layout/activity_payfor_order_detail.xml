@@ -65,7 +65,9 @@
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/ll_select_receive_address"
+            android:layout_weight="1"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical"
@@ -103,6 +105,11 @@
                 android:textColor="@color/grey_2"
                 android:textSize="14sp" />
         </LinearLayout>
+
+        <ImageView
+            android:src="@drawable/ic_arrow_right"
+            android:layout_width="10dp"
+            android:layout_height="18dp" />
     </LinearLayout>
 
     <View
