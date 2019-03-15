@@ -43,6 +43,7 @@ import com.mt.bbdj.community.activity.ClientManagerActivity;
 import com.mt.bbdj.community.activity.CommunityActivity;
 import com.mt.bbdj.community.activity.ComplainManagerdActivity;
 import com.mt.bbdj.community.activity.EnterManagerActivity;
+import com.mt.bbdj.community.activity.GlobalSearchActivity;
 import com.mt.bbdj.community.activity.MatterShopActivity;
 import com.mt.bbdj.community.activity.MessageAboutActivity;
 import com.mt.bbdj.community.activity.MessageManagerdActivity;
@@ -633,7 +634,8 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void actionToSearchPannel() {
-
+       /* Intent intent = new Intent(getActivity(),GlobalSearchActivity.class);
+        startActivity(intent);*/
     }
 
     private void actionToRepertoryPannel() {

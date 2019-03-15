@@ -134,10 +134,14 @@ public class BindAliFragment extends Fragment {
             BindAccountModel bindAccountModel = (BindAccountModel) targetEvent.getObject();
             mAcountName.setText(bindAccountModel.getAli_realName());
             mAccount.setText(bindAccountModel.getAli_account());
+            mAcountName.setEnabled(false);
+            mAccount.setEnabled(false);
         } else {
             mBtbindAccount.setClickable(true);
             mBtbindAccount.setBackgroundResource(R.drawable.bt_bg_8);
             mBtbindAccount.setTextColor(Color.parseColor("#ffffff"));
+            mAcountName.setEnabled(true);
+            mAccount.setEnabled(true);
         }
     }
 

@@ -102,10 +102,17 @@ public class BindBankcardFragment extends Fragment {
             etAccountName.setText(bindAccountModel.getBank_realName());
             etAccountBank.setText(bindAccountModel.getBank());
             etAccount.setText(bindAccountModel.getBack_number());
+            etAccount.setEnabled(false);
+            etAccountName.setEnabled(false);
+            etAccountBank.setEnabled(false);
+
         } else {
             btCommit.setClickable(true);
             btCommit.setBackgroundResource(R.drawable.bt_bg_8);
             btCommit.setTextColor(Color.parseColor("#ffffff"));
+            etAccount.setEnabled(true);
+            etAccountName.setEnabled(true);
+            etAccountBank.setEnabled(true);
         }
     }
 

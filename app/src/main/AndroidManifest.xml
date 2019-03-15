@@ -311,7 +311,13 @@
         <activity
             android:name=".community.activity.RepertoryActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".community.activity.RepertoryDetailActivity"></activity>
+        <activity
+            android:name=".community.activity.RepertoryDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.GlobalSearchActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>
 
 </manifest>
