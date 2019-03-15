@@ -19,7 +19,7 @@ public class ExpressLogo {
     private String express_name;    //快递公司名称
     private String flag;   // 1 : 快递  2：物流
     private String states;    // 1：使用  2：禁用
-    private String property;    //1：寄件  2：派件
+    private String property;    //1：寄件、派件  2：寄件   3：派件
     @Generated(hash = 1975175317)
     public ExpressLogo(Long id, String express_id, String logoInterPath,
             String logoLocalPath, String express_name, String flag, String states,

@@ -182,10 +182,12 @@ public class CommunityActivity extends BaseActivity {
         if (expressLogoList == null ||expressLogoList.size() == 0) {
             return ;
         }
-        ExpressLogo expressLogo = expressLogoList.get(0);
-        expressLogo.setLogoLocalPath(filePath);
-        expressLogo.setId(expressLogo.getId());
-        mExpressLogoDao.update(expressLogo);
+
+        for (ExpressLogo expressLogo : expressLogoList) {
+            expressLogo.setLogoLocalPath(filePath);
+            expressLogo.setId(expressLogo.getId());
+            mExpressLogoDao.update(expressLogo);
+        }
     }
 
     private void initView() {
@@ -248,35 +250,26 @@ public class CommunityActivity extends BaseActivity {
     }
 
     private void setExpressLogoMessage(JSONObject jsonObject) throws JSONException {
-        JSONObject data = jsonObject.getJSONObject("data");
-        JSONArray ji = data.getJSONArray("ji");
-        JSONArray pai = data.getJSONArray("pai");
 
+        JSONArray dataArray = jsonObject.getJSONArray("data");
         mExpressLogoDao.deleteAll();
+        for (int i = 0;i< dataArray.length();i++) {
+            JSONObject data = dataArray.getJSONObject(i);
+            String express_id = data.getString("express_id");
+            String express_logo = data.getString("express_logo");
+            String express_name = data.getString("express_name");
+            String states = data.getString("states");
+            String flag = data.getString("flag");
+            String category = data.getString("category");
 
-        for (int i = 0; i < ji.length(); i++) {
-            JSONObject jsonObject1 = ji.getJSONObject(i);
             ExpressLogo expressLogo = new ExpressLogo();
-            expressLogo.setExpress_id(jsonObject1.getString("express_id"));
-            expressLogo.setFlag(jsonObject1.getString("flag"));
-            expressLogo.setStates(jsonObject1.getString("states"));
-            expressLogo.setLogoInterPath(jsonObject1.getString("express_logo"));
-            expressLogo.setExpress_name(jsonObject1.getString("express_name"));
+            expressLogo.setExpress_id(express_id);
+            expressLogo.setFlag(flag);
+            expressLogo.setStates(states);
+            expressLogo.setLogoInterPath(express_logo);
+            expressLogo.setExpress_name(express_name);
             expressLogo.setLogoLocalPath("");
-            expressLogo.setProperty(jsonObject1.getString("type"));
-            mExpressLogoDao.save(expressLogo);
-        }
-
-        for (int i = 0; i < pai.length(); i++) {
-            JSONObject jsonObject1 = pai.getJSONObject(i);
-            ExpressLogo expressLogo = new ExpressLogo();
-            expressLogo.setExpress_id(jsonObject1.getString("express_id"));
-            expressLogo.setFlag(jsonObject1.getString("flag"));
-            expressLogo.setStates(jsonObject1.getString("states"));
-            expressLogo.setLogoInterPath(jsonObject1.getString("express_logo"));
-            expressLogo.setExpress_name(jsonObject1.getString("express_name"));
-            expressLogo.setLogoLocalPath("");
-            expressLogo.setProperty(jsonObject1.getString("type"));
+            expressLogo.setProperty(category);
             mExpressLogoDao.save(expressLogo);
         }
         //保存logo信息

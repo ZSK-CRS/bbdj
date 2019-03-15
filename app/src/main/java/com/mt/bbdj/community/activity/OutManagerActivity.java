@@ -209,7 +209,7 @@ public class OutManagerActivity extends CaptureActivity {
     }
 
     private void requestOut() {
-        String pathUrl = "http://192.168.1.116/HzApi/pushWeight";
+        String pathUrl = "http://www.81dja.com/HzApi/pushWeight";
         //建立连接
         URL url= null;
         try {
@@ -220,7 +220,7 @@ public class OutManagerActivity extends CaptureActivity {
             httpConn.setDoInput(true);//使用 URL 连接进行输入
             httpConn.setUseCaches(false);//忽略缓存
             httpConn.setRequestMethod("POST");//设置URL请求方法
-            String requestString = "{\"companyCode\":\"GP1551345058\",\"scanType\":\"TRAN\",\"billCode\":\"73105882055131\",\"partnerCode\":\"50661551955673\",\"weight\":\"10\"}";
+            String requestString = "{\"companyCode\":\"GP1551345058\",\"scanType\":\"TRAN\",\"billCode\":\"73105882055384\",\"partnerCode\":\"91751552011311\",\"weight\":\"10\"}";
 
             byte[] requestStringBytes = requestString.getBytes(ENCODING_UTF_8);
             httpConn.setRequestProperty("Content-length", "" + requestStringBytes.length);
@@ -228,7 +228,7 @@ public class OutManagerActivity extends CaptureActivity {
             httpConn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
             httpConn.setRequestProperty("Charset", "UTF-8");
             httpConn.setRequestProperty("x-companyid", "be0dbfb7f29742e99870ea449a79a55b");
-            httpConn.setRequestProperty("x-datadigest", "WSbdQpYR1fEBFuQaAiMB5Q==");
+            httpConn.setRequestProperty("x-datadigest", "ZGJB/AtcP/3gWeUNyagF2w==");
 
             //建立输出流，并写入数据
             OutputStream outputStream = httpConn.getOutputStream();

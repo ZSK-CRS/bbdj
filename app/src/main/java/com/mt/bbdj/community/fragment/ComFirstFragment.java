@@ -60,6 +60,7 @@ import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONArray;
@@ -111,6 +112,8 @@ public class ComFirstFragment extends BaseFragment {
     @BindView(R.id.iv_message)
     ImageView ivMessage;     //消息
     View mView;
+    @BindView(R.id.textview_serach)
+    TextView tvSearch;     //搜索
 
 
     private List<HashMap<String, Object>> mList = new ArrayList<>();
@@ -144,6 +147,7 @@ public class ComFirstFragment extends BaseFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.layout_com_first_fragment, container, false);
         unbinder = ButterKnife.bind(this, mView);
+        EventBus.getDefault().register(this);
         initParams();
         initData();
         initView();
@@ -602,7 +606,8 @@ public class ComFirstFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.tv_address, R.id.tv_time, R.id.tv_receive_wait, R.id.tv_receive_handle, R.id.iv_message,R.id.tv_abnormal_wait})
+    @OnClick({R.id.tv_address, R.id.tv_time, R.id.tv_receive_wait, R.id.tv_receive_handle,
+            R.id.iv_message,R.id.tv_abnormal_wait,R.id.textview_serach})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_address:
@@ -621,7 +626,14 @@ public class ComFirstFragment extends BaseFragment {
             case R.id.tv_abnormal_wait:     //仓库
                 actionToRepertoryPannel();
                 break;
+            case R.id.textview_serach:
+                actionToSearchPannel();    //搜索
+                break;
         }
+    }
+
+    private void actionToSearchPannel() {
+
     }
 
     private void actionToRepertoryPannel() {
@@ -644,5 +656,11 @@ public class ComFirstFragment extends BaseFragment {
         Intent intent = new Intent(getActivity(), SendManagerActivity.class);
         intent.putExtra("currentItem", 0);
         startActivity(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -35,7 +35,7 @@ public class IntegerUtil {
     }
 
     public static float getStringChangeToFloat(String date) {
-        if (date == null || "".equals(date)) {
+        if (date == null || "".equals(date)||"null".equals(date)) {
             return 0;
         }
         float number = Float.parseFloat(date);

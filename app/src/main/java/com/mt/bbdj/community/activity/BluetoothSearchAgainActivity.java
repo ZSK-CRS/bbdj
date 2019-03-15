@@ -567,11 +567,11 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             pum.put("[Sender_address]",  Sender_address);
             pum.put("[Sender_address_all]", Sender_address + Sender_address1);
             pum.put("[Sender_address1]", Sender_address1);
-            pum.put("[servicePhone]", "4008 6666");
             pum.put("[wight]",weight);
             pum.put("[printTime]", printTime);
             pum.put("[stageCode]",number);
             pum.put("[goodName]", goods_name);
+            pum.put("[servicePhone]", "400-7750-008");
             Set<String> keySet = pum.keySet();
             Iterator<String> iterator = keySet.iterator();
             InputStream afis = this.getResources().getAssets().open("ZhongTong.txt");//打印模版放在assets文件夹里

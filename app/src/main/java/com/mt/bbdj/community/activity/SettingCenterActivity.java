@@ -61,7 +61,11 @@ public class SettingCenterActivity extends BaseActivity {
     private void initView() {
         String version = PackageUtils.getVersionName(this);
         appVersion.setText(version);
+        SharedPreferences sharedPreferences = SharedPreferencesUtil.getSharedPreference();
+        boolean isCheck = sharedPreferences.getBoolean("isPlaySound",true);
+        rbSchoolAround.setChecked(isCheck);
     }
+
 
     @OnClick({R.id.iv_back, R.id.ll_change_password, R.id.bt_take_out})
     public void onViewClicked(View view) {

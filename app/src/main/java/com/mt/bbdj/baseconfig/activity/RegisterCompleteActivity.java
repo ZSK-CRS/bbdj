@@ -380,7 +380,7 @@ public class RegisterCompleteActivity extends BaseActivity {
                     String code = jsonObject.get("code").toString();
                     if ("5001".equals(code)) {
                         JSONObject dataObject = jsonObject.getJSONObject("data");
-                        String pictureUrl = dataObject.getString("picurl");
+                        String pictureUrl = dataObject.getString("picu rl");
                         String message = jsonObject.get("msg").toString();
                         mEditor.putString(pictureType, pictureUrl);
                         mEditor.commit();

@@ -174,12 +174,17 @@ public class SendManagerActivity extends BaseActivity {
         mFastData.clear();
         //查询快递公司的信息
         List<ExpressLogo> expressLogoList = mExpressLogoDao.queryBuilder()
-                .where(ExpressLogoDao.Properties.States.eq(1)).list();
+                .where(ExpressLogoDao.Properties.States.eq(1)).where(ExpressLogoDao.Properties.Property.notEq(3)).list();
         HashMap<String, String> map = new HashMap<>();
         map.put("express", "全部");
         map.put("express_id", "");
         mFastData.add(map);
-        if (expressLogoList != null && expressLogoList.size() != 0) {
+        ExpressLogo expressLogo = expressLogoList.get(0);
+        HashMap<String, String> map1 = new HashMap<>();
+        map1.put("express", expressLogo.getExpress_name());
+        map1.put("express_id", expressLogo.getExpress_id());
+        mFastData.add(map1);
+     /*   if (expressLogoList != null && expressLogoList.size() != 0) {
             for (ExpressLogo expressLogo : expressLogoList) {
                 HashMap<String, String> map1 = new HashMap<>();
                 map1.put("express", expressLogo.getExpress_name());
@@ -187,7 +192,8 @@ public class SendManagerActivity extends BaseActivity {
                 mFastData.add(map1);
                 map1 = null;
             }
-        }
+        }*/
+
         SimpleStringAdapter goodsAdapter = new SimpleStringAdapter(this, mFastData);
         goodsAdapter.setOnItemClickListener(new SimpleStringAdapter.OnItemClickListener() {
             @Override
