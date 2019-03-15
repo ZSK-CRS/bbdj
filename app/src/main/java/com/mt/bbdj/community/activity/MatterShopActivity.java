@@ -206,10 +206,40 @@ public class MatterShopActivity extends BaseActivity {
                         }
                         product.setDataList(dataListBeans);
                         product.setMenuTitle(type_Name);
+
                         homeData.add(product);
                         showTitle.add(i);
                     }
 
+                    //设置短信面单
+
+                    CategoryBean.DataBean pannel = new CategoryBean.DataBean();
+                    List<CategoryBean.DataBean.DataListBean> dataListBeans2 = new ArrayList<>();
+                    CategoryBean.DataBean.DataListBean productList2 = new CategoryBean.DataBean.DataListBean();
+                    productList2.setId("");
+                    productList2.setImgURL("");
+                    productList2.setTitle("面单");
+                    dataListBeans2.add(productList2);
+                    pannel.setDataList(dataListBeans2);
+                    pannel.setMenuTitle("面单");
+                    homeData.add(pannel);
+
+                    CategoryBean.DataBean message = new CategoryBean.DataBean();
+                    List<CategoryBean.DataBean.DataListBean> dataListBeans = new ArrayList<>();
+                    CategoryBean.DataBean.DataListBean productList = new CategoryBean.DataBean.DataListBean();
+                    productList.setId("");
+                    productList.setImgURL("");
+                    productList.setTitle("短信");
+                    dataListBeans.add(productList);
+                    message.setDataList(dataListBeans);
+                    message.setMenuTitle("短信");
+                    homeData.add(message);
+
+                    menuData.add("面单");
+                    menuData.add("短信");
+                    int index = showTitle.size();
+                    showTitle.add(index);
+                    showTitle.add(index+1);
                     mGoodsMenuAdapter.setSelectItem(0);
                     mTitile.setText(homeData.get(0).getMenuTitle());
                     mGoodsHomeAdapter.notifyDataSetChanged();

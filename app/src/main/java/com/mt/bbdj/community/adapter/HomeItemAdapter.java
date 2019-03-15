@@ -63,8 +63,15 @@ public class HomeItemAdapter extends BaseAdapter {
         } else {
             viewHold = (ViewHold) convertView.getTag();
         }
+        String title = subcategory.getTitle();
+        if ("短信".equals(title)) {
+            viewHold.iv_icon.setBackgroundResource(R.drawable.ic_message_);
+        } else if ("面单".equals(title)) {
+            viewHold.iv_icon.setBackgroundResource(R.drawable.ic_pannel_);
+        } else {
+            Glide.with(context).load(subcategory.getImgURL()).error(R.drawable.ic_no_picture).into(viewHold.iv_icon);
+        }
         viewHold.tv_name.setText(subcategory.getTitle());
-        Glide.with(context).load(subcategory.getImgURL()).error(R.drawable.ic_no_picture).into(viewHold.iv_icon);
         return convertView;
     }
 

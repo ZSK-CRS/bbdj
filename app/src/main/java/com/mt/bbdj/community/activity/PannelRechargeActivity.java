@@ -61,7 +61,7 @@ public class PannelRechargeActivity extends BaseActivity {
     private DaoSession mDaoSession;
     private UserBaseMessageDao mUserMessageDao;
 
-    private int single_price = 0;
+    private float single_price = 0;
 
     private String face_id = "";    //面单id
     private int face_number = 0;
@@ -105,7 +105,7 @@ public class PannelRechargeActivity extends BaseActivity {
                 ToastUtil.showShort("超出范围！");
                 return;
             }
-            int allPrice = num * single_price;
+            float allPrice = num * single_price;
             tvPannelMoney.setText(allPrice+"");
         }
     };
@@ -135,7 +135,7 @@ public class PannelRechargeActivity extends BaseActivity {
                         String singlePrice = data.getString("single_price");
                         face_id = data.getString("single_id");
                         if (!"null".equals(single_price) && !"".equals(single_price)) {
-                            single_price = Integer.parseInt(singlePrice);
+                            single_price = Float.parseFloat(singlePrice);
                         }
                     } else {
                         ToastUtil.showShort(msg);
