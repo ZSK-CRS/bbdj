@@ -62,13 +62,14 @@ public class ComDataFragment extends BaseFragment {
         list_fragment.clear();
         list_fragment.add(DateFromsFragment.getInstance());
         list_fragment.add(MonthFromsFragment.getInstance());
+        list_fragment.add(MonthFromsFragment.getInstance());
         list_title.clear();
         list_title.add("日报");
         list_title.add("月报");
+        list_title.add("排行榜");
         SimpleFragmentPagerAdapter pagerAdapter = new SimpleFragmentPagerAdapter(getActivity().getSupportFragmentManager(),
                 getActivity(), list_fragment, list_title);
         viewPager.setAdapter(pagerAdapter);
-
         sltTitle.setViewPager(viewPager);
     }
 

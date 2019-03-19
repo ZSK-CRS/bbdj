@@ -44,6 +44,7 @@
         tl:tl_divider_width="1dp"
         tl:tl_indicator_color="@color/mainColor"
         tl:tl_indicator_height="2dp"
+        tl:tl_indicator_width="20dp"
         tl:tl_tab_padding="22dp"
         tl:tl_tab_space_equal="true"
         tl:tl_textSelectColor="@color/mainColor"

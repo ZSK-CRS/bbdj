@@ -251,7 +251,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
         mNewAdapter.setConnectClickListener(new BluetoothSearchAdapter.OnItemConnectClickListener() {
             @Override
             public void onConnect(int position) {
-                dialogLoading.showDialog();
+                dialogLoading = WaitDialog.show(BluetoothSearchAgainActivity.this,"连接中...").setCanCancel(true);
                 try {
                     if (mBtAdapter.isDiscovering()) {
                         mBtAdapter.cancelDiscovery();
