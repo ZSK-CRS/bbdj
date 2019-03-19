@@ -221,7 +221,7 @@ public class RecordSheetDetailActivity extends BaseActivity {
         String yundanhao = dataObj.getString("yundanhao");    //运单号
         String code = dataObj.getString("code");   //标识码
         String place = dataObj.getString("place");      //中转地
-        String transit = dataObj.getString("transit");     //中转地标识码和时间
+                      String transit = dataObj.getString("transit");     //中转地标识码和时间
         String send_name = dataObj.getString("send_name");    //寄送名称
         String send_phone = dataObj.getString("send_phone");    //寄送电话
         String send_region = dataObj.getString("send_region");    //寄送区域

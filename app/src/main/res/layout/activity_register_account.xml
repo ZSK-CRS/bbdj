@@ -9,17 +9,17 @@
     tools:context=".baseconfig.activity.RegisterAccountActivity">
 
     <LinearLayout
-    android:id="@+id/iv_back"
-    android:layout_width="40dp"
-    android:layout_height="40dp">
+        android:id="@+id/iv_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp">
 
-    <ImageView
-        android:layout_gravity="center_vertical"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/ic_back_left_black" />
-</LinearLayout>
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_back_left_black" />
+    </LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -56,9 +56,9 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
-                android:layout_height="35dp">
+                android:layout_height="35dp"
+                android:layout_marginTop="30dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -71,10 +71,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
                     android:text="手机号"
                     android:textColor="@color/grey_2"
-                    android:layout_marginLeft="5dp"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -93,9 +93,9 @@
 
 
             <LinearLayout
-                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="35dp">
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -108,9 +108,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
                     android:text="验证码"
-                    android:layout_marginLeft="5dp"
                     android:textColor="@color/grey_2"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -119,9 +119,9 @@
 
 
             <LinearLayout
-                android:background="@drawable/shap_et_bg"
                 android:layout_width="match_parent"
-                android:layout_height="45dp">
+                android:layout_height="45dp"
+                android:background="@drawable/shap_et_bg">
 
 
                 <EditText
@@ -136,9 +136,9 @@
                     android:textSize="@dimen/standardTextSize" />
 
                 <View
-                    android:background="@color/grey_4"
                     android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_4" />
 
                 <TextView
                     android:id="@+id/tv_identify_number"
@@ -157,9 +157,9 @@
 
 
             <LinearLayout
-                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="35dp">
+                android:layout_height="35dp"
+                android:layout_marginTop="15dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -172,8 +172,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
-                    android:gravity="center_vertical"
                     android:layout_marginLeft="5dp"
+                    android:gravity="center_vertical"
                     android:text="密码"
                     android:textColor="@color/grey_2"
                     android:textSize="15sp"
@@ -193,9 +193,9 @@
                 android:textSize="@dimen/standardTextSize" />
 
             <LinearLayout
-                android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
-                android:layout_height="35dp">
+                android:layout_height="35dp"
+                android:layout_marginTop="30dp">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -208,10 +208,10 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
+                    android:layout_marginLeft="5dp"
                     android:gravity="center_vertical"
                     android:text="工号(选填)"
                     android:textColor="@color/grey_2"
-                    android:layout_marginLeft="5dp"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -224,24 +224,55 @@
                 android:layout_height="45dp"
                 android:background="@drawable/shap_et_bg"
                 android:hint="请输入您的工号"
-                android:inputType="number"
+                android:singleLine="true"
                 android:paddingLeft="25dp"
                 android:textSize="@dimen/standardTextSize" />
+
+
+            <LinearLayout
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+
+                <CheckBox
+                    android:id="@+id/cb_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:button="@drawable/shap_check_1"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/tv_read_agreement"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="7sp"
+                    android:gravity="center_vertical"
+                    android:text="兵兵到家注册协议"
+                    android:textColor="@color/grey_2"
+                    android:textSize="@dimen/standardTextSize" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/bt_register_next"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginBottom="25dp"
                 android:layout_marginTop="50dp"
+                android:layout_marginBottom="25dp"
                 android:background="@drawable/bt_bg"
                 android:text="下一步"
                 android:textColor="#ffffff"
                 android:textSize="15sp" />
 
         </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
 
+
+    </android.support.v4.widget.NestedScrollView>
 
 
 </LinearLayout>

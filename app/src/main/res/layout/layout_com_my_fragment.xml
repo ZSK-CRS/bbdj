@@ -54,7 +54,7 @@
             android:layout_gravity="top"
             android:layout_marginTop="130dp"
             android:gravity="center"
-            android:text="账户余额: 20000"
+            android:text="账户余额: 0"
             android:textColor="@color/whilte"
             android:textSize="14sp" />
 
@@ -65,7 +65,7 @@
             android:layout_gravity="top"
             android:layout_marginTop="150dp"
             android:gravity="center"
-            android:text="入驻天数: 365天"
+            android:text="入驻天数: 0天"
             android:textColor="@color/whilte"
             android:textSize="14sp" />
     </FrameLayout>

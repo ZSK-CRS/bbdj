@@ -549,6 +549,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     }
 
 
+
     private void printPanel() {
         try {
             HashMap<String, String> pum = new HashMap<String, String>();
@@ -571,7 +572,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             pum.put("[printTime]", printTime);
             pum.put("[stageCode]",number);
             pum.put("[goodName]", goods_name);
-            pum.put("[servicePhone]", "400-7750-008");
+            pum.put("[servicePhone]", "400-775-0008");
             Set<String> keySet = pum.keySet();
             Iterator<String> iterator = keySet.iterator();
             InputStream afis = this.getResources().getAssets().open("ZhongTong.txt");//打印模版放在assets文件夹里
@@ -580,8 +581,12 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
                 String string = (String) iterator.next();
                 path = path.replace(string, pum.get(string));
             }
-            LogUtil.i("数据",pum.toString());
-            HPRTPrinterHelper.printText(path);
+            // HPRTPrinterHelper.printText(path);
+
+
+            HPRTPrinterHelper.openEndStatic(true);//开启
+            HPRTPrinterHelper.PrintData(path);//打印机打印
+
             InputStream inbmp = this.getResources().getAssets().open("ic_logo_mini.png");
             Bitmap bitmap = BitmapFactory.decodeStream(inbmp);
             HPRTPrinterHelper.Expanded("20", "10", bitmap, (byte) 0);//第一联 顶部兵兵logo
@@ -594,7 +599,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             HPRTPrinterHelper.Expanded("525", "675", bitmap7, (byte) 0);// 第二联 收
             InputStream inbmp8 = this.getResources().getAssets().open("ic_post_logo.png");
             Bitmap bitmap8 = BitmapFactory.decodeStream(inbmp8);
-            HPRTPrinterHelper.Expanded("525", "1120", bitmap8, (byte) 0);// 第三联 寄
+            HPRTPrinterHelper.Expanded("525", "1135", bitmap8, (byte) 0);// 第三联 寄
             InputStream inbmp4 = this.getResources().getAssets().open("ic_code.png");
             Bitmap bitmap4 = BitmapFactory.decodeStream(inbmp4);
             HPRTPrinterHelper.Expanded("443", "940", bitmap4, (byte) 0);//二维码
@@ -602,14 +607,16 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             Bitmap bitmap3 = BitmapFactory.decodeStream(inbmp3);
             HPRTPrinterHelper.Expanded("20", "975", bitmap3, (byte) 0);//第二联 兵兵logo
 
+            HPRTPrinterHelper.AutLine("65","365",500,3,false,false,Receiver_address + Receiver_address1);
+            HPRTPrinterHelper.AutLine("65","748",500,3,false,false,Receiver_address + Receiver_address1);
+
             fastLogoBig = "";
             fastLogoMini = "";
 
             setLogoData();   //设置logo
-
             InputStream inbmp5 = this.getResources().getAssets().open(fastLogoMini);
             Bitmap bitmap5 = BitmapFactory.decodeStream(inbmp5);
-            HPRTPrinterHelper.Expanded("410", "490", bitmap5, (byte) 0);//第一联 快递公司logo
+            HPRTPrinterHelper.Expanded("410", "505", bitmap5, (byte) 0);//第一联 快递公司logo
 
             InputStream inbmp1 = this.getResources().getAssets().open(fastLogoBig);
             Bitmap bitmap1 = BitmapFactory.decodeStream(inbmp1);
@@ -617,9 +624,8 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
 
             InputStream inbmp2 = this.getResources().getAssets().open(fastLogoBig);
             Bitmap bitmap2 = BitmapFactory.decodeStream(inbmp2);
-            HPRTPrinterHelper.Expanded("310", "1115", bitmap2, (byte) 0);//第三联 快递公司logo
-
-              if ("1".equals(BluetoothSearchActivity.paper)) {
+            HPRTPrinterHelper.Expanded("310", "1135", bitmap2, (byte) 0);//第三联 快递公司logo
+            if ("1".equals(BluetoothSearchActivity.paper)) {
                 HPRTPrinterHelper.Form();
             }
             HPRTPrinterHelper.Form();

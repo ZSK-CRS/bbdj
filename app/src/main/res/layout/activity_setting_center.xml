@@ -126,10 +126,28 @@
             android:textSize="13sp" />
     </LinearLayout>
 
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/grey_6" />
+
+    <TextView
+        android:text="Copyright@2018-2020"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/grey_2"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+
+    <TextView
+        android:text="兵兵到家版权所有"
+        android:textColor="@color/grey_2"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
 
     <Button
         android:visibility="gone"

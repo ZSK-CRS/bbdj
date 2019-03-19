@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +22,7 @@ import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
+import com.mt.bbdj.community.activity.RegisterAggreementActivity;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -54,6 +57,11 @@ public class RegisterAccountActivity extends BaseActivity {
     EditText mRegisterPassword;  //密码
     @BindView(R.id.et_main_bussiess_number)
     EditText mBusinessNumber;   //工号
+    @BindView(R.id.cb_check)
+    CheckBox cbCheck;    //选中阅读协议
+    @BindView(R.id.tv_read_agreement)
+    TextView tvReadAgreement;
+
     private MyCountDownTimer mCountDownTimer;
     private RequestQueue mRequestQueue;    //请求队列
     private String mRandCode = "";      //验证码
@@ -67,6 +75,18 @@ public class RegisterAccountActivity extends BaseActivity {
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initData();
+        initListener();
+    }
+
+    private void initListener() {
+        cbCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                }
+            }
+        });
     }
 
     private void initData() {
@@ -84,7 +104,7 @@ public class RegisterAccountActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.tv_identify_number, R.id.bt_register_next, R.id.iv_back})
+    @OnClick({R.id.tv_identify_number, R.id.bt_register_next, R.id.iv_back,R.id.tv_read_agreement})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_identify_number:
@@ -96,7 +116,15 @@ public class RegisterAccountActivity extends BaseActivity {
             case R.id.iv_back:
                 finish();
                 break;
+            case R.id.tv_read_agreement:       //跳转协议
+                handleReadAgreementEvent();
+                break;
         }
+    }
+
+    private void handleReadAgreementEvent() {
+        Intent intent = new Intent(this,RegisterAggreementActivity.class);
+        startActivity(intent);
     }
 
     private void handleCompleteRegisterEvent() {
@@ -104,6 +132,7 @@ public class RegisterAccountActivity extends BaseActivity {
         String currentCode = mRegisterCode.getText().toString();
         String currentPassword = mRegisterPassword.getText().toString();
         String businessNumber = mBusinessNumber.getText().toString();
+
         if (!mRegisterPhone.equals(currentPhone)) {
              ToastUtil.showShort("注册账号发生变化！");
              return;
@@ -114,6 +143,10 @@ public class RegisterAccountActivity extends BaseActivity {
         }
         if ("".equals(currentPassword) || currentPassword.length()< 6 || currentPassword.length() > 16) {
             ToastUtil.showShort("请输入6~16位数的密码！");
+            return;
+        }
+        if (!cbCheck.isChecked()) {
+            ToastUtil.showShort("请先阅读协注册协议");
             return;
         }
         //保存账号信息

@@ -144,49 +144,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void spliteDifferenceArea() {
-        List<Province> provinceList = new ArrayList<>();    //省
-        List<City> cityList = new ArrayList<>();   //市
-        List<County> countyList = new ArrayList<>();   //县
-
-        List<MingleArea> mingleAreaList = mMingleAreaDao.queryBuilder().list();
-        //查找省
-        Iterator<MingleArea> mingleAreaIterator = mingleAreaList.iterator();
-        while(mingleAreaIterator.hasNext()) {
-            MingleArea mingleArea = mingleAreaIterator.next();
-           if ("0".equals(mingleArea.getParent_id())) {
-               Province province = new Province(mingleArea.getId(),mingleArea.getRegion_name(),mingleArea.getParent_id(),mingleArea.getRegion_code());
-               provinceList.add(province);
-               province = null;
-               mingleAreaIterator.remove();
-           }
-        }
-
-        //查找市
-        for (int i = 0;i< provinceList.size();i++) {
-            Province province = provinceList.get(i);
-            for (int j = 0;j < mingleAreaList.size();j++) {
-                MingleArea mingleArea = mingleAreaList.get(j);
-                if (province.getId().equals(mingleArea.getParent_id())) {
-                    City city = new City(mingleArea.getId(),mingleArea.getRegion_name(),mingleArea.getParent_id(),mingleArea.getRegion_code());
-                    cityList.add(city);
-                    mingleAreaList.remove(j);
-                    city = null;
-                }
-            }
-        }
-
-        //县
-        for (MingleArea mingleArea : mingleAreaList) {
-            County county = new County(mingleArea.getId(),mingleArea.getRegion_name(),mingleArea.getParent_id(),mingleArea.getRegion_code());
-            countyList.add(county);
-            county = null;
-        }
-        mProvinceDao.saveInTx(provinceList);
-        mCountyDao.saveInTx(countyList);
-        mCityDao.saveInTx(cityList);
-    }
-
 
     private void handleLogin(JSONObject jsonObject) throws JSONException {
         JSONObject dataObject = jsonObject.getJSONObject("data");

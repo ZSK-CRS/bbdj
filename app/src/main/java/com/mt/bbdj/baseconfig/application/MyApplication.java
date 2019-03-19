@@ -12,6 +12,7 @@ import com.kongzue.dialog.v2.DialogSettings;
 import com.mt.bbdj.BuildConfig;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.model.Constant;
+import com.mt.bbdj.baseconfig.utls.CrashHandler;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
@@ -56,6 +57,9 @@ public class MyApplication extends Application {
         DialogSettings.style = STYLE_IOS;
 
         initPushSetting();    //初始化推送
+
+        //bug收集
+      //  CrashHandler.getInstance().init(this);
 
     }
 

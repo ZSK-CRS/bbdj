@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.kongzue.dialog.v2.SelectDialog;
 import com.mt.bbdj.R;
+import com.mt.bbdj.baseconfig.activity.LoginActivity;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
@@ -214,6 +215,8 @@ public class ComMymessageFragment extends BaseFragment {
         editor.putBoolean("update", false);
         editor.commit();
         EventBus.getDefault().post(new TargetEvent(111));
+        Intent intent = new Intent(getActivity(),LoginActivity.class);
+        startActivity(intent);
         getActivity().onBackPressed();//销毁自己
     }
 

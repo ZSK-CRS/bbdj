@@ -380,17 +380,19 @@ public class RegisterCompleteActivity extends BaseActivity {
                     String code = jsonObject.get("code").toString();
                     if ("5001".equals(code)) {
                         JSONObject dataObject = jsonObject.getJSONObject("data");
-                        String pictureUrl = dataObject.getString("picu rl");
+                        String pictureUrl = dataObject.getString("picurl");
                         String message = jsonObject.get("msg").toString();
                         mEditor.putString(pictureType, pictureUrl);
                         mEditor.commit();
                     } else {
-                        ToastUtil.showShort("账号或者密码错误，请重试！");
+                        ToastUtil.showShort("上传失败，请重试！");
+                        restorePictureState();    //还原图片位
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     dialogLoading.cancel();
                     ToastUtil.showShort("上传失败，请重试！");
+                    restorePictureState();
                 }
                 dialogLoading.cancel();
             }
@@ -405,6 +407,24 @@ public class RegisterCompleteActivity extends BaseActivity {
                 dialogLoading.cancel();
             }
         });
+    }
+
+    private void restorePictureState() {
+        switch (pictureType) {
+            case "just_card":     //身份证前面
+                mIvRegisterIdFront.setImageBitmap(null);
+                icFrontAdd.setBackgroundResource(R.drawable.ic_add);
+                break;
+            case "back_card":     //身份证背面
+                mIvRegisterIdBack.setImageBitmap(null);
+                icBackAdd.setBackgroundResource(R.drawable.ic_add);
+                break;
+            case "license":       //营业执照
+                mIvRegisterIdLicence.setImageBitmap(null);
+                icLicenceAdd.setBackgroundResource(R.drawable.ic_add);
+                break;
+
+        }
     }
 
     private void handleCompleteEvent() {
@@ -422,7 +442,7 @@ public class RegisterCompleteActivity extends BaseActivity {
         String back_card = mSharedPreferences.getString("back_card", "");
         String license = mSharedPreferences.getString("license", "");
         String businessNumber = mSharedPreferences.getString("businessNumber", "");
-        Request<String> request = NoHttpRequest.commitRegisterRequest(phone, password, realname, idcard, just_card, back_card, license,businessNumber);
+        Request<String> request = NoHttpRequest.commitRegisterRequest(phone, password, realname, idcard, just_card, back_card, license, businessNumber);
         mRequestQueue.add(2, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {

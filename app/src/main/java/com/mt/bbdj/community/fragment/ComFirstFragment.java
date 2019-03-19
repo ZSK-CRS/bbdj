@@ -29,6 +29,7 @@ import com.mt.bbdj.baseconfig.db.gen.MingleAreaDao;
 import com.mt.bbdj.baseconfig.db.gen.ProvinceDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
+import com.mt.bbdj.baseconfig.model.AddressBean;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
@@ -137,6 +138,7 @@ public class ComFirstFragment extends BaseFragment {
     private String user_id;
     private ExpressLogoDao mExpressLogoDao;
     private List<ExpressLogo> mExpressLogoList;
+    private List<AddressBean.AddressEntity> allAddressdata;
 
     public static ComFirstFragment getInstance() {
         ComFirstFragment comFirstFragment = new ComFirstFragment();
@@ -228,8 +230,10 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void requestAreaData() {
-        uploadGenealData();    //下载省市区数据
+      //  uploadGenealData();    //下载省市区数据
+
     }
+
 
     private void uploadGenealData() {
         Request<String> request = NoHttpRequest.getAreaRequest(user_id, express_id);
@@ -548,57 +552,9 @@ public class ComFirstFragment extends BaseFragment {
         }
         mMingleAreaDao.saveInTx(mingleAreaList);
 
-        //分离不同的地区
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                spliteDifferenceArea();
-            }
-        }).start();
     }
 
-    private void spliteDifferenceArea() {
-        List<Province> provinceList = new ArrayList<>();    //省
-        List<City> cityList = new ArrayList<>();   //市
-        List<County> countyList = new ArrayList<>();   //县
 
-        List<MingleArea> mingleAreaList = mMingleAreaDao.queryBuilder().list();
-        //查找省
-        Iterator<MingleArea> mingleAreaIterator = mingleAreaList.iterator();
-        while (mingleAreaIterator.hasNext()) {
-            MingleArea mingleArea = mingleAreaIterator.next();
-            if ("0".equals(mingleArea.getParent_id())) {
-                Province province = new Province(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
-                provinceList.add(province);
-                province = null;
-                mingleAreaIterator.remove();
-            }
-        }
-
-        //查找市
-        for (int i = 0; i < provinceList.size(); i++) {
-            Province province = provinceList.get(i);
-            for (int j = 0; j < mingleAreaList.size(); j++) {
-                MingleArea mingleArea = mingleAreaList.get(j);
-                if (province.getId().equals(mingleArea.getParent_id())) {
-                    City city = new City(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
-                    cityList.add(city);
-                    mingleAreaList.remove(j);
-                    city = null;
-                }
-            }
-        }
-
-        //县
-        for (MingleArea mingleArea : mingleAreaList) {
-            County county = new County(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
-            countyList.add(county);
-            county = null;
-        }
-        mProvinceDao.saveInTx(provinceList);
-        mCountyDao.saveInTx(countyList);
-        mCityDao.saveInTx(cityList);
-    }
 
 
     @Override

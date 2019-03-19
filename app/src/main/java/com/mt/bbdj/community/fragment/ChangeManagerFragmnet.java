@@ -133,6 +133,9 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
             express_id = targetEvent.getData();
             recyclerView.refresh();
         }
+        if (targetEvent.getTarget() == TargetEvent.REFRESH_ALEADY_CHAGNE) {
+            recyclerView.refresh();
+        }
     }
 
     private void initPopuStyle() {
@@ -271,6 +274,7 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
     private void handldChangeResult(JSONObject jsonObject) {
         popupWindow.dismiss();
         recyclerView.refresh();
+        EventBus.getDefault().post(new TargetEvent(TargetEvent.REFRESH_ALEADY_CHAGNE));
         ToastUtil.showShort("交接成功！");
     }
 

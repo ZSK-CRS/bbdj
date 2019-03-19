@@ -3,27 +3,40 @@ package com.mt.bbdj.community.activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
+import com.mt.bbdj.baseconfig.db.City;
+import com.mt.bbdj.baseconfig.db.County;
+import com.mt.bbdj.baseconfig.db.MingleArea;
+import com.mt.bbdj.baseconfig.db.Province;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
+import com.mt.bbdj.baseconfig.db.gen.CityDao;
+import com.mt.bbdj.baseconfig.db.gen.CountyDao;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
 import com.mt.bbdj.baseconfig.db.gen.ExpressLogoDao;
+import com.mt.bbdj.baseconfig.db.gen.ProvinceDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.internet.down.DownLoadPictureService;
 import com.mt.bbdj.baseconfig.internet.down.ImageDownLoadCallBack;
+import com.mt.bbdj.baseconfig.model.AddressBean;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
+import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.fragment.ComDataFragment;
 import com.mt.bbdj.community.fragment.ComFirstFragment;
@@ -42,6 +55,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
@@ -94,6 +109,9 @@ public class CommunityActivity extends BaseActivity {
 
     private UserBaseMessageDao mUserMessageDao;
     private RequestQueue mRequestQueue;
+    private ProvinceDao mProvinceDao;     //省
+    private CityDao mCityDao;     //市
+    private CountyDao mCountyDao;   //县
 
     private String user_id = "";     //用户id
     private String express_id = "";    //快递公司id
@@ -101,6 +119,22 @@ public class CommunityActivity extends BaseActivity {
     private Thread upLoadThread;
 
     private ExecutorService executorService;   //用于下载图片的线程池
+    private List<AddressBean.AddressEntity> allAddressdata;
+
+    // 定义一个变量，来标识是否退出
+    private static boolean isExit = false;
+
+
+    Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,14 +143,110 @@ public class CommunityActivity extends BaseActivity {
         ButterKnife.bind(this);
         initView();
         initParams();
+        loadAddressData();
         //下载快递logo
         upLoadexpressLogo();
+    }
+
+    private void loadAddressData() {
+        String json = StringUtil.getJson(this, "adress.json");
+        AddressBean addressBean = com.alibaba.fastjson.JSONObject.parseObject(json, AddressBean.class);
+        allAddressdata = addressBean.getData();
+        //分离不同的地区
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                spliteDifferenceArea();
+            }
+        }).start();
+    }
+
+    private void spliteDifferenceArea() {
+        mProvinceDao.deleteAll();
+        mCountyDao.deleteAll();
+        mCityDao.deleteAll();
+        List<Province> provinceList = new ArrayList<>();    //省
+        List<City> cityList = new ArrayList<>();   //市
+        List<County> countyList = new ArrayList<>();   //县
+        //查找省
+        Iterator<AddressBean.AddressEntity> mingleAreaIterator = allAddressdata.iterator();
+
+      /*  while (mingleAreaIterator.hasNext()) {
+            AddressBean.AddressEntity mingleArea = mingleAreaIterator.next();
+            if ("0".equals(mingleArea.getParent_id())) {
+                Province province = new Province(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
+                provinceList.add(province);
+                province = null;
+                mingleAreaIterator.remove();
+            }
+        }*/
+
+        for (int x = 0; x<allAddressdata.size();x++) {
+            AddressBean.AddressEntity entity = allAddressdata.get(x);
+            if ("0".equals(entity.getParent_id())) {
+                Province province = new Province(entity.getId(), entity.getRegion_name(), entity.getParent_id(), entity.getRegion_code());
+                provinceList.add(province);
+                allAddressdata.remove(x);
+                province = null;
+
+            }
+        }
+
+        //查找市
+        for (int i = 0; i < provinceList.size(); i++) {
+            Province province = provinceList.get(i);
+            for (int j = 0; j < allAddressdata.size(); j++) {
+                AddressBean.AddressEntity mingleArea = allAddressdata.get(j);
+                if (province.getId().equals(mingleArea.getParent_id())) {
+                    City city = new City(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
+                    cityList.add(city);
+                    allAddressdata.remove(j);
+                    city = null;
+                    continue;
+                }
+            }
+        }
+
+        //县
+        for (AddressBean.AddressEntity mingleArea : allAddressdata) {
+            County county = new County(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
+            countyList.add(county);
+            county = null;
+        }
+        mProvinceDao.saveInTx(provinceList);
+        mCountyDao.saveInTx(countyList);
+        mCityDao.saveInTx(cityList);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    private void exit() {
+        if (!isExit) {
+            isExit = true;
+            Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                    Toast.LENGTH_SHORT).show();
+            // 利用handler延迟发送更改状态信息
+            mHandler.sendEmptyMessageDelayed(0, 500);
+        } else {
+            finish();
+            System.exit(0);
+        }
     }
 
     private void initParams() {
         DaoSession mDaoSession = GreenDaoManager.getInstance().getSession();
         mUserMessageDao = mDaoSession.getUserBaseMessageDao();
         mExpressLogoDao = mDaoSession.getExpressLogoDao();
+        mProvinceDao = mDaoSession.getProvinceDao();
+        mCityDao = mDaoSession.getCityDao();
+        mCountyDao = mDaoSession.getCountyDao();
         //初始化请求队列
         mRequestQueue = NoHttp.newRequestQueue();
         List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
