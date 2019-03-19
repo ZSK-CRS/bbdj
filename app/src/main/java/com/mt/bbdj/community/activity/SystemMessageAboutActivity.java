@@ -3,11 +3,13 @@ package com.mt.bbdj.community.activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.flyco.tablayout.SlidingTabLayout;
+import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
@@ -57,6 +59,24 @@ public class SystemMessageAboutActivity extends BaseActivity {
     private void initView() {
         initBrage();
         initFragment();
+        initListener();
+    }
+
+    private void initListener() {
+        btNotificationNumber.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return true;
+            }
+        });
+        btSystemNumber.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return true;
+            }
+        });
     }
 
     private void initBrage() {
@@ -86,6 +106,8 @@ public class SystemMessageAboutActivity extends BaseActivity {
         }
     }
 
+
+
     private void initFragment() {
         list_fragment.clear();
         list_fragment.add(MessageCenterFragment.getInstance(0));    //通知公告
@@ -93,7 +115,7 @@ public class SystemMessageAboutActivity extends BaseActivity {
         //  list_fragment.add(MessageCenterFragment.getInstance(2));    //异常件消息
         list_title.clear();
         list_title.add("通知公告");
-        list_title.add("系統消息");
+        list_title.add("系统消息");
         //  list_title.add("异常件消息");
         SimpleFragmentPagerAdapter pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(),
                 SystemMessageAboutActivity.this, list_fragment, list_title);
@@ -112,13 +134,14 @@ public class SystemMessageAboutActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    @OnClick({R.id.bt_notification_number, R.id.bt_system_number})
+   /* @OnClick({R.id.bt_notification_number, R.id.bt_system_number})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.bt_notification_number:
+
                 break;
             case R.id.bt_system_number:
                 break;
         }
-    }
+    }*/
 }
