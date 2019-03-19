@@ -32,6 +32,7 @@ import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.internet.down.DownLoadPictureService;
 import com.mt.bbdj.baseconfig.internet.down.ImageDownLoadCallBack;
 import com.mt.bbdj.baseconfig.model.AddressBean;
+import com.mt.bbdj.baseconfig.model.Area;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
@@ -119,7 +120,7 @@ public class CommunityActivity extends BaseActivity {
     private Thread upLoadThread;
 
     private ExecutorService executorService;   //用于下载图片的线程池
-    private List<AddressBean.AddressEntity> allAddressdata;
+
 
     // 定义一个变量，来标识是否退出
     private static boolean isExit = false;
@@ -135,7 +136,6 @@ public class CommunityActivity extends BaseActivity {
     };
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,73 +149,46 @@ public class CommunityActivity extends BaseActivity {
     }
 
     private void loadAddressData() {
-        String json = StringUtil.getJson(this, "adress.json");
-        AddressBean addressBean = com.alibaba.fastjson.JSONObject.parseObject(json, AddressBean.class);
-        allAddressdata = addressBean.getData();
-        //分离不同的地区
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                spliteDifferenceArea();
-            }
-        }).start();
-    }
 
-    private void spliteDifferenceArea() {
         mProvinceDao.deleteAll();
         mCountyDao.deleteAll();
         mCityDao.deleteAll();
-        List<Province> provinceList = new ArrayList<>();    //省
-        List<City> cityList = new ArrayList<>();   //市
-        List<County> countyList = new ArrayList<>();   //县
-        //查找省
-        Iterator<AddressBean.AddressEntity> mingleAreaIterator = allAddressdata.iterator();
 
-      /*  while (mingleAreaIterator.hasNext()) {
-            AddressBean.AddressEntity mingleArea = mingleAreaIterator.next();
-            if ("0".equals(mingleArea.getParent_id())) {
-                Province province = new Province(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
-                provinceList.add(province);
-                province = null;
-                mingleAreaIterator.remove();
-            }
-        }*/
+        String json = StringUtil.getJson(this, "adress.json");
+        AddressBean addressBean = com.alibaba.fastjson.JSONObject.parseObject(json, AddressBean.class);
+        List<com.mt.bbdj.baseconfig.model.Province> provinceList = addressBean.getProvince();
+        List<com.mt.bbdj.baseconfig.model.City> cityList = addressBean.getCity();
+        List<Area> areaList = addressBean.getArea();
 
-        for (int x = 0; x<allAddressdata.size();x++) {
-            AddressBean.AddressEntity entity = allAddressdata.get(x);
-            if ("0".equals(entity.getParent_id())) {
-                Province province = new Province(entity.getId(), entity.getRegion_name(), entity.getParent_id(), entity.getRegion_code());
-                provinceList.add(province);
-                allAddressdata.remove(x);
-                province = null;
+        List<Province> db_Province = new ArrayList<>();
+        List<City> db_City = new ArrayList<>();
+        List<County> db_County = new ArrayList<>();
 
-            }
+        for (int i = 0;i<provinceList.size();i++) {
+            com.mt.bbdj.baseconfig.model.Province entity = provinceList.get(i);
+            Province province = new Province(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
+            db_Province.add(province);
+            province = null;
         }
 
-        //查找市
-        for (int i = 0; i < provinceList.size(); i++) {
-            Province province = provinceList.get(i);
-            for (int j = 0; j < allAddressdata.size(); j++) {
-                AddressBean.AddressEntity mingleArea = allAddressdata.get(j);
-                if (province.getId().equals(mingleArea.getParent_id())) {
-                    City city = new City(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
-                    cityList.add(city);
-                    allAddressdata.remove(j);
-                    city = null;
-                    continue;
-                }
-            }
+        for (int i = 0;i<cityList.size();i++) {
+            com.mt.bbdj.baseconfig.model.City entity = cityList.get(i);
+            City city = new City(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
+            db_City.add(city);
+            city = null;
         }
 
-        //县
-        for (AddressBean.AddressEntity mingleArea : allAddressdata) {
-            County county = new County(mingleArea.getId(), mingleArea.getRegion_name(), mingleArea.getParent_id(), mingleArea.getRegion_code());
-            countyList.add(county);
+        for (int i = 0;i<areaList.size();i++) {
+            Area entity = areaList.get(i);
+            County county = new County(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
+            db_County.add(county);
             county = null;
         }
-        mProvinceDao.saveInTx(provinceList);
-        mCountyDao.saveInTx(countyList);
-        mCityDao.saveInTx(cityList);
+
+
+        mProvinceDao.saveInTx(db_Province);
+        mCountyDao.saveInTx(db_County);
+        mCityDao.saveInTx(db_City);
     }
 
     @Override
@@ -272,15 +245,14 @@ public class CommunityActivity extends BaseActivity {
 
         for (ExpressLogo expressLogo : mExpressLogoList) {
             //下载logo
-            upLogo(expressLogo.getExpress_id(),expressLogo.getLogoInterPath());
+            upLogo(expressLogo.getExpress_id(), expressLogo.getLogoInterPath());
         }
     }
 
 
-
     private void upLogo(final String express_id, String logoInterPath) {
         if (logoInterPath == null || "".equals(logoInterPath)) {
-            return ;
+            return;
         }
         String uuid = UUID.randomUUID().toString();
         String path2 = uuid + ".jpg";
@@ -289,7 +261,7 @@ public class CommunityActivity extends BaseActivity {
         DownLoadPictureService downLoadPictureService = new DownLoadPictureService(logo.getPath(),
                 logoInterPath, express_id, new ImageDownLoadCallBack() {
             @Override
-            public void onDownLoadSuccess(String tag,String localPath) {
+            public void onDownLoadSuccess(String tag, String localPath) {
                 //更新本地图片地址和状态
                 updateLogoAfterLoad(tag, localPath);
             }
@@ -305,12 +277,12 @@ public class CommunityActivity extends BaseActivity {
 
     private void updateLogoAfterLoad(String express_id, String filePath) {
         if ("".equals(filePath)) {
-            return ;
+            return;
         }
         List<ExpressLogo> expressLogoList = mExpressLogoDao.queryBuilder()
                 .where(ExpressLogoDao.Properties.Express_id.eq(express_id)).list();
-        if (expressLogoList == null ||expressLogoList.size() == 0) {
-            return ;
+        if (expressLogoList == null || expressLogoList.size() == 0) {
+            return;
         }
 
         for (ExpressLogo expressLogo : expressLogoList) {
@@ -383,7 +355,7 @@ public class CommunityActivity extends BaseActivity {
 
         JSONArray dataArray = jsonObject.getJSONArray("data");
         mExpressLogoDao.deleteAll();
-        for (int i = 0;i< dataArray.length();i++) {
+        for (int i = 0; i < dataArray.length(); i++) {
             JSONObject data = dataArray.getJSONObject(i);
             String express_id = data.getString("express_id");
             String express_logo = data.getString("express_logo");

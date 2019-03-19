@@ -53,7 +53,6 @@ import butterknife.OnClick;
 
 //修改地址
 public class ChangeMessageActivity extends AppCompatActivity {
-
     @BindView(R.id.iv_back)
     RelativeLayout ivBack;        //返回
     @BindView(R.id.tv_address_manager)
@@ -108,6 +107,7 @@ public class ChangeMessageActivity extends AppCompatActivity {
         initParams();
         initData();
         initAreaData();
+
     }
 
 

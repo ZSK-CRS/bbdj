@@ -138,7 +138,6 @@ public class ComFirstFragment extends BaseFragment {
     private String user_id;
     private ExpressLogoDao mExpressLogoDao;
     private List<ExpressLogo> mExpressLogoList;
-    private List<AddressBean.AddressEntity> allAddressdata;
 
     public static ComFirstFragment getInstance() {
         ComFirstFragment comFirstFragment = new ComFirstFragment();
