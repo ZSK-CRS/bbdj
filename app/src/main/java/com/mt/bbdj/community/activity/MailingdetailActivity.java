@@ -184,7 +184,6 @@ public class MailingdetailActivity extends AppCompatActivity {
     }
 
     private void savePannelMessage(JSONObject jsonObject) throws JSONException {
-
         String express_name = jsonObject.getString("express_name");
         String time = jsonObject.getString("time");
         String dingdanhao = jsonObject.getString("dingdanhao");
@@ -212,14 +211,14 @@ public class MailingdetailActivity extends AppCompatActivity {
         tvGoodsWeiht.setText(weight + " kg");
         tvGoodsMark.setText(content);
 
-        JSONObject dataObj = jsonObject.getJSONObject("data");
-        String mail_id = dataObj.getString("mail_id");       //订单id
-        String express_id = dataObj.getString("express_id");     //快递公司id
-        String number = dataObj.getString("number");      //驿站代码
-        String yundanhao = dataObj.getString("yundanhao");    //运单号
-        String code = dataObj.getString("code");   //标识码
-        String place = dataObj.getString("place");      //中转地
-        String transit = dataObj.getString("transit");     //中转地标识码和时间
+      //  JSONObject dataObj = jsonObject.getJSONObject("data");
+        String mail_id = jsonObject.getString("mail_id");       //订单id
+        String express_id = jsonObject.getString("express_id");     //快递公司id
+        String number = jsonObject.getString("number");      //驿站代码
+        String yundanhao = jsonObject.getString("yundanhao");    //运单号
+        String code = jsonObject.getString("code");   //标识码
+        String place = jsonObject.getString("place");      //中转地
+        String transit = jsonObject.getString("transit");     //中转地标识码和时间
 
         SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
         editor.putString("mail_id", StringUtil.handleNullResultForString(mail_id));

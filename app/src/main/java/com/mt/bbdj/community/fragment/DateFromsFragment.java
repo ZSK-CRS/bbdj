@@ -25,6 +25,7 @@ import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -68,12 +69,9 @@ import butterknife.Unbinder;
  * Date : 2019/1/29
  * Description :   日报
  */
-public class DateFromsFragment extends BaseFragment implements XRecyclerView.LoadingListener {
+public class DateFromsFragment extends BaseFragment {
 
     Unbinder unbinder;
-    @BindView(R.id.rl_date)
-    XRecyclerView recyclerView;
-
     private String user_id;
     private RequestQueue mRequestQueue;
 
@@ -88,17 +86,12 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
 
     private List<HashMap<String,String>> mList = new ArrayList<>();
     private HorizontalBarChart barChart;
+    private List<HashMap<String, String>> PackageOrder = new ArrayList<HashMap<String, String>>();
 
     public static DateFromsFragment getInstance() {
         DateFromsFragment bf = new DateFromsFragment();
         return bf;
     }
-
-    private final int[] zidingyi = {
-            Color.rgb(174, 197, 0), Color.rgb(246, 125, 0), Color.rgb(53, 139, 234), Color.rgb(174, 197, 0),
-            Color.rgb(246, 125, 0)
-    };
-
 
     @Nullable
     @Override
@@ -107,7 +100,6 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
         unbinder = ButterKnife.bind(this, view);
         initParams();
         initView(view);
-       // requestData();
         return view;
     }
 
@@ -119,91 +111,13 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
         }
     }
 
-
-  /*  private void requestData() {
-        startTime = "1551399010";
-        endTime = "1551658210";
-        Request<String> request = NoHttpRequest.getDataCenterRequest(user_id, startTime, endTime);
-        mRequestQueue.add(REQUEST_DATA_CENTER, request, new OnResponseListener<String>() {
-            @Override
-            public void onStart(int what) {
-                //   dialogLoading = WaitDialog.show(getActivity(), "加载中...").setCanCancel(true);
-            }
-
-            @Override
-            public void onSucceed(int what, Response<String> response) {
-                LogUtil.i("photoFile", "DateFromsFragment::" + response.get());
-                try {
-                    JSONObject jsonObject = new JSONObject(response.get());
-                    String code = jsonObject.get("code").toString();
-                    String msg = jsonObject.get("msg").toString();
-
-                    if ("5001".equals(code)) {
-                        JSONObject dataObj = jsonObject.getJSONObject("data");
-                        String mailsum = dataObj.getString("mailsum");    //寄件数量
-                        String entersum = dataObj.getString("entersum");    //入库数
-                        String outsum = dataObj.getString("outsum");    //出库数
-                        String paysum = dataObj.getString("paysum");   //支出
-                        int maiSum = IntegerUtil.getStringChangeToNumber(mailsum);
-                        int enterSum = IntegerUtil.getStringChangeToNumber(entersum);
-                        int outSum = IntegerUtil.getStringChangeToNumber(outsum);
-                        float paySum = IntegerUtil.getStringChangeToFloat(paysum);
-                        setChartData(maiSum, outSum, enterSum);
-                        tvSendNumber.setText(maiSum + "件");
-                        tvPatyforNumber.setText(paySum + "元");
-                        tvOutNumber.setText(outSum + "件");
-                        tvEnterNumber.setText(enterSum + "件");
-                    } else {
-                        ToastUtil.showShort(msg);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    //     dialogLoading.doDismiss();
-                    ToastUtil.showShort("加载失败！");
-                }
-                //  dialogLoading.doDismiss();
-            }
-
-            @Override
-            public void onFailed(int what, Response<String> response) {
-                //   dialogLoading.doDismiss();
-            }
-
-            @Override
-            public void onFinish(int what) {
-                //  dialogLoading.doDismiss();
-            }
-        });
-    }*/
-
     private void initView(View view) {
-        iniRecycler();
-        initChart();
-    }
-
-    private void iniRecycler() {
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.date_account, (ViewGroup) getActivity().findViewById(android.R.id.content), false);
-        recyclerView.addHeaderView(view);
-        recyclerView.setLoadingListener(this);
-        recyclerView.addItemDecoration(new MyDecoration(getActivity(), LinearLayoutManager.VERTICAL, Color.parseColor("#efefef"), 1));
-        recyclerView.setAdapter(new ClientDetailAdapter(getActivity(),mList));
-
-        initBarChart(view);
-    }
-
-    private void initBarChart(View view) {
         barChart = view.findViewById(R.id.chart_barchart);
         showBarChartMore();
     }
 
 
-    private void initChart() {
-        
-    }
-
     private void showBarChartMore() {
-        
         barChart.setDrawBarShadow(false);
         barChart.setDrawValueAboveBar(true);
         barChart.getDescription().setEnabled(false);
@@ -214,20 +128,22 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
 
         YAxis yl = barChart.getAxisLeft();
         yl.setDrawAxisLine(true);
-        yl.setDrawGridLines(true);
+        yl.setDrawGridLines(false);
         yl.setAxisMinimum(0f);
 
         YAxis yr = barChart.getAxisRight();
         yr.setDrawAxisLine(true);
-        yr.setDrawGridLines(true);
+        yr.setDrawGridLines(false);
+        yr.setEnabled(false);
         yr.setAxisMinimum(0f);
 
         Legend l = barChart.getLegend();
-        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         l.setDrawInside(false);
         l.setFormSize(12f);
+        l.setEnabled(false);
         l.setXEntrySpace(4f);
 
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
@@ -254,20 +170,18 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
         xAxis.setAvoidFirstLastClipping(false);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
-        xAxis.setLabelCount(14, false);
-        xAxis.setAxisMaximum(14);
-        final String[] xValues = {"2019.2.27", "2019.2.28", "2019.3.1", "2019.3.2", "2019.3.3","2019.3.4","2019.3.5","2019.3.5","2019.3.5","2019.3.5","2019.3.5"};
-
+        xAxis.setLabelCount(13, false);
+        xAxis.setAxisMaximum(13);
+        final String[] xValues = {"2.27", "2.28", "3.1", "3.2", "3.3","3.4","3.5"};
+        xAxis.setCenterAxisLabels(true);
+      //  xAxis.setValueFormatter(new IndexAxisValueFormatter(xValues));
         xAxis.setValueFormatter(new IAxisValueFormatter() {
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
-                for (int i = 0;i<xAxisValues.size();i++) {
-                    if (value == xAxisValues.get(i)-1) {
-                        return xValues[i];
-                    }
+                for (int i = 0;i<PackageOrder.size();i++) {
+                    return PackageOrder.get(i).get("sendcorp");
                 }
                 return "";
-
             }
         });
 
@@ -288,11 +202,11 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
             barChart.notifyDataSetChanged();
         } else {
             set1 = new BarDataSet(yVals1, "寄件数");
-            set2 = new BarDataSet(yVals2, "派件书");
-            set3 = new BarDataSet(yVals3, "福五鼠");
-            set1.setColor(Color.rgb(57, 177, 122));
-            set2.setColor(Color.rgb(19, 38, 220));
-            set3.setColor(Color.rgb(197, 120, 78));
+            set2 = new BarDataSet(yVals2, "派件数");
+            set3 = new BarDataSet(yVals3, "服务数");
+            set1.setColor(Color.rgb(215, 170, 88));
+            set2.setColor(Color.rgb(80, 160, 236));
+            set3.setColor(Color.rgb(118, 215, 128));
             BarData data = new BarData();
             data.addDataSet(set1);
             data.addDataSet(set2);
@@ -311,7 +225,8 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
     float groupSpace = 0.3f; //柱状图组之间的间距
     float barSpace = (float) ((1 - 0.12) / 3 / 10); // x4 DataSet
 
-    private List<HashMap<String, String>> PackageOrder = new ArrayList<HashMap<String, String>>();
+
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -333,15 +248,5 @@ public class DateFromsFragment extends BaseFragment implements XRecyclerView.Loa
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
-    }
-
-    @Override
-    public void onRefresh() {
-        recyclerView.refreshComplete();
-    }
-
-    @Override
-    public void onLoadMore() {
-        recyclerView.loadMoreComplete();
     }
 }

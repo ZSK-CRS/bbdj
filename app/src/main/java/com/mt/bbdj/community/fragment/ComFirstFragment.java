@@ -28,6 +28,7 @@ import com.mt.bbdj.baseconfig.db.gen.ExpressLogoDao;
 import com.mt.bbdj.baseconfig.db.gen.MingleAreaDao;
 import com.mt.bbdj.baseconfig.db.gen.ProvinceDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
+import com.mt.bbdj.baseconfig.internet.InterApi;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.AddressBean;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
@@ -117,6 +118,9 @@ public class ComFirstFragment extends BaseFragment {
     @BindView(R.id.textview_serach)
     TextView tvSearch;     //搜索
 
+    @BindView(R.id.tv_test_tag)
+    TextView tvTestTag;
+
 
     private List<HashMap<String, Object>> mList = new ArrayList<>();
     private DaoSession mDaoSession;
@@ -176,6 +180,12 @@ public class ComFirstFragment extends BaseFragment {
         List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
         if (list != null && list.size() != 0) {
             user_id = list.get(0).getUser_id();
+        }
+
+        if (InterApi.SERVER_ADDRESS.contains("www.81dja.com")) {
+            tvTestTag.setText("待收件");
+        } else {
+            tvTestTag.setText("待收件(测试)");
         }
     }
 

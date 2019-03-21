@@ -136,6 +136,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tv_test_tag"
                         android:layout_width="wrap_content"
                         android:layout_height="30dp"
                         android:layout_marginTop="10dp"
@@ -300,24 +301,26 @@
 
 
     <LinearLayout
-        android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="1">
 
         <com.mt.bbdj.baseconfig.view.MyGridView
             android:id="@+id/gv_com_first"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:gravity="center"
             android:horizontalSpacing="10dip"
             android:listSelector="@null"
             android:numColumns="4"
             android:scrollbars="none"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="8dip"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:verticalSpacing="8dip">
 
         </com.mt.bbdj.baseconfig.view.MyGridView>
 
     </LinearLayout>
+
+
 </LinearLayout>

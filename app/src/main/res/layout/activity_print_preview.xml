@@ -487,6 +487,7 @@
             android:layout_toRightOf="@+id/bt_again_old"
             android:background="@drawable/bt_bg_8"
             android:text="再打一单"
+            android:visibility="gone"
             android:textColor="#ffffff"
             android:textSize="13sp" />
     </RelativeLayout>

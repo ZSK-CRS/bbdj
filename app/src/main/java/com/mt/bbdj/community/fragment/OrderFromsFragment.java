@@ -3,52 +3,36 @@ package com.mt.bbdj.community.fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.CustomListener;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
-import com.bigkoo.pickerview.view.TimePickerView;
-import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.HorizontalBarChart;
-import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
-import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
-import com.mt.bbdj.baseconfig.utls.DateUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
-import com.mt.bbdj.baseconfig.utls.IntegerUtil;
-import com.mt.bbdj.baseconfig.utls.LogUtil;
-import com.mt.bbdj.baseconfig.utls.ToastUtil;
-import com.mt.bbdj.baseconfig.view.NumberFormatter;
+import com.mt.bbdj.baseconfig.view.MyDecoration;
+import com.mt.bbdj.community.adapter.ClientDetailAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
-import com.yanzhenjie.nohttp.rest.OnResponseListener;
-import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
-import com.yanzhenjie.nohttp.rest.Response;
 
 import org.greenrobot.eventbus.EventBus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,11 +42,10 @@ import butterknife.Unbinder;
 
 /**
  * Author : ZSK
- * Date : 2019/1/29
- * Description :   日报
+ * Date : 2019/3/20
+ * Description :
  */
-public class MonthFromsFragment extends BaseFragment {
-
+public class OrderFromsFragment extends BaseFragment{
 
     Unbinder unbinder;
     private String user_id;
@@ -80,15 +63,15 @@ public class MonthFromsFragment extends BaseFragment {
     private List<HashMap<String,String>> mList = new ArrayList<>();
     private HorizontalBarChart barChart;
 
-    public static MonthFromsFragment getInstance() {
-        MonthFromsFragment bf = new MonthFromsFragment();
+    public static OrderFromsFragment getInstance() {
+        OrderFromsFragment bf = new OrderFromsFragment();
         return bf;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_froms_month, container, false);
+        view = inflater.inflate(R.layout.fragment_froms_date, container, false);
         unbinder = ButterKnife.bind(this, view);
         initParams();
         initView(view);
@@ -131,3 +114,4 @@ public class MonthFromsFragment extends BaseFragment {
         EventBus.getDefault().unregister(this);
     }
 }
+

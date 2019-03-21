@@ -151,7 +151,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="还没有账号?"
+                    android:text="立即注册"
                     android:textColor="@color/mainColor"
                     android:textSize="13sp" />
 

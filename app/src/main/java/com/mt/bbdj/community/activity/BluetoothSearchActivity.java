@@ -257,7 +257,7 @@ public class BluetoothSearchActivity extends BaseActivity {
             @Override
             public void onClick(int position) {
                 mNewDeviceData.remove(position);
-                mNewAdapter.setData(mPaireDevicesData);
+                mNewAdapter.setData(mNewDeviceData);
             }
         });
 
