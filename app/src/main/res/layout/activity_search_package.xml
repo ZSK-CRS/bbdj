@@ -65,7 +65,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/et_underline_unselected"
                 android:hint="请输入单号"
-                android:text="73221063002710"
+                android:text=""
                 android:inputType="number"
                 android:layout_marginLeft="10dp"
                 android:textColorHint="@color/grey_1"

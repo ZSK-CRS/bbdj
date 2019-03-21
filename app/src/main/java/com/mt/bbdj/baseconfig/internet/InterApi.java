@@ -7,14 +7,14 @@ package com.mt.bbdj.baseconfig.internet;
  */
 public class InterApi {
     /**
-    /**
+     * /**
      * 服务器地址
      */
     // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
-     public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+    //public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
-    // public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
-    // public static final String SERVER_ADDRESS = "http://web1.mingtaikeji.cn/BbdjApi/";
+      public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
+    // public static fin    al String SERVER_ADDRESS = "http://web1.mingtaikeji.cn/BbdjApi/";
 
     /**
      * 获取验证码
@@ -272,14 +272,14 @@ public class InterApi {
     public static final String ACTION_APPLY_MONEY = "getCashApply700";
 
     /**
-     *  获取提现记录
+     * 获取提现记录
      */
     public static final String ACTION_GET_MONRY_REQUEST = "getWithdrawalslist700";
 
     /**
      * 消费记录
      */
-     public static final String ACTION_CONSUME_RECORD_REQUEST = "getConsumelist700";
+    public static final String ACTION_CONSUME_RECORD_REQUEST = "getConsumelist700";
 
     /**
      * 获取客户含订单列表
@@ -292,7 +292,7 @@ public class InterApi {
     public static final String ACTION_CLIENT_MANAGER_REQUEST = "getCustomerlist800";
 
     /**
-     *  添加客户信息
+     * 添加客户信息
      */
     public static final String ACTION_ADD_CLIENT_REQUEST = "addCustomer800";
 
@@ -385,12 +385,6 @@ public class InterApi {
      * 取消订单
      */
     public static final String ACTION_CANNEL_ORDER_REQUEST = "CancellationMail1010";
-
-
-
-
-
-
 
 
 }

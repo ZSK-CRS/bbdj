@@ -17,6 +17,9 @@ import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -49,6 +52,9 @@ public class MywalletActivity extends AppCompatActivity {
     private UserBaseMessageDao userBaseMessageDao;
     private RequestQueue mRequestQueue;
 
+    @BindView(R.id.bt_recharge)
+    Button recharge;
+    private IWXAPI api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +82,7 @@ public class MywalletActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.iv_back, R.id.bt_withdraw_cash, R.id.ll_withdraw_record,
-            R.id.ll_consume_record, R.id.ll_bind_account})
+            R.id.ll_consume_record, R.id.ll_bind_account,R.id.bt_recharge})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -94,7 +100,15 @@ public class MywalletActivity extends AppCompatActivity {
             case R.id.ll_bind_account:
                 showBindAccountPannel();    //绑定提现账户
                 break;
+            case R.id.bt_recharge:    //充值
+                handleRecharge();
+                break;
         }
+    }
+
+    private void handleRecharge() {
+        Intent intent = new Intent(this,RechargeActivity.class);
+        startActivity(intent);
     }
 
     private void showBindAccountPannel() {

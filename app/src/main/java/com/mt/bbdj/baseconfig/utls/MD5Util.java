@@ -41,7 +41,7 @@ public class MD5Util {
          return null;  
        }*/
 
-    public static byte[] toMD5(String plainText) {
+    public static String toMD5(String plainText) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(plainText.getBytes());
@@ -57,7 +57,7 @@ public class MD5Util {
                     buf.append("0");
                 buf.append(Integer.toHexString(i));
             }
-            return buf.toString().getBytes();
+            return buf.toString();
             //  System.out.println("32λ: " + buf.toString());// 32位
             // System.out.println("16λ: " + buf.toString().substring(8, 24));// 16位
         }

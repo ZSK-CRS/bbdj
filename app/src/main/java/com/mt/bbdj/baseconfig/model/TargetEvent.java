@@ -20,6 +20,7 @@ public class TargetEvent {
     public static int DESTORY_GOODS_DETAIL = 413;   //销毁商品详情界面
     public static int DESTORY_GOODS_FROM_CART = 414;    //销毁购物车界面
     public static int REFRESH_ALEADY_CHAGNE = 415;     //刷新已交接界面
+    public static int DESTORY_RECHAR = 416;      //销毁充值界面
 
     private int target;
 

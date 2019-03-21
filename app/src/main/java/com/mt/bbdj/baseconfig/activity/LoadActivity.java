@@ -11,6 +11,8 @@ import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.community.activity.CommunityActivity;
 
+import org.greenrobot.eventbus.EventBus;
+
 //启动界面
 public class LoadActivity extends AppCompatActivity {
 
@@ -62,4 +64,6 @@ public class LoadActivity extends AppCompatActivity {
         //倒计时2s
         handler.sendEmptyMessageDelayed(1,1000);
     }
+
+
 }

@@ -22,6 +22,10 @@
     <string name="timepicker_min">分</string>
     <string name="timepicker_title">选择时间</string>
     <string name="timepicker_finish">确认</string>
+
+
+    <string name="pay_result_callback_msg" formatted="false">微信支付结果：%s</string>
+
     <string name="timepicker_title_default">设置</string>
     <string name="aggrement_one">1、兵兵到家科技网站相关业务由深圳兵兵到家科技有限公司拥有及营运，本网站将完全按照以下发布的服务条款和操作规则严格执行，
         用户必须完全同意所有服务条款，才能注册成为丰巢的正式会员.\n\n\t\t

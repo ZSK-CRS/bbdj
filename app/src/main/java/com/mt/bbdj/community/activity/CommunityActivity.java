@@ -1,11 +1,13 @@
 package com.mt.bbdj.community.activity;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -66,6 +68,8 @@ import java.util.concurrent.Executors;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.ycbjie.ycstatusbarlib.StatusBarUtils;
+import cn.ycbjie.ycstatusbarlib.bar.YCAppBar;
 
 public class CommunityActivity extends BaseActivity {
 
@@ -415,7 +419,8 @@ public class CommunityActivity extends BaseActivity {
             case R.id.main_tab_imgbt_data:
             case R.id.main_tab_tv_data:
             case R.id.main_tab_ll_data:
-                selectFragmentData();     //选中数据界面
+                ToastUtil.showShort("该功能暂未开放！");
+               // selectFragmentData();     //选中数据界面
                 break;
             case R.id.main_tab_imgbt_my:
             case R.id.main_tab_tv_my:
@@ -427,6 +432,9 @@ public class CommunityActivity extends BaseActivity {
 
     private void selectFragmentMy() {
         resetSelectState();
+       /* YCAppBar.setStatusBarColor(CommunityActivity.this,
+                ContextCompat.getColor(CommunityActivity.this,
+                        R.color.mainColor));*/
         mtv_my.setSelected(true);
         imgbtn_my.setSelected(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -441,6 +449,9 @@ public class CommunityActivity extends BaseActivity {
 
     private void selectFragmentData() {
         resetSelectState();
+      /*  YCAppBar.setStatusBarColor(CommunityActivity.this,
+                ContextCompat.getColor(CommunityActivity.this,
+                        R.color.mainColor));*/
         mtv_data.setSelected(true);
         imgbtn_data.setSelected(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -455,6 +466,8 @@ public class CommunityActivity extends BaseActivity {
 
     private void selectFragmentOrder() {
         resetSelectState();
+       /* YCAppBar.setStatusBarLightMode(this, Color.WHITE);
+        StatusBarUtils.StatusBarLightMode(CommunityActivity.this);*/
         mtv_order.setSelected(true);
         imgbtn_order.setSelected(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -470,6 +483,9 @@ public class CommunityActivity extends BaseActivity {
     private void selectFragmentFirst() {
         //重置状态
         resetSelectState();
+       /* YCAppBar.setStatusBarColor(CommunityActivity.this,
+                ContextCompat.getColor(CommunityActivity.this,
+                        R.color.mainColor));*/
         mtv_first.setSelected(true);
         imgbtn_first.setSelected(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -493,6 +509,8 @@ public class CommunityActivity extends BaseActivity {
         imgbtn_first.setSelected(false);
         imgbtn_order.setSelected(false);
         imgbtn_my.setSelected(false);
+
+       // StatusBarUtils.StatusBarLightMode(CommunityActivity.this);
     }
 
     //隐藏Fragment

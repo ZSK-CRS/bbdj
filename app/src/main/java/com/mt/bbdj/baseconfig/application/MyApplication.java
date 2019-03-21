@@ -59,7 +59,7 @@ public class MyApplication extends Application {
         initPushSetting();    //初始化推送
 
         //bug收集
-      //  CrashHandler.getInstance().init(this);
+        CrashHandler.getInstance().init(this);
 
     }
 

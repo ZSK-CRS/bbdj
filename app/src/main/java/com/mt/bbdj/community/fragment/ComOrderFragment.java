@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
+import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.activity.SendManagerActivity;
 
 /**
@@ -18,7 +19,12 @@ import com.mt.bbdj.community.activity.SendManagerActivity;
  * Date : 2018/12/26
  * Description : 社区版订单
  */
-public class ComOrderFragment extends BaseFragment {
+public class ComOrderFragment extends BaseFragment implements View.OnClickListener {
+
+    public static ComOrderFragment getInstance(){
+        ComOrderFragment comOrderFragment = new ComOrderFragment();
+        return comOrderFragment;
+    }
 
     @Nullable
     @Override
@@ -30,17 +36,31 @@ public class ComOrderFragment extends BaseFragment {
 
     private void initView(View view) {
         LinearLayout ll_my_order = view.findViewById(R.id.ll_my_order);
-        ll_my_order.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),SendManagerActivity.class);
-                startActivity(intent);
-            }
-        });
+        LinearLayout ll_my_service = view.findViewById(R.id.ll_my_service);
+        LinearLayout ll_my_manager = view.findViewById(R.id.ll_my_manager);
+        ll_my_order.setOnClickListener(this);
+        ll_my_service.setOnClickListener(this);
+        ll_my_manager.setOnClickListener(this);
     }
 
-    public static ComOrderFragment getInstance(){
-        ComOrderFragment comOrderFragment = new ComOrderFragment();
-        return comOrderFragment;
+
+    @Override
+    public void onClick(View view ){
+        switch (view.getId()) {
+            case R.id.ll_my_order:    //我的寄件/订单
+                handleOrder();
+                break;
+            case R.id.ll_my_service:   //我的服务
+                ToastUtil.showShort("功能暂未开放");
+                break;
+            case R.id.ll_my_manager:    //我的管理
+                ToastUtil.showShort("功能暂未开放");
+                break;
+        }
+    }
+
+    private void handleOrder() {
+        Intent intent = new Intent(getActivity(),SendManagerActivity.class);
+        startActivity(intent);
     }
 }

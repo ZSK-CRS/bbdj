@@ -1,5 +1,7 @@
 package com.mt.bbdj.baseconfig.utls;
 
+import android.text.TextUtils;
+
 import com.yanzhenjie.durban.DurbanActivity;
 
 import java.io.File;
@@ -100,9 +102,14 @@ public class DateUtil {
 
     //获取当天零点的时间戳
     public static String getTadayStartTimeStamp() {
-        long current = System.currentTimeMillis();
-        long zero = (current / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset()) / 1000;
-        return zero + "";
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date date = calendar.getTime();
+        String timestamp = String.valueOf(date.getTime()/1000);
+        return timestamp;
     }
 
     //获取给定时间零点的时间戳
@@ -115,7 +122,8 @@ public class DateUtil {
             e.printStackTrace();
         }
         long mills = time.getTime();
-        long zero = (mills / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset()) / 1000;
+    //    long zero = (mills / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset()) / 1000;
+        long zero = mills / 1000;
         return zero + "";
     }
 
@@ -237,9 +245,12 @@ public class DateUtil {
     }
 
     public static String dayDate() {
-        Date date = new Date();
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), calendar1.get(Calendar.DAY_OF_MONTH),
+                0, 0, 0);
+        Date beginOfDate = calendar1.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String dateStr = sdf.format(date);
+        String dateStr = sdf.format(beginOfDate);
         return dateStr;
     }
 
@@ -864,7 +875,7 @@ public class DateUtil {
      * @return
      * @throws Exception
      */
-    public static String getSpecifiedDayBefore(String format,String specifiedDay) {
+    public static String getSpecifiedDayBefore(String format, String specifiedDay) {
         //SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         Date date = null;
@@ -887,7 +898,7 @@ public class DateUtil {
      * @param specifiedDay
      * @return
      */
-    public static String getSpecifiedDayAfter(String format,String specifiedDay) {
+    public static String getSpecifiedDayAfter(String format, String specifiedDay) {
         Calendar c = Calendar.getInstance();
         Date date = null;
         try {
@@ -986,7 +997,7 @@ public class DateUtil {
     public static String getNextMonthForSpecial(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.MONTH,1);
+        calendar.add(Calendar.MONTH, 1);
         Date addTime = calendar.getTime();
         return getTimeForYearAndMonth(addTime);
     }

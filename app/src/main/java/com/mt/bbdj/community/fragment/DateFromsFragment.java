@@ -149,9 +149,10 @@ public class DateFromsFragment extends BaseFragment {
         ArrayList<BarEntry> yVals1 = new ArrayList<BarEntry>();
         ArrayList<BarEntry> yVals2 = new ArrayList<BarEntry>();
         ArrayList<BarEntry> yVals3 = new ArrayList<BarEntry>();
+
         final ArrayList<Float> xAxisValues = new ArrayList<Float>();
 
-        for (int i = 0;i<7;i++) {
+        for (int i = 0;i<9;i++) {
             HashMap<String, String> item = new HashMap<String, String>();
             item.put("sendcorp","测试"+i);
             item.put("rnumber", (i+0.5)*10+"");
@@ -170,8 +171,8 @@ public class DateFromsFragment extends BaseFragment {
         xAxis.setAvoidFirstLastClipping(false);
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(true);
-        xAxis.setLabelCount(13, false);
-        xAxis.setAxisMaximum(13);
+        xAxis.setLabelCount(8, false);
+        //xAxis.setAxisMaximum(7);
         final String[] xValues = {"2.27", "2.28", "3.1", "3.2", "3.3","3.4","3.5"};
         xAxis.setCenterAxisLabels(true);
       //  xAxis.setValueFormatter(new IndexAxisValueFormatter(xValues));
@@ -212,19 +213,17 @@ public class DateFromsFragment extends BaseFragment {
             data.addDataSet(set2);
             data.addDataSet(set3);
             data.setBarWidth(barWidth);
-            data.groupBars(0, groupSpace, barSpace);
             barChart.setData(data);
-
+            data.groupBars(0, groupSpace, barSpace);
         }
         barChart.setFitBars(false);
         barChart.animateY(2500);
         barChart.getData().setHighlightEnabled(false);
     }
 
-    private float barWidth = (float) ((1 - 0.01) / 2); // x4 DataSet
-    float groupSpace = 0.3f; //柱状图组之间的间距
-    float barSpace = (float) ((1 - 0.12) / 3 / 10); // x4 DataSet
-
+    private float barWidth = 0.4f; // 柱状图宽度
+    float groupSpace = 0.07f; //柱状图组之间的间距
+    float barSpace = 0.01f; // 柱状图之间的距离
 
 
     @Override

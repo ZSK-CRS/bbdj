@@ -196,7 +196,8 @@ public class RegisterAccountActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mCountDownTimer.cancel();
+               //
+                // mCountDownTimer.cancel();
             }
 
             @Override
@@ -230,7 +231,14 @@ public class RegisterAccountActivity extends BaseActivity {
             if (mViewRefrence != null && mViewRefrence.get() != null) {
                 TextView identifyTv = mViewRefrence.get();
                 identifyTv.setClickable(false);
-                identifyTv.setText(millisUntilFinished / 1000 + "s");
+                int currentTime = (int) (millisUntilFinished / 1000);
+                if (currentTime == 0) {
+                    identifyTv.setClickable(true);
+                    identifyTv.setText("获取验证码");
+                    cancel();
+                } else{
+                    identifyTv.setText(millisUntilFinished / 1000 + "s");
+                }
             }
         }
 

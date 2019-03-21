@@ -16,6 +16,7 @@ import com.yanzhenjie.nohttp.rest.Request;
 
 import java.io.File;
 import java.util.Base64;
+import java.util.HashMap;
 
 /**
  * Author : ZSK
@@ -1983,6 +1984,23 @@ public class NoHttpRequest {
         request.add("mail_id", mail_id);
         request.add("reason_id", reason_id);
         request.add("content", content);
+        return request;
+    }
+
+    //微信支付请求接口
+    public static Request<String> getWeiChartPayforRequest(String user_id,String money){
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest("http://www.81dja.com/Payment/WeChatPay", RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CANNEL_ORDER_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("money", money);
         return request;
     }
 

@@ -7,12 +7,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.kongzue.dialog.v2.SelectDialog;
 import com.mt.bbdj.R;
@@ -33,6 +35,9 @@ import com.mt.bbdj.community.activity.MyAddressActivity;
 import com.mt.bbdj.community.activity.MyOrderActivity;
 import com.mt.bbdj.community.activity.MywalletActivity;
 import com.mt.bbdj.community.activity.SettingCenterActivity;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -78,6 +83,7 @@ public class ComMymessageFragment extends BaseFragment {
     TextView tvMoney;
     @BindView(R.id.tv_birthday)
     TextView tvBirthday;
+
     private SharedPreferences.Editor editor;
     private String user_id;
     private RequestQueue mRequestQueue;
@@ -85,6 +91,7 @@ public class ComMymessageFragment extends BaseFragment {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor1;
     private UserBaseMessageDao userBaseMessageDao;
+    private IWXAPI api;
 
 
     @Nullable
@@ -94,8 +101,12 @@ public class ComMymessageFragment extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         initParams();
         initData();
+
         return view;
     }
+
+
+
 
     private void initParams() {
        DaoSession daoSession = GreenDaoManager.getInstance().getSession();

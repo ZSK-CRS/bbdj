@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -29,6 +30,8 @@ import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
+import com.tencent.mm.opensdk.modelpay.PayReq;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -71,6 +74,9 @@ public class WithdrawCashActivity extends BaseActivity {
     @BindView(R.id.bt_commit)
     Button btCommit;
 
+    @BindView(R.id.bt_recharge)
+    Button btRecharge;     //充值
+
     private MyCountDownTimer mCountDownTimer;
     private RequestQueue mRequestQueue;    //请求队列
     private String mRandCode = "";      //验证码
@@ -111,7 +117,7 @@ public class WithdrawCashActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_select_account, R.id.bt_get_verify, R.id.bt_commit, R.id.iv_back})
+    @OnClick({R.id.tv_select_account, R.id.bt_get_verify, R.id.bt_commit, R.id.iv_back,R.id.bt_recharge})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_select_account:
@@ -128,6 +134,7 @@ public class WithdrawCashActivity extends BaseActivity {
                 break;
         }
     }
+
 
     private void commitMessage() {
         String currentCode = etVerofyNumber.getText().toString();

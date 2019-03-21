@@ -14,86 +14,176 @@
         android:focusable="true"
         android:focusableInTouchMode="true" />
 
+
     <LinearLayout
         android:id="@+id/ll_title"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/mainColor"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_centerInParent="true"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="订单管理"
-            android:textColor="@color/whilte"
-            android:textSize="15sp" />
+            android:textColor="@color/grey_7"
+            android:textSize="16sp" />
 
 
     </LinearLayout>
 
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginRight="30dp"
-        android:orientation="horizontal">
+        android:layout_height="1dp"
+        android:background="@color/grey_6" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="请选择您需要的服务"
+        android:textColor="@color/grey_2"
+        android:textSize="15sp" />
+
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        android:layout_marginTop="-5dp"
+        app:cardUseCompatPadding="true"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
         <LinearLayout
             android:id="@+id/ll_my_order"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/shap_tv_bg_1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="horizontal">
 
+            <ImageView
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_send_"
+                android:layout_width="45dp"
+                android:layout_height="45dp" />
+            
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="我的订单"
-                android:textColor="@color/grey_7"
-                android:textSize="18sp" />
+                android:gravity="center_vertical"
+                android:textColor="@color/grey_2"
+                android:text="我的寄件"
+                android:paddingLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_right"
+                android:layout_width="10dp"
+                android:layout_height="15dp" />
 
         </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
         <LinearLayout
-            android:visibility="invisible"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/shap_tv_bg_1"
-            android:layout_width="0dp"
+            android:id="@+id/ll_my_service"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_service_"
+                android:layout_width="45dp"
+                android:layout_height="45dp" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="支出"
-                android:textColor="@color/grey_7"
-                android:textSize="18sp" />
+                android:gravity="center_vertical"
+                android:textColor="@color/grey_2"
+                android:text="我的服务"
+                android:paddingLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:gravity="center"
-                android:text="500元"
-                android:textColor="@color/grey_7"
-                android:textSize="18sp" />
-
+            <ImageView
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_right"
+                android:layout_width="10dp"
+                android:layout_height="15dp" />
 
         </LinearLayout>
 
+    </android.support.v7.widget.CardView>
 
-    </LinearLayout>
+    <android.support.v7.widget.CardView
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:cardUseCompatPadding="true"
+        android:orientation="horizontal"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
 
+        <LinearLayout
+            android:id="@+id/ll_my_manager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_manager_"
+                android:layout_width="45dp"
+                android:layout_height="45dp" />
+
+            <TextView
+                android:gravity="center_vertical"
+                android:textColor="@color/grey_2"
+                android:text="我的管理"
+                android:paddingLeft="5dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_right"
+                android:layout_width="10dp"
+                android:layout_height="15dp" />
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
 
 </LinearLayout>

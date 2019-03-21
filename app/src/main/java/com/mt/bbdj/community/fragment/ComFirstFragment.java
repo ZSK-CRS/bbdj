@@ -1,10 +1,15 @@
 package com.mt.bbdj.community.fragment;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mt.bbdj.R;
+import com.mt.bbdj.baseconfig.application.MyApplication;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.City;
 import com.mt.bbdj.baseconfig.db.County;
@@ -33,11 +39,15 @@ import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.AddressBean;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
+import com.mt.bbdj.baseconfig.utls.DialogUtil;
+import com.mt.bbdj.baseconfig.utls.DownloadUtil;
+import com.mt.bbdj.baseconfig.utls.FileUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
+import com.mt.bbdj.baseconfig.utls.SystemUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MyGridView;
 import com.mt.bbdj.community.activity.ChangeManagerdActivity;
@@ -70,6 +80,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -121,6 +132,8 @@ public class ComFirstFragment extends BaseFragment {
     @BindView(R.id.tv_test_tag)
     TextView tvTestTag;
 
+    private  String APP_PATH_ROOT   = FileUtil.getRootPath(MyApplication.getInstance()).getAbsolutePath() + File.separator +"bbdj";
+
 
     private List<HashMap<String, Object>> mList = new ArrayList<>();
     private DaoSession mDaoSession;
@@ -142,6 +155,10 @@ public class ComFirstFragment extends BaseFragment {
     private String user_id;
     private ExpressLogoDao mExpressLogoDao;
     private List<ExpressLogo> mExpressLogoList;
+    private String version_url;
+    private ProgressDialog mProgressBar;
+
+    final String fileName = "bbdj.apk";
 
     public static ComFirstFragment getInstance() {
         ComFirstFragment comFirstFragment = new ComFirstFragment();
@@ -305,13 +322,16 @@ public class ComFirstFragment extends BaseFragment {
                 handleChangeManagerEvent();
                 break;
             case "4":       //入库管理
-                handleEnterManagerEvent();
+                ToastUtil.showShort("该功能暂未开放！");
+               // handleEnterManagerEvent();
                 break;
             case "5":       //出库管理
-                handleOutManagerEvent();
+                ToastUtil.showShort("该功能暂未开放！");
+               // handleOutManagerEvent();
                 break;
             case "6":       //财务管理
-                handleMoneyManagerEvent();
+                ToastUtil.showShort("该功能暂未开放！");
+               // handleMoneyManagerEvent();
                 break;
             case "7":       //客户管理
                 handleClientManagerEvent();
@@ -326,6 +346,7 @@ public class ComFirstFragment extends BaseFragment {
                 handleComplainEvent();
                 break;
             case "11":      //操作手册
+                ToastUtil.showShort("该功能暂未开放！");
                 break;
         }
 
@@ -524,8 +545,10 @@ public class ComFirstFragment extends BaseFragment {
         String money = dataObj.getString("money");   //账户余额
         String birthday = dataObj.getString("birthday");   //入驻天数
         String version_number = dataObj.getString("version_number");   //版本号
-        String version_url = dataObj.getString("version_url");   //版本地址
+        //版本地址
+        version_url = dataObj.getString("version_url");
         String unread_url = dataObj.getString("unread_url");   //未读消息
+
         tvReceiveWait.setText(StringUtil.handleNullResultForNumber(mail_stay));
         tvReceiveHandle.setText("已处理 " + StringUtil.handleNullResultForNumber(mail_processed));
         tvAbnormalWait.setText(StringUtil.handleNullResultForNumber(abnormal_stay));
@@ -538,8 +561,83 @@ public class ComFirstFragment extends BaseFragment {
         editor.putString("birthday", birthday);
         editor.putString("address", username);
         editor.commit();
+
+        upLoadNewVersion(version_number, version_url);    //更新最新版本
     }
 
+    private void upLoadNewVersion(String version_number,String version_url) {
+        String version = SystemUtil.getVersion(getActivity());
+        if (!version.equals(version_number)) {
+            showDownLoadDialog(version_url);
+        }
+    }
+
+    private void showDownLoadDialog(String version_url) {
+        DialogUtil.promptDialog1(getActivity(),"更新提示","有新版本上线，请先更新！", DetermineListener, throwListener);
+    }
+
+
+    android.content.DialogInterface.OnClickListener DetermineListener = new android.content.DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            download();
+        }
+    };
+
+    private void download() {
+        mProgressBar = new ProgressDialog(getActivity());
+        mProgressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressBar.setTitle("正在下载");
+        mProgressBar.setMessage("请稍后...");
+        mProgressBar.setProgress(0);
+        mProgressBar.setMax(100);
+        mProgressBar.show();
+        mProgressBar.setCancelable(false);
+
+        DownloadUtil.get().download(version_url, APP_PATH_ROOT,fileName, new DownloadUtil.OnDownloadListener() {
+            @Override
+            public void onDownloadSuccess(File file) {
+                if (mProgressBar != null && mProgressBar.isShowing()) {
+                    mProgressBar.dismiss();
+                }
+                //下载完成进行相关逻辑操作
+                installApk(file);// 安装
+            }
+
+            @Override
+            public void onDownloading(int progress) {
+                mProgressBar.setProgress(progress);
+            }
+
+            @Override
+            public void onDownloadFailed(Exception e) {
+                //下载异常进行相关提示操作
+            }
+        });
+
+    }
+
+    private void installApk(File file) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri photoURI = FileProvider.getUriForFile(getActivity(), MyApplication.getInstance().getPackageName() + ".provider", file);
+            intent.setDataAndType(photoURI, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        startActivity(intent);
+    }
+
+    android.content.DialogInterface.OnClickListener throwListener = new android.content.DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+            dialogLoading.cancel();
+        }
+    };
 
     private void handleUploadArea(JSONObject jsonObject) throws JSONException {    //下载省市县
         mProvinceDao.deleteAll();
@@ -590,7 +688,8 @@ public class ComFirstFragment extends BaseFragment {
                 actionToMessagePannel();      //跳转到消息界面
                 break;
             case R.id.tv_abnormal_wait:     //仓库
-                actionToRepertoryPannel();
+                ToastUtil.showShort("该功能暂未开放！");
+                //actionToRepertoryPannel();
                 break;
             case R.id.textview_serach:
                 actionToSearchPannel();    //搜索

@@ -29,6 +29,7 @@ import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.DestroyEvent;
+import com.mt.bbdj.baseconfig.model.ImageCutEvent;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.MiPictureHelper;
@@ -55,6 +56,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -181,6 +183,20 @@ public class RegisterCompleteActivity extends BaseActivity {
         }
     };
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void imageCutListener(ImageCutEvent event) {
+        if (this.getClass().getName().equals(event.getContextName())) {
+            ArrayList<String> imagePath = event.getPicturePathList();
+            if (imagePath.size() > 0) {
+                String cutPath = imagePath.get(0);
+                Glide.with(RegisterCompleteActivity.this)
+                        .load(cutPath)
+                        .into(mIvRegisterIdLicence);
+              uploadPicture(cutPath);
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -279,7 +295,6 @@ public class RegisterCompleteActivity extends BaseActivity {
         } else {
             icLicenceAdd.setVisibility(View.GONE);
         }
-
         uploadPicture(filePath);    //上传图片
     }
 
@@ -307,6 +322,7 @@ public class RegisterCompleteActivity extends BaseActivity {
                 .maxWidthHeight(2019, 1275)
                 .outputDirectory(compressPicture.getPath())
                 .inputImagePaths(Uri.fromFile(photoFile).getPath())
+                .rotateSupport(true, this.getClass().getName())    //设置支持裁剪区域旋转
                 .aspectRatio(1346, 850)
                 .start();
     }

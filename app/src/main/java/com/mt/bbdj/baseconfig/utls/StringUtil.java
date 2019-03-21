@@ -15,7 +15,12 @@ import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -32,6 +37,51 @@ public class StringUtil {
         String result = "";
         for (int i = 0; i < amount; i++) {
             result += random.nextInt(10);
+        }
+        return result;
+    }
+
+    //获取固定位数的随机数
+    public static String getRandomCode(int n) {
+        String a = "0123456789qwertyuiopasdfghjklzxcvbnmABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        char[] rands = new char[n];
+        for (int i = 0; i < rands.length; i++) {
+            int rand = (int) (Math.random() * a.length());
+            rands[i] = a.charAt(rand);
+        }
+        return String.valueOf(rands);
+    }
+
+    public static String getWxChartPayforSign(Map<String,String> map) {
+        String result = "";
+        try {
+            List<Map.Entry<String, String>> infoIds = new ArrayList<Map.Entry<String, String>>(map.entrySet());
+            // 对所有传入参数按照字段名的 ASCII 码从小到大排序（字典序）
+            Collections.sort(infoIds, new Comparator<Map.Entry<String, String>>() {
+
+                public int compare(Map.Entry<String, String> o1, Map.Entry<String, String> o2) {
+                    return (o1.getKey()).toString().compareTo(o2.getKey());
+                }
+            });
+
+            // 构造签名键值对的格式
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<String, String> item : infoIds) {
+                if (item.getKey() != null || item.getKey() != "") {
+                    String key = item.getKey();
+                    String val = item.getValue();
+                    if (!(val == "" || val == null)) {
+                        sb.append(key + "=" + val + "&");
+                    }
+                }
+
+            }
+//			sb.append(PropertyManager.getProperty("SIGNKEY"));
+            result = sb.toString();
+            //进行MD5加密
+            result = MD5Util.toMD5(result);
+        } catch (Exception e) {
+            return null;
         }
         return result;
     }
@@ -209,9 +259,9 @@ public class StringUtil {
         //IO流读取json文件内容
         try {
             BufferedReader bufferedReader = new BufferedReader(
-                    new InputStreamReader(assetManager.open(fileName),"utf-8"));
+                    new InputStreamReader(assetManager.open(fileName), "utf-8"));
             String line;
-            while((line = bufferedReader.readLine()) != null) {
+            while ((line = bufferedReader.readLine()) != null) {
                 stringBuilder.append(line);
             }
         } catch (IOException e) {
@@ -221,30 +271,30 @@ public class StringUtil {
     }
 
     //加密电话号码
-    public static String encryptPhone(String phone){
+    public static String encryptPhone(String phone) {
         String encryptStr = phone;
         if ("".equals(encryptStr)) {
             return "";
         }
         int length = encryptStr.length();
         StringBuilder builder = new StringBuilder();
-        builder.append(encryptStr.substring(0,3));
+        builder.append(encryptStr.substring(0, 3));
         builder.append("****");
-        builder.append(encryptStr.substring(length-3));
-        return  builder.toString();
+        builder.append(encryptStr.substring(length - 3));
+        return builder.toString();
     }
 
     //加密银行卡号
-    public static String encryptBankNumber(String bankNumber){
+    public static String encryptBankNumber(String bankNumber) {
         String encryptStr = bankNumber;
         if ("".equals(encryptStr)) {
             return "";
         }
         int length = encryptStr.length();
         StringBuilder builder = new StringBuilder();
-        builder.append(encryptStr.substring(0,3));
+        builder.append(encryptStr.substring(0, 3));
         builder.append("************");
-        builder.append(encryptStr.substring(length-3));
-        return  builder.toString();
+        builder.append(encryptStr.substring(length - 3));
+        return builder.toString();
     }
 }
