@@ -34,6 +34,7 @@ public class UserBaseMessageDao extends AbstractDao<UserBaseMessage, Long> {
         public final static Property Contact_email = new Property(7, String.class, "contact_email", false, "contact_email");
         public final static Property Birthday = new Property(8, String.class, "birthday", false, "birthday");
         public final static Property Balance = new Property(9, String.class, "balance", false, "balance");
+        public final static Property Contact_account = new Property(10, String.class, "contact_account", false, "contact_account");
     }
 
 
@@ -58,7 +59,8 @@ public class UserBaseMessageDao extends AbstractDao<UserBaseMessage, Long> {
                 "\"contact_number\" TEXT," + // 6: contact_number
                 "\"contact_email\" TEXT," + // 7: contact_email
                 "\"birthday\" TEXT," + // 8: birthday
-                "\"balance\" TEXT);"); // 9: balance
+                "\"balance\" TEXT," + // 9: balance
+                "\"contact_account\" TEXT);"); // 10: contact_account
     }
 
     /** Drops the underlying database table. */
@@ -120,6 +122,11 @@ public class UserBaseMessageDao extends AbstractDao<UserBaseMessage, Long> {
         if (balance != null) {
             stmt.bindString(10, balance);
         }
+ 
+        String contact_account = entity.getContact_account();
+        if (contact_account != null) {
+            stmt.bindString(11, contact_account);
+        }
     }
 
     @Override
@@ -175,6 +182,11 @@ public class UserBaseMessageDao extends AbstractDao<UserBaseMessage, Long> {
         if (balance != null) {
             stmt.bindString(10, balance);
         }
+ 
+        String contact_account = entity.getContact_account();
+        if (contact_account != null) {
+            stmt.bindString(11, contact_account);
+        }
     }
 
     @Override
@@ -194,7 +206,8 @@ public class UserBaseMessageDao extends AbstractDao<UserBaseMessage, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // contact_number
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // contact_email
             cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // birthday
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9) // balance
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // balance
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10) // contact_account
         );
         return entity;
     }
@@ -211,6 +224,7 @@ public class UserBaseMessageDao extends AbstractDao<UserBaseMessage, Long> {
         entity.setContact_email(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setBirthday(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
         entity.setBalance(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setContact_account(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
      }
     
     @Override

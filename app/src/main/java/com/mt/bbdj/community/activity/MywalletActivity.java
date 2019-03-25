@@ -47,6 +47,8 @@ public class MywalletActivity extends AppCompatActivity {
     LinearLayout llBindAccount;
     @BindView(R.id.tv_current_money)
     TextView tvCurrentMoney;
+    @BindView(R.id.tv_ming_money)
+    TextView tvMingMoney;   //警戒余额
     private UserBaseMessage userBaseMessage;
     private String user_id;
     private UserBaseMessageDao userBaseMessageDao;
@@ -55,6 +57,7 @@ public class MywalletActivity extends AppCompatActivity {
     @BindView(R.id.bt_recharge)
     Button recharge;
     private IWXAPI api;
+    private String contact_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +85,7 @@ public class MywalletActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.iv_back, R.id.bt_withdraw_cash, R.id.ll_withdraw_record,
-            R.id.ll_consume_record, R.id.ll_bind_account,R.id.bt_recharge})
+            R.id.ll_consume_record, R.id.ll_bind_account, R.id.bt_recharge, R.id.ll_recharge_record})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -103,31 +106,41 @@ public class MywalletActivity extends AppCompatActivity {
             case R.id.bt_recharge:    //充值
                 handleRecharge();
                 break;
+            case R.id.ll_recharge_record:     //充值记录
+                showRechargePannel();
+                break;
         }
     }
 
+    private void showRechargePannel() {
+        Intent intent = new Intent(this, RechargeRecordActivity.class);
+        startActivity(intent);
+    }
+
     private void handleRecharge() {
-        Intent intent = new Intent(this,RechargeActivity.class);
+        Intent intent = new Intent(this, RechargeActivity.class);
         startActivity(intent);
     }
 
     private void showBindAccountPannel() {
-        Intent intent = new Intent(this,BindAccountActivity.class);
+        Intent intent = new Intent(this, BindAccountActivity.class);
         startActivity(intent);
     }
 
     private void showConsumeRecordPannel() {
-        Intent intent = new Intent(this,ConsumeRecordActivity.class);
+        Intent intent = new Intent(this, ConsumeRecordActivity.class);
         startActivity(intent);
     }
 
     private void showWithdrawCashRecordPannel() {
-        Intent intent = new Intent(this,WithdrawCashRecordActivity.class);
+        Intent intent = new Intent(this, WithdrawCashRecordActivity.class);
+
         startActivity(intent);
     }
 
     private void showWithdrawCashPannel() {
-        Intent intent = new Intent(this,WithdrawCashActivity.class);
+        Intent intent = new Intent(this, WithdrawCashActivity.class);
+        intent.putExtra("contact_number", contact_number);
         startActivity(intent);
     }
 
@@ -162,10 +175,12 @@ public class MywalletActivity extends AppCompatActivity {
                     String headimg = dataObj.getString("headimg");
                     String mingcheng = dataObj.getString("mingcheng");
                     String contacts = dataObj.getString("contacts");
-                    String contact_number = dataObj.getString("contact_number");
+                    contact_number = dataObj.getString("contact_number");
                     String contact_email = dataObj.getString("contact_email");
+                    String contact_account = dataObj.getString("contact_account");
                     String birthday = dataObj.getString("birthday");
                     String balance = dataObj.getString("balance");
+                    String min_balance = dataObj.getString("min_balance");    //境界余额
                     UserBaseMessage userBaseMessage = new UserBaseMessage();
                     userBaseMessage.setUser_id(user_id);
                     userBaseMessage.setHeadimg(headimg);
@@ -173,10 +188,12 @@ public class MywalletActivity extends AppCompatActivity {
                     userBaseMessage.setContacts(contacts);
                     userBaseMessage.setContact_number(contact_number);
                     userBaseMessage.setContact_email(contact_email);
+                    userBaseMessage.setContact_account(contact_account);
                     userBaseMessage.setBirthday(birthday);
                     userBaseMessage.setBalance(balance);
-                    tvCurrentMoney.setText("当前余额 :  "+balance);
+                    tvCurrentMoney.setText("当前余额 :  " + balance);
                     userBaseMessageDao.save(userBaseMessage);
+                    tvMingMoney.setText("警戒余额 : "+ min_balance);
                 } else {
                     ToastUtil.showShort(msg);
                 }

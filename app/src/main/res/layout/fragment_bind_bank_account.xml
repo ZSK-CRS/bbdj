@@ -6,10 +6,10 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
 
         <TextView
             android:layout_width="90dp"
@@ -19,12 +19,12 @@
 
         <EditText
             android:id="@+id/et_account_name"
-            android:paddingLeft="15dp"
             android:layout_width="match_parent"
-            android:singleLine="true"
             android:layout_height="match_parent"
             android:background="@null"
             android:hint="请填写姓名"
+            android:paddingLeft="15dp"
+            android:singleLine="true"
             android:textSize="13sp" />
 
     </LinearLayout>
@@ -35,10 +35,10 @@
         android:background="@color/grey_6" />
 
     <LinearLayout
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
 
         <TextView
             android:layout_width="90dp"
@@ -48,22 +48,32 @@
 
         <EditText
             android:id="@+id/et_account"
-            android:layout_weight="1"
-            android:paddingLeft="15dp"
             android:layout_width="0dp"
-            android:singleLine="true"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:background="@null"
             android:hint="请填写卡号"
+            android:paddingLeft="15dp"
+            android:singleLine="true"
             android:textSize="13sp" />
 
-        <ImageView
-            android:id="@+id/iv_identify_bank"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_camera"
-            android:scaleType="centerInside"
-            android:layout_width="25dp"
-            android:layout_height="25dp" />
+        <RelativeLayout
+            android:clickable="false"
+            android:id="@+id/rl_take_camera"
+            android:layout_width="45dp"
+            android:layout_height="45dp">
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:id="@+id/iv_identify_bank"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_camera" />
+
+        </RelativeLayout>
+
 
     </LinearLayout>
 
@@ -73,10 +83,10 @@
         android:background="@color/grey_6" />
 
     <LinearLayout
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
         android:layout_width="match_parent"
-        android:layout_height="45dp">
+        android:layout_height="45dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp">
 
         <TextView
             android:layout_width="100dp"
@@ -86,12 +96,12 @@
 
         <EditText
             android:id="@+id/et_account_bank"
-            android:paddingLeft="15dp"
             android:layout_width="match_parent"
-            android:singleLine="true"
             android:layout_height="match_parent"
             android:background="@null"
             android:hint=""
+            android:paddingLeft="15dp"
+            android:singleLine="true"
             android:textSize="13sp" />
 
     </LinearLayout>
@@ -139,23 +149,23 @@
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatTextView
-        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
-        android:minHeight="25dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
+        android:layout_marginRight="20dp"
         android:gravity="center_vertical"
+        android:minHeight="25dp"
         android:text="2、只可绑定一张储蓄卡账户"
         android:textSize="13sp" />
 
     <android.support.v7.widget.AppCompatTextView
-        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="25dp"
         android:layout_marginLeft="70dp"
-        android:lineSpacingExtra="5dp"
+        android:layout_marginRight="20dp"
         android:gravity="center_vertical"
+        android:lineSpacingExtra="5dp"
+        android:minHeight="25dp"
         android:text="3、如需更改请联系客服。电话: 010-3278234"
         android:textSize="13sp" />
 

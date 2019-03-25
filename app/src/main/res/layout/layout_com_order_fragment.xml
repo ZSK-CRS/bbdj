@@ -80,7 +80,7 @@
             <TextView
                 android:gravity="center_vertical"
                 android:textColor="@color/grey_2"
-                android:text="我的寄件"
+                android:text="寄件管理"
                 android:paddingLeft="5dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -125,7 +125,7 @@
             <TextView
                 android:gravity="center_vertical"
                 android:textColor="@color/grey_2"
-                android:text="我的服务"
+                android:text="服务订单"
                 android:paddingLeft="5dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"
@@ -170,7 +170,7 @@
             <TextView
                 android:gravity="center_vertical"
                 android:textColor="@color/grey_2"
-                android:text="我的管理"
+                android:text="派件管理"
                 android:paddingLeft="5dp"
                 android:layout_width="0dp"
                 android:layout_weight="1"

@@ -1456,6 +1456,33 @@ public class NoHttpRequest {
         return request;
     }
 
+    /**
+     * 获取充值记录
+     * @param user_id   用户id
+     * @param page   页码
+     * @param start  开始时间
+     * @param endtime 结束时间
+     * @return
+     */
+    public static Request<String> getRechargeRecordRequest(String user_id,int page,String start,String endtime){
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_RECHARGE_RECORD_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_RECHARGE_RECORD_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("page", page);
+        request.add("starttime", start);
+        request.add("endtime", endtime);
+        return request;
+    }
+
 
     /**
      * 获取客户列表请求

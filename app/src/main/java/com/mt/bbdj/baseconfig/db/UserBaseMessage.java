@@ -34,11 +34,13 @@ public class UserBaseMessage {
     private String birthday;     //入驻天数
     @Property(nameInDb = "balance")
     private String balance;     //剩余金额
-    @Generated(hash = 809564002)
+    @Property(nameInDb = "contact_account")
+    private String contact_account;    //注册人电话
+    @Generated(hash = 1205159608)
     public UserBaseMessage(Long mainId, String user_id, String user_type,
             String headimg, String mingcheng, String contacts,
             String contact_number, String contact_email, String birthday,
-            String balance) {
+            String balance, String contact_account) {
         this.mainId = mainId;
         this.user_id = user_id;
         this.user_type = user_type;
@@ -49,6 +51,7 @@ public class UserBaseMessage {
         this.contact_email = contact_email;
         this.birthday = birthday;
         this.balance = balance;
+        this.contact_account = contact_account;
     }
     @Generated(hash = 1135630984)
     public UserBaseMessage() {
@@ -112,6 +115,12 @@ public class UserBaseMessage {
     }
     public void setBalance(String balance) {
         this.balance = balance;
+    }
+    public String getContact_account() {
+        return this.contact_account;
+    }
+    public void setContact_account(String contact_account) {
+        this.contact_account = contact_account;
     }
 
 }

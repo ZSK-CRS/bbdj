@@ -5,19 +5,27 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.baidu.ocr.sdk.OCR;
+import com.baidu.ocr.sdk.model.BankCardParams;
+import com.baidu.ocr.sdk.model.GeneralParams;
 import com.kongzue.dialog.v2.SelectDialog;
 import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
+import com.mt.bbdj.baseconfig.application.MyApplication;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
@@ -26,6 +34,7 @@ import com.mt.bbdj.baseconfig.model.BindAccountModel;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.SystemUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.CommonDialog;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -40,12 +49,16 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Author : ZSK
@@ -64,6 +77,9 @@ public class BindBankcardFragment extends Fragment {
     EditText etAccountBank;
     @BindView(R.id.bt_commit)
     Button btCommit;
+    @BindView(R.id.rl_take_camera)
+    RelativeLayout takeCamera;
+
     Unbinder unbinder;
     private String user_id;
     private RequestQueue mRequestQueue;
@@ -71,6 +87,11 @@ public class BindBankcardFragment extends Fragment {
     private final int ACTION_BIND_ACCOUNT = 200;
     private WaitDialog waitDialog;
     private View view;
+    private String picturePath = "/bbdj/picture";
+    private File f = new File(Environment.getExternalStorageDirectory(), picturePath);
+    private File photoFile;
+    private File compressPicture;
+    private final int TAKE_BANK = 100;
 
     public static BindBankcardFragment getInstance() {
         BindBankcardFragment bf = new BindBankcardFragment();
@@ -122,7 +143,7 @@ public class BindBankcardFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_identify_bank, R.id.bt_commit})
+    @OnClick({R.id.iv_identify_bank, R.id.bt_commit,R.id.rl_take_camera})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_identify_bank:
@@ -130,7 +151,47 @@ public class BindBankcardFragment extends Fragment {
             case R.id.bt_commit:
                 commitAccount();
                 break;
+            case R.id.rl_take_camera:
+                takeBankPicture();
+                break;
         }
+    }
+
+    private void takeBankPicture() {
+        if (SystemUtil.hasSdcard()) {
+            if (!f.exists()) {
+                f.mkdirs();
+            }
+            String uuid = UUID.randomUUID().toString();
+            String path2 = uuid + ".jpg";
+            photoFile = new File(f, path2);
+            compressPicture = new File(f, uuid);
+            Uri photoURI = FileProvider.getUriForFile(getActivity(),  MyApplication.getInstance().getPackageName() + ".provider", photoFile);
+            Intent intent = new Intent();
+
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+            intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
+
+            startActivityForResult(intent, TAKE_BANK);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == TAKE_BANK && resultCode == RESULT_OK) {
+            identifyBank();    //识别银行卡
+        }
+    }
+
+    private void identifyBank() {
+      /*  BankCardParams params = new BankCardParams();
+        params.setDetectDirection(true);
+        params.setVertexesLocation(true);
+        params.setRecognizeGranularity(GeneralParams.GRANULARITY_SMALL);
+        param.setImageFile(new File(filePath));
+        OCR.getInstance(getActivity()).recognizeBankCard();*/
+
     }
 
     private void showCommitDialog(final String accountName, final String account, final String accountBank) {

@@ -74,9 +74,6 @@ public class WithdrawCashActivity extends BaseActivity {
     @BindView(R.id.bt_commit)
     Button btCommit;
 
-    @BindView(R.id.bt_recharge)
-    Button btRecharge;     //充值
-
     private MyCountDownTimer mCountDownTimer;
     private RequestQueue mRequestQueue;    //请求队列
     private String mRandCode = "";      //验证码
@@ -105,7 +102,7 @@ public class WithdrawCashActivity extends BaseActivity {
         List<UserBaseMessage> userBaseMessages = userBaseMessageDao.queryBuilder().list();
         if (userBaseMessages.size() != 0) {
             userBaseMessage = userBaseMessages.get(0);
-            etPhone.setText(userBaseMessage.getContact_number());
+            etPhone.setText(userBaseMessage.getContact_account());
             user_id = userBaseMessage.getUser_id();
         }
     }
@@ -117,7 +114,7 @@ public class WithdrawCashActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_select_account, R.id.bt_get_verify, R.id.bt_commit, R.id.iv_back,R.id.bt_recharge})
+    @OnClick({R.id.tv_select_account, R.id.bt_get_verify, R.id.bt_commit, R.id.iv_back})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_select_account:

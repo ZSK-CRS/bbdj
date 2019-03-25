@@ -102,13 +102,11 @@ public class DateUtil {
 
     //获取当天零点的时间戳
     public static String getTadayStartTimeStamp() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        calendar.set(Calendar.HOUR, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        Date date = calendar.getTime();
-        String timestamp = String.valueOf(date.getTime()/1000);
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), calendar1.get(Calendar.DAY_OF_MONTH),
+                0, 0, 0);
+        Date beginOfDate = calendar1.getTime();
+        String timestamp = String.valueOf(beginOfDate.getTime()/1000);
         return timestamp;
     }
 

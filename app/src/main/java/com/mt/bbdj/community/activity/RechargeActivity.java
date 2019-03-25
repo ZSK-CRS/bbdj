@@ -1,10 +1,12 @@
 package com.mt.bbdj.community.activity;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.kongzue.dialog.v2.WaitDialog;
@@ -43,11 +45,15 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import cn.ycbjie.ycstatusbarlib.StatusBarUtils;
+import cn.ycbjie.ycstatusbarlib.bar.YCAppBar;
+
 public class RechargeActivity extends BaseActivity {
 
     private RelativeLayout ivBack;
     private Button rechargeBt;   //充值
     private EditText etMoney;
+    private LinearLayout weChatLayout,aliLayout;     //微信支付、支付宝支付
     private RequestQueue mRequestQueue;
     private UserBaseMessageDao userBaseMessageDao;
     private UserBaseMessage userBaseMessage;
@@ -61,6 +67,8 @@ public class RechargeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recharge);
+        YCAppBar.setStatusBarLightMode(this, Color.WHITE);
+        StatusBarUtils.StatusBarLightMode(RechargeActivity.this);
         EventBus.getDefault().register(this);
         initParams();
         initView();
@@ -100,6 +108,22 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+
+        //微信支付
+        weChatLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        //支付宝支付
+        aliLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtil.showShort("暂不支持支付宝支付");
             }
         });
     }
@@ -195,6 +219,15 @@ public class RechargeActivity extends BaseActivity {
         ivBack = findViewById(R.id.iv_back);
         rechargeBt = findViewById(R.id.bt_recharge);
         etMoney = findViewById(R.id.et_money);
+        weChatLayout = findViewById(R.id.ll_wechat);
+        aliLayout = findViewById(R.id.ll_ali);
+        etMoney.setCursorVisible(false);
+        etMoney.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etMoney.setCursorVisible(true);
+            }
+        });
     }
 
     @Override

@@ -90,6 +90,21 @@ public class LoginActivity extends AppCompatActivity {
         applyPermission();    //申请权限
         setPushSetting();     //设置推送别名
         initData();
+        mUsername.setCursorVisible(false);
+        mPassword.setCursorVisible(false);
+        mUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mUsername.setCursorVisible(true);
+            }
+        });
+
+        mPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPassword.setCursorVisible(true);
+            }
+        });
     }
 
     private void setPushSetting() {
@@ -178,7 +193,6 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if ("".equals(password)) {
-
             ToastUtil.showShort("密码不可为空！");
             return;
         }
@@ -234,6 +248,7 @@ public class LoginActivity extends AppCompatActivity {
         String contacts = dataObject.getString("contacts");
         String contact_number = dataObject.getString("contact_number");
         String contact_email = dataObject.getString("contact_email");
+        String contact_account = dataObject.getString("contact_account");
         mUserMessageDao.deleteAll();
         UserBaseMessage userBaseMessage = new UserBaseMessage();
         userBaseMessage.setUser_id(user_id);
@@ -243,6 +258,7 @@ public class LoginActivity extends AppCompatActivity {
         userBaseMessage.setContacts(contacts);
         userBaseMessage.setContact_number(contact_number);
         userBaseMessage.setContact_email(contact_email);
+        userBaseMessage.setContact_account(contact_account);
         mUserMessageDao.save(userBaseMessage);
     }
 

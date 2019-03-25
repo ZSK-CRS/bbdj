@@ -39,7 +39,7 @@ android {
     }
 
     greendao {
-        schemaVersion 12     //版本
+        schemaVersion 15    //版本
         daoPackage 'com.mt.bbdj.baseconfig.db.gen'
         targetGenDir 'src/main/java'
     }

@@ -1,20 +1,14 @@
 package com.mt.bbdj.community.activity;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.format.DateUtils;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.configure.PickerOptions;
 import com.bigkoo.pickerview.listener.CustomListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
@@ -30,7 +24,8 @@ import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
-import com.mt.bbdj.community.adapter.WithdrawCashRecordAdapter;
+import com.mt.bbdj.community.adapter.ConsumeRecordAdapter;
+import com.mt.bbdj.community.adapter.RechargeRecordAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -41,7 +36,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -52,37 +46,31 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class WithdrawCashRecordActivity extends BaseActivity implements XRecyclerView.LoadingListener {
+public class RechargeRecordActivity extends BaseActivity implements XRecyclerView.LoadingListener {
 
     @BindView(R.id.iv_back)
     RelativeLayout ivBack;     //返回
     @BindView(R.id.tv_fast_select)
     ImageView tvFastSelect;     //筛选
     @BindView(R.id.rl_record)
-    XRecyclerView rlRecord;    //提现记录
+    XRecyclerView rlRecord;    //消费记录
     @BindView(R.id.ll_title)
     LinearLayout llTitle;
 
     private List<HashMap<String, String>> mList;
-    private WithdrawCashRecordAdapter mAdapter;
+    private RechargeRecordAdapter mAdapter;
+    private boolean isFresh = true;
+    private int mPage = 1;
     private String user_id;
     private RequestQueue mRequestQueue;
-    private int mPage = 1;
-    private String startTime, endTime;
-    private boolean isFresh = true;
-
-
-    private final int REQUEST_GET_MONEY_RECORD = 300;
-    private int mYear;
-    private int mMonth;
-    private int mDay;
+    private String startTime,endTime;
+    private final int REQUEST_CONSUME_REQUEST = 300;
     private TimePickerView timePicker;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_withdraw_cash_record);
+        setContentView(R.layout.activity_recharge_record);
         ButterKnife.bind(this);
         initParams();
         initRecycler();     //初始化列表
@@ -157,7 +145,6 @@ public class WithdrawCashRecordActivity extends BaseActivity implements XRecycle
         }
         //初始化请求队列
         mRequestQueue = NoHttp.newRequestQueue();
-
     }
 
     @Override
@@ -166,10 +153,37 @@ public class WithdrawCashRecordActivity extends BaseActivity implements XRecycle
         rlRecord.refresh();
     }
 
-    private void requestData() {
+    private void initRecycler() {
+        mList = new ArrayList<>();
+        rlRecord.setFocusable(false);
+        rlRecord.setNestedScrollingEnabled(false);
+        //设置线性布局 Creates a vertical LinearLayoutManager
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        rlRecord.setLayoutManager(mLayoutManager);
+        rlRecord.setLoadingListener(this);
+        mAdapter = new RechargeRecordAdapter(this, mList);
+        rlRecord.setAdapter(mAdapter);
+    }
 
-        Request<String> request = NoHttpRequest.getMoneyRecordRequest(user_id, mPage, startTime, endTime);
-        mRequestQueue.add(REQUEST_GET_MONEY_RECORD, request, new OnResponseListener<String>() {
+    @OnClick({R.id.iv_back, R.id.tv_fast_select})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_back:
+                finish();
+                break;
+            case R.id.tv_fast_select:
+                showTimeSelectDialog();
+                break;
+        }
+    }
+
+    private void showTimeSelectDialog() {
+        timePicker.show();
+    }
+
+    private void requestData() {
+        Request<String> request = NoHttpRequest.getRechargeRecordRequest(user_id, mPage, startTime, endTime);
+        mRequestQueue.add(REQUEST_CONSUME_REQUEST, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
 
@@ -177,7 +191,7 @@ public class WithdrawCashRecordActivity extends BaseActivity implements XRecycle
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-                LogUtil.i("photoFile", "WithDrawCashgRecordActivity::" + response.get());
+                LogUtil.i("photoFile", "RechargeRecordActivity::" + response.get());
                 if (isFresh) {
                     rlRecord.refreshComplete();
                 } else {
@@ -217,52 +231,24 @@ public class WithdrawCashRecordActivity extends BaseActivity implements XRecycle
         JSONArray jsonArray = dataObj.getJSONArray("list");
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-            String type = jsonObject1.getString("type");
-            String card_number = jsonObject1.getString("card_number");
-            String pay_account = jsonObject1.getString("pay_account");
+            String title = jsonObject1.getString("title");
             String money = jsonObject1.getString("money");
-            String Flag = jsonObject1.getString("flag");
-            String Time = jsonObject1.getString("time");
+            String order_number = jsonObject1.getString("order_number");
+            String time = jsonObject1.getString("time");
+            time = DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm",time);
+            String types = jsonObject1.getString("types");
             HashMap<String,String> map = new HashMap<>();
-            map.put("type",type);
-            map.put("card_number",StringUtil.handleNullResultForString(card_number));
-            map.put("pay_account",StringUtil.handleNullResultForString(pay_account));
+            map.put("title",title);
             map.put("money",StringUtil.handleNullResultForString(money));
-            map.put("Flag",Flag);
-            map.put("Time",Time);
+            map.put("order_number",StringUtil.handleNullResultForString(order_number));
+            map.put("time",time);
+            map.put("types",types);
             mList.add(map);
             map = null;
         }
         mAdapter.notifyDataSetChanged();
     }
 
-    private void initRecycler() {
-        mList = new ArrayList<>();
-        rlRecord.setFocusable(false);
-        rlRecord.setNestedScrollingEnabled(false);
-        //设置线性布局 Creates a vertical LinearLayoutManager
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        rlRecord.setLayoutManager(mLayoutManager);
-        rlRecord.setLoadingListener(this);
-        mAdapter = new WithdrawCashRecordAdapter(this, mList);
-        rlRecord.setAdapter(mAdapter);
-    }
-
-    @OnClick({R.id.iv_back, R.id.tv_fast_select})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.iv_back:
-                finish();
-                break;
-            case R.id.tv_fast_select:
-                showTimeSelectDialog();
-                break;
-        }
-    }
-
-    private void showTimeSelectDialog() {
-        timePicker.show();
-    }
 
     @Override
     public void onRefresh() {
@@ -282,6 +268,7 @@ public class WithdrawCashRecordActivity extends BaseActivity implements XRecycle
     protected void onDestroy() {
         super.onDestroy();
         mList = null;
+        mRequestQueue.cancelAll();
+        mRequestQueue.stop();
     }
-
 }

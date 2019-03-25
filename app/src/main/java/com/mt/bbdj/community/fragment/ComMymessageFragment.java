@@ -83,6 +83,8 @@ public class ComMymessageFragment extends BaseFragment {
     TextView tvMoney;
     @BindView(R.id.tv_birthday)
     TextView tvBirthday;
+    @BindView(R.id.tv_ming_money)
+    TextView tvMingMoney;    //警戒余额
 
     private SharedPreferences.Editor editor;
     private String user_id;
@@ -276,8 +278,10 @@ public class ComMymessageFragment extends BaseFragment {
                     String contacts = dataObj.getString("contacts");
                     String contact_number = dataObj.getString("contact_number");
                     String contact_email = dataObj.getString("contact_email");
+                    String contact_account = dataObj.getString("contact_account");
                     String birthday = dataObj.getString("birthday");
                     String balance = dataObj.getString("balance");
+                    String min_balance = dataObj.getString("min_balance");    //境界余额
                     UserBaseMessage userBaseMessage = new UserBaseMessage();
                     userBaseMessage.setUser_id(user_id);
                     userBaseMessage.setHeadimg(headimg);
@@ -287,10 +291,12 @@ public class ComMymessageFragment extends BaseFragment {
                     userBaseMessage.setContact_email(contact_email);
                     userBaseMessage.setBirthday(birthday);
                     userBaseMessage.setBalance(balance);
+                    userBaseMessage.setContact_account(contact_account);
                     tvShopLocal.setText(mingcheng);
                     tvMoney.setText("账户余额  "+balance);
-                    tvBirthday.setText("入驻天数  "+birthday);
+                    tvBirthday.setText("入驻天数  "+birthday+"天");
                     userBaseMessageDao.save(userBaseMessage);
+                    tvMingMoney.setText("警戒余额 : "+ min_balance);
                 } else {
                     ToastUtil.showShort(msg);
                 }

@@ -251,10 +251,10 @@ public class ChangeMessageActivity extends AppCompatActivity {
             ToastUtil.showShort("姓名不可为空！");
             return false;
         }
-        if (!StringUtil.isMobile(telephone)) {
+       /* if (!StringUtil.isMobile(telephone)) {
             ToastUtil.showShort("手机号码不合法！");
             return false;
-        }
+        }*/
         if ("".equals(region) || "".equals(address)) {
             ToastUtil.showShort("地址信息不完善！");
             return false;
