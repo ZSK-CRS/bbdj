@@ -249,7 +249,7 @@ public class FinishHandleFragment extends BaseFragment implements XRecyclerView.
             String mail_id = jsonObject1.getString("mail_id");
             HashMap<String, String> map = new HashMap<>();
             map.put("mail_id", mail_id);
-            map.put("waybill_number", waybill_number);
+            map.put("waybill_number", StringUtil.handleNullResultForString(waybill_number));
             map.put("express_id", express_id);
             map.put("send_name", send_name);
             map.put("create_time", create_time);

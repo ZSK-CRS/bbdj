@@ -81,8 +81,7 @@
         <activity
             android:name=".baseconfig.activity.LoginActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".baseconfig.activity.RegisterAccountActivity"
             android:screenOrientation="portrait"
@@ -317,18 +316,15 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".community.activity.GlobalSearchActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".community.activity.RegisterAggreementActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".community.activity.RechargeRecordActivity"
             android:screenOrientation="portrait" />
-
         <activity
-            android:name="com.mt.bbdj.wxapi.WXPayEntryActivity"
+            android:name=".wxapi.WXPayEntryActivity"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
@@ -336,14 +332,21 @@
             android:name=".community.activity.RechargeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden">
-
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="wx8272f870c214888e" /> <!-- 需修改 -->
             </intent-filter>
-
         </activity>
+        <activity
+            android:name=".community.activity.YesterdayPayActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".community.activity.YesterdSendPayActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

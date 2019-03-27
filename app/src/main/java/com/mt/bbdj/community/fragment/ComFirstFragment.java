@@ -330,8 +330,7 @@ public class ComFirstFragment extends BaseFragment {
                // handleOutManagerEvent();
                 break;
             case "6":       //财务管理
-                ToastUtil.showShort("该功能暂未开放！");
-               // handleMoneyManagerEvent();
+                handleMoneyManagerEvent();
                 break;
             case "7":       //客户管理
                 handleClientManagerEvent();
@@ -580,6 +579,12 @@ public class ComFirstFragment extends BaseFragment {
     android.content.DialogInterface.OnClickListener DetermineListener = new android.content.DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
+            SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
+           /* editor.putString("userName","");
+            editor.putString("password","");*/
+            editor.remove("userName");
+            editor.remove("password");
+            editor.commit();
             download();
         }
     };
@@ -700,8 +705,8 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void actionToSearchPannel() {
-       /* Intent intent = new Intent(getActivity(),GlobalSearchActivity.class);
-        startActivity(intent);*/
+        Intent intent = new Intent(getActivity(),GlobalSearchActivity.class);
+        startActivity(intent);
     }
 
     private void actionToRepertoryPannel() {

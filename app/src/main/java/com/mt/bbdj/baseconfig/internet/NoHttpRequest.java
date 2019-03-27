@@ -2031,4 +2031,98 @@ public class NoHttpRequest {
         return request;
     }
 
+    /**
+     * 首页全局搜索
+     * @param user_id    用户id
+     * @param keywords  关键字
+     * @return
+     */
+    public static Request<String> getGlobalSendRequest(String user_id,String keywords) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GLOBALE_SEND_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GLOBALE_SEND_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("keywords", keywords);
+        return request;
+    }
+
+    /**
+     * 财务首页
+     * @param user_id   用户id
+     * @return
+     */
+    public static Request<String> getMoneyManagerRequest(String user_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_MONEY_MANAGER_REQUESTR, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_MONEY_MANAGER_REQUESTR);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        return request;
+    }
+
+    /**
+     * 获取昨天支出
+     * @param user_id   用户id
+     * @param starttime 开始时间戳
+     * @param endtime 结束时间戳
+     * @return
+     */
+    public static Request<String> getYesterDayPayforRequest(String user_id,String starttime,String endtime) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GET_YESTERDAY_SEND_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GET_YESTERDAY_SEND_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
+        return request;
+    }
+
+    /**
+     * 获取昨天寄件的数据
+     * @param user_id   用户id
+     * @param starttime 开始时间戳
+     * @param endtime 结束时间戳
+     * @return
+     */
+    public static Request<String> getYesterDaySendforRequest(String user_id,String starttime,String endtime) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_GET_YESTERDAY_SEND__REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_GET_YESTERDAY_SEND__REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
+        return request;
+    }
+
 }

@@ -3,6 +3,8 @@ package com.mt.bbdj.baseconfig.utls;
 import android.content.Context;
 import android.os.PowerManager;
 
+import java.lang.reflect.Field;
+
 /**
  * Author : ZSK
  * Date : 2019/1/28
@@ -16,8 +18,27 @@ public class ScreenStateManager {
     public boolean isScreen(Context context) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         if (pm.isScreenOn()) {
-            return  true;
+            return true;
         }
         return false;
     }
+
+    //获取状态栏的高度
+    public static int getStatusBarHeight(Context context) {
+        Class<?> c = null;
+        Object obj = null;
+        Field field = null;
+        int x = 0;
+        try {
+            c = Class.forName("com.android.internal.R$dimen");
+            obj = c.newInstance();
+            field = c.getField("status_bar_height");
+            x = Integer.parseInt(field.get(obj).toString());
+            return context.getResources().getDimensionPixelSize(x);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+            return 75;
+        }
+    }
+
 }

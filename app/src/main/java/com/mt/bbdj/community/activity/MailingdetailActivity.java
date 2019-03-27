@@ -208,7 +208,7 @@ public class MailingdetailActivity extends AppCompatActivity {
         tvReceivePhone.setText(collect_phone);
         tvReceiveAddress.setText(collect_region + collect_address);
         tvGoodsName.setText(goods_name);
-        tvGoodsWeiht.setText(weight + " kg");
+        tvGoodsWeiht.setText(weight);
         tvGoodsMark.setText(content);
 
       //  JSONObject dataObj = jsonObject.getJSONObject("data");

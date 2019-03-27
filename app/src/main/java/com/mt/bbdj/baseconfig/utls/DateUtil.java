@@ -1,5 +1,6 @@
 package com.mt.bbdj.baseconfig.utls;
 
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.yanzhenjie.durban.DurbanActivity;
@@ -252,6 +253,15 @@ public class DateUtil {
         return dateStr;
     }
 
+
+    public static String dayDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = sdf.format(date);
+        dateStr = dateStr+" 00:00:00";
+        return dateStr;
+    }
+
+
     public static String dayDate(String format) {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat(format);
@@ -272,6 +282,8 @@ public class DateUtil {
         String dateStr = sdf.format(date);
         return dateStr;
     }
+
+
 
     public static String dayTime3() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -313,6 +325,7 @@ public class DateUtil {
         return dateStr;
     }
 
+
     public static String dayStringDate() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
@@ -334,9 +347,27 @@ public class DateUtil {
         return dateStr;
     }
 
+
+    //获取当前年
+    public static int currentYearDate() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+        String dateStr = sdf.format(date);
+        int year = Integer.parseInt(dateStr);
+        return year;
+    }
+
     public static int monthDate() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        String dateStr = sdf.format(date);
+
+        return Integer.parseInt(dateStr);
+    }
+
+    public static int currentDate() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd");
         String dateStr = sdf.format(date);
 
         return Integer.parseInt(dateStr);

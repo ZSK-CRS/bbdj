@@ -5,69 +5,78 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical"
     tools:context=".community.activity.GlobalSearchActivity">
 
 
     <LinearLayout
+        android:layout_marginTop="5dp"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/mainColor"
-        android:orientation="vertical">
+        android:layout_height="45dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="38dp"
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/main_bg_first_search"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:layout_marginLeft="7dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_main_search" />
 
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_centerVertical="true"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="7dp"
-                android:padding="5dp"
-                android:src="@drawable/ic_main_search" />
-
-            <EditText
-                android:id="@+id/textview_serach"
-                android:layout_width="match_parent"
-                android:layout_height="35dp"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:gravity="center"
-                android:hint="手机号/运单号"
-                android:text=""
-                android:textColorHint="@color/grey_1"
-                android:textSize="@dimen/standardTextSize" />
-
-        </RelativeLayout>
-
-        <com.flyco.tablayout.SlidingTabLayout
-            android:id="@+id/slt_title"
+        <EditText
+            android:id="@+id/textview_serach"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/mainColor"
-            tl:tl_divider_color="#00000000"
-            tl:tl_divider_padding="13dp"
-            tl:tl_divider_width="1dp"
-            tl:tl_indicator_color="@color/white"
-            tl:tl_indicator_height="2dp"
-            tl:tl_tab_padding="22dp"
-            tl:tl_tab_space_equal="true"
-            tl:tl_textSelectColor="@color/white"
-            tl:tl_textUnselectColor="@color/white"
-            tl:tl_textsize="14sp" />
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:hint="请输入手机号/运单号"
+            android:layout_marginLeft="10dp"
+            android:text=""
+            android:textColorHint="@color/grey_1"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_cannel"
+            android:text="取消"
+            android:gravity="center"
+            android:textColorHint="@color/grey_1"
+            android:textSize="15sp"
+            android:layout_toRightOf="@+id/textview_serach"
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
+
+    <View
+        android:layout_marginTop="5dp"
+        android:background="@color/grey_6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slt_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        tl:tl_divider_color="#00000000"
+        tl:tl_divider_padding="13dp"
+        tl:tl_divider_width="1dp"
+        tl:tl_indicator_color="@color/mainColor"
+        tl:tl_indicator_height="2dp"
+        tl:tl_tab_padding="22dp"
+        tl:tl_tab_space_equal="true"
+        tl:tl_textSelectColor="@color/mainColor"
+        tl:tl_textUnselectColor="@color/grey_2"
+        tl:tl_textsize="14sp" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
@@ -29,6 +30,7 @@ public class LoadActivity extends AppCompatActivity {
             }
         }
     };
+
     private SharedPreferences mShare;
     private SharedPreferences.Editor mEditor;
 
@@ -58,7 +60,8 @@ public class LoadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_load);
-
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         mShare = SharedPreferencesUtil.getSharedPreference();
         mEditor = SharedPreferencesUtil.getEditor();
         //倒计时2s

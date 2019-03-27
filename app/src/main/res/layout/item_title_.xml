@@ -18,13 +18,9 @@
         android:gravity="center"
         android:maxLines="2"
         android:text="序号"
-        android:textColor="#000000"
+        android:textColor="@color/grey_2"
         android:textSize="14sp" />
 
-    <View
-        android:background="@color/grey_9"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"/>
 
     <com.mt.bbdj.baseconfig.view.InterceptScrollLinearLayout
         android:layout_width="match_parent"
@@ -52,13 +48,8 @@
                     android:layout_marginRight="2dp"
                     android:gravity="center"
                     android:text="快递公司"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
-                <View
-                    android:background="@color/grey_9"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
-
 
 
                 <TextView
@@ -67,16 +58,12 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
-                    android:layout_weight="1"
+                    android:layout_weight="1.5"
                     android:gravity="center"
                     android:text="运单号"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
 
-                <View
-                    android:background="@color/grey_9"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
 
                 <TextView
                     android:id="@+id/textView_4"
@@ -87,13 +74,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="寄件人/收件人"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
-                <View
-                    android:background="@color/grey_9"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
-
 
                 <TextView
                     android:id="@+id/textView_5"
@@ -104,13 +86,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="始发地/目的地"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
-                <View
-                    android:background="@color/grey_9"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
-
 
                 <TextView
                     android:id="@+id/textView_6"
@@ -121,13 +98,9 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="重量"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
 
-                <View
-                    android:background="@color/grey_9"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
 
                 <TextView
                     android:id="@+id/textView_7"
@@ -138,13 +111,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="服务费"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
-
-                <View
-                    android:background="@color/grey_9"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
 
 
                 <TextView
@@ -156,13 +124,9 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="发货费"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
 
-                <View
-                    android:background="@color/grey_9"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"/>
 
                 <TextView
                     android:id="@+id/textView_9"
@@ -175,11 +139,11 @@
                     android:paddingLeft="5dp"
                     android:paddingRight="5dp"
                     android:text="时间"
-                    android:textColor="#000000"
+                    android:textColor="@color/grey_2"
                     android:textSize="14sp" />
 
                 <View
-                    android:layout_width="30dp"
+                    android:layout_width="15dp"
                     android:layout_height="match_parent"/>
             </LinearLayout>
         </com.mt.bbdj.baseconfig.view.CustomHScrollView>

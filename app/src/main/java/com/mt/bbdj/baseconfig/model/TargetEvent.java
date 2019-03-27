@@ -21,6 +21,9 @@ public class TargetEvent {
     public static int DESTORY_GOODS_FROM_CART = 414;    //销毁购物车界面
     public static int REFRESH_ALEADY_CHAGNE = 415;     //刷新已交接界面
     public static int DESTORY_RECHAR = 416;      //销毁充值界面
+    public static int SEARCH_GLOBAL_SEND = 417;     //首页搜索内寄件
+    public static int SEARCH_GLOBAL_PAI = 418;    //首页搜索派件
+    public static int CLEAR_SEARCH_DATA = 419;    //清空首页搜索信息
 
     private int target;
 
