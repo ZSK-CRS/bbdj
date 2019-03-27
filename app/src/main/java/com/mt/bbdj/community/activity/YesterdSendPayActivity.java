@@ -256,7 +256,6 @@ public class YesterdSendPayActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override

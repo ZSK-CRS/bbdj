@@ -411,4 +411,9 @@ public class InterApi {
      */
     public static final String ACTION_GET_YESTERDAY_SEND__REQUEST = "getYesterdayMail1050";
 
+    /**
+     * 获取数据排行榜
+     */
+    public static final String ACTION_SORT_REQUEST = "getRankingList1050";
+
 }

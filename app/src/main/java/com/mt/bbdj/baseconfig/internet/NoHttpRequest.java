@@ -2125,4 +2125,31 @@ public class NoHttpRequest {
         return request;
     }
 
+    /**
+     * 数据排行榜
+     * @param user_id   用户id
+     * @param starttime   开始时间
+     * @param endtime   结束时间
+     * @param types  类型  1：全部  2：寄件  3：派件  4：服务
+     * @return
+     */
+    public static Request<String> getSortRequest(String user_id,String starttime,String endtime,String types){
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_SORT_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_SORT_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
+        request.add("types", types);
+        return request;
+    }
+
 }

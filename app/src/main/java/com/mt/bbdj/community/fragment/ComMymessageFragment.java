@@ -108,10 +108,8 @@ public class ComMymessageFragment extends BaseFragment {
     }
 
 
-
-
     private void initParams() {
-       DaoSession daoSession = GreenDaoManager.getInstance().getSession();
+        DaoSession daoSession = GreenDaoManager.getInstance().getSession();
         userBaseMessageDao = daoSession.getUserBaseMessageDao();
     }
 
@@ -124,7 +122,7 @@ public class ComMymessageFragment extends BaseFragment {
 
     @OnClick({R.id.ll_base_message, R.id.ll_my_wallet, R.id.ll_center_sitting,
             R.id.ll_about_app, R.id.ll_connect_service, R.id.ll_connect_manager,
-            R.id.bt_cannel,R.id.ll_my_order,R.id.ll_address_manager})
+            R.id.bt_cannel, R.id.ll_my_order, R.id.ll_address_manager})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_message:
@@ -158,11 +156,11 @@ public class ComMymessageFragment extends BaseFragment {
     }
 
     private void showConnectMaster() {
-        SelectDialog.show(getActivity(), "联系管家", "010-5838292", "呼叫", new DialogInterface.OnClickListener() {
+        SelectDialog.show(getActivity(), "联系管家", "400-775-0008", "呼叫", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                Uri data = Uri.parse("tel:" + "010-5838292");
+                Uri data = Uri.parse("tel:" + "400-775-0008");
                 intent.setData(data);
                 startActivity(intent);
             }
@@ -175,11 +173,11 @@ public class ComMymessageFragment extends BaseFragment {
     }
 
     private void showConnectService() {
-        SelectDialog.show(getActivity(), "客服热线", "010-5838292", "呼叫", new DialogInterface.OnClickListener() {
+        SelectDialog.show(getActivity(), "客服热线", "400-775-0008", "呼叫", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                Uri data = Uri.parse("tel:" + "010-5838292");
+                Uri data = Uri.parse("tel:" + "400-775-0008");
                 intent.setData(data);
                 startActivity(intent);
             }
@@ -192,7 +190,7 @@ public class ComMymessageFragment extends BaseFragment {
     }
 
     private void showAddressManagerPannel() {
-        Intent intent = new Intent(getActivity(),MyAddressActivity.class);
+        Intent intent = new Intent(getActivity(), MyAddressActivity.class);
         startActivity(intent);
     }
 
@@ -228,7 +226,7 @@ public class ComMymessageFragment extends BaseFragment {
         editor.putBoolean("update", false);
         editor.commit();
         EventBus.getDefault().post(new TargetEvent(111));
-        Intent intent = new Intent(getActivity(),LoginActivity.class);
+        Intent intent = new Intent(getActivity(), LoginActivity.class);
         startActivity(intent);
         getActivity().onBackPressed();//销毁自己
     }
@@ -293,10 +291,10 @@ public class ComMymessageFragment extends BaseFragment {
                     userBaseMessage.setBalance(balance);
                     userBaseMessage.setContact_account(contact_account);
                     tvShopLocal.setText(mingcheng);
-                    tvMoney.setText("账户余额  "+balance);
-                    tvBirthday.setText("入驻天数  "+birthday+"天");
+                    tvMoney.setText("账户余额  " + balance);
+                    tvBirthday.setText("入驻天数  " + birthday + "天");
                     userBaseMessageDao.save(userBaseMessage);
-                    tvMingMoney.setText("警戒余额 : "+ min_balance);
+                    tvMingMoney.setText("警戒余额 : " + min_balance);
                 } else {
                     ToastUtil.showShort(msg);
                 }

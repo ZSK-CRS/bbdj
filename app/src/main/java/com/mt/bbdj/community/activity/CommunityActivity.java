@@ -421,8 +421,7 @@ public class CommunityActivity extends BaseActivity {
             case R.id.main_tab_imgbt_data:
             case R.id.main_tab_tv_data:
             case R.id.main_tab_ll_data:
-                ToastUtil.showShort("该功能暂未开放！");
-               // selectFragmentData();     //选中数据界面
+                selectFragmentData();     //选中数据界面
                 break;
             case R.id.main_tab_imgbt_my:
             case R.id.main_tab_tv_my:
