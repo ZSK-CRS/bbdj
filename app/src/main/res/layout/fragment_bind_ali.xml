@@ -118,7 +118,7 @@
         android:layout_marginLeft="70dp"
         android:lineSpacingExtra="5dp"
         android:gravity="center_vertical"
-        android:text="3、如需更改请联系客服。电话: 010-3278234"
+        android:text="3、如需更改请联系客服。电话: 400-775-0008"
         android:textSize="13sp" />
 
 

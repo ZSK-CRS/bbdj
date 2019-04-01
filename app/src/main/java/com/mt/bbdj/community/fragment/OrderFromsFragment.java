@@ -8,10 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -121,6 +123,7 @@ public class OrderFromsFragment extends BaseFragment {
     private TimePickerView timePickerDate;
     private View selectView;
     private View customView;
+    private boolean isGetData = false;
 
 
     public static OrderFromsFragment getInstance() {
@@ -133,11 +136,33 @@ public class OrderFromsFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_froms_order, container, false);
         unbinder = ButterKnife.bind(this, view);
+        Log.e("fragment:::","onCreateView");
         initParams();
         initView(view);
-        requestData();
+      //  requestData();
         initDialog();
         return view;
+    }
+
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        Log.e("fragment:::","onCreateAnimation");
+        if (enter&& !isGetData) {
+            Log.e("fragment:::","onCreateAnimation:::里面");
+            isGetData = true;
+            requestData();
+        } else {
+            isGetData = false;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e("fragment:::","onPause");
+        isGetData = false;
     }
 
 
@@ -223,6 +248,28 @@ public class OrderFromsFragment extends BaseFragment {
         mAdapter = new SortOrderAdapter(mList);
         rlSort.setAdapter(mAdapter);
         customView = LayoutInflater.from(getActivity()).inflate(R.layout.layout_custom, null);
+
+        String typeOrder = tvSortTag.getText().toString();
+        if ("月排行榜".equals(typeOrder)) {
+            isMonth = true;
+        } else {
+            isMonth = false;
+        }
+
+        if (isMonth) {
+            String currentYear = DateUtil.getYear()+"";
+            String currentMonth = DateUtil.getMonth()+"";
+            tvTime.setText(currentYear+"年"+currentMonth+"月");
+            startTime = DateUtil.getSomeDayStamp(DateUtil.getCurrentMonthFirstDate());
+            endTime = DateUtil.getSomeDayStamp(DateUtil.getCurrentMonthLastDate());
+        } else {
+            String currentTime = DateUtil.getCurrentTimeFormat("yyyy-MM-dd");
+            String currentTime1 = DateUtil.getCurrentTimeFormat("yyyy年MM月dd日");
+            tvTime.setText(currentTime1);
+            startTime = DateUtil.getSomeDayStamp(currentTime+" 00:00:00");
+            currentTime = DateUtil.dayDate(currentTime + " 23:59:59");
+            endTime = DateUtil.getSomeDayStamp(currentTime);
+        }
     }
 
 
@@ -305,7 +352,7 @@ public class OrderFromsFragment extends BaseFragment {
                 String last = DateUtil.getLastDayOfMonth(year,month);
                 startTime = DateUtil.getSomeDayStamp(first+" 00:00:00");
                 endTime = DateUtil.getSomeDayStamp(last+" 23:59:59");
-                tvTime.setText(DateUtil.getStrDate(date, "yyyy年MM月dd日"));
+                tvTime.setText(DateUtil.getStrDate(date, "yyyy年MM月"));
                 requestData();
             }
         })

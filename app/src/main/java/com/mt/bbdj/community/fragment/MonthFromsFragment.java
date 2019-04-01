@@ -1,5 +1,6 @@
 package com.mt.bbdj.community.fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -94,6 +96,7 @@ public class MonthFromsFragment extends BaseFragment {
     private TimePickerView timePickerDate;
     private List<List<BarBean>> chartData = new ArrayList<>();
     private List<String> strXList = new ArrayList<>();
+    private boolean isGetData = false;
 
     public static MonthFromsFragment getInstance() {
         MonthFromsFragment bf = new MonthFromsFragment();
@@ -109,8 +112,25 @@ public class MonthFromsFragment extends BaseFragment {
         initView(view);
         initDialog();
         initListener();
-        requestData();
+      //  requestData();
         return view;
+    }
+
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter&& !isGetData) {
+            isGetData = true;
+            requestData();
+        } else {
+            isGetData = false;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isGetData = false;
     }
 
     private void requestData() {
@@ -261,8 +281,12 @@ public class MonthFromsFragment extends BaseFragment {
         timePickerDate = new TimePickerBuilder(getActivity(), new OnTimeSelectListener() {
             @Override
             public void onTimeSelect(Date date, View v) {
-                String first = DateUtil.getFisrtDayOfMonth(year,month);
-                String last = DateUtil.getLastDayOfMonth(year,month);
+                String yearStr = DateUtil.getStrDate(date, "yyyy");
+                String monthStr = DateUtil.getStrDate(date, "MM");
+                int yearInt = Integer.parseInt(yearStr);
+                int monthInt = Integer.parseInt(monthStr);
+                String first = DateUtil.getFisrtDayOfMonth(yearInt,monthInt);
+                String last = DateUtil.getLastDayOfMonth(yearInt,monthInt);
                 startTime = DateUtil.getSomeDayStamp(first+" 00:00:00");
                 endTime = DateUtil.getSomeDayStamp(last+" 23:59:59");
                 tvCurrentTime.setText(DateUtil.getStrDate(date, "yyyy年MM月"));

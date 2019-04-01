@@ -133,7 +133,7 @@ public class RegisterAccountActivity extends BaseActivity {
         String currentPassword = mRegisterPassword.getText().toString();
         String businessNumber = mBusinessNumber.getText().toString();
 
-       /* if (!mRegisterPhone.equals(currentPhone)) {
+        if (!mRegisterPhone.equals(currentPhone)) {
              ToastUtil.showShort("注册账号发生变化！");
              return;
         }
@@ -148,7 +148,7 @@ public class RegisterAccountActivity extends BaseActivity {
         if (!cbCheck.isChecked()) {
             ToastUtil.showShort("请先阅读协注册协议");
             return;
-        }*/
+        }
         //保存账号信息
         SharedPreferences.Editor mEditor = SharedPreferencesUtil.getEditor();
         mEditor.putString("phone",currentPhone);

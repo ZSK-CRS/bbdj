@@ -382,7 +382,6 @@ public class RegisterCompleteActivity extends BaseActivity {
         initPopuStyle();    //初始化popuwindow的样式
     }
 
-
     //图片来源点击事件
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
         @Override
@@ -899,7 +898,7 @@ public class RegisterCompleteActivity extends BaseActivity {
             return false;
         }
 
-        if (!StringUtil.isIDNumber(idNumber)) {
+        if (!StringUtil.isID(idNumber)) {
             ToastUtil.showShort("身份证不合法！");
             return false;
         }

@@ -555,7 +555,7 @@ public class IdentificationActivity extends AppCompatActivity {
             ToastUtil.showShort("请完善认证信息！");
             return false;
         }
-        if (!StringUtil.isIDNumber(personNumber)) {
+        if (!StringUtil.isID(personNumber)) {
             ToastUtil.showShort("身份证号不合法！");
             return false;
         }

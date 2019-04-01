@@ -57,6 +57,7 @@
     <color name="color_afff">#afff</color>
 
     <color name="background">#F9F7F8</color>
+    <color name="bg_color">#f2f2f2</color>>
 
 
 </resources>

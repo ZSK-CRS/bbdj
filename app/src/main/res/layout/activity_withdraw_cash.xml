@@ -218,24 +218,18 @@
             android:text="提现说明:"
             android:textSize="14sp" />
 
-        <TextView
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_marginRight="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:minHeight="25dp"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:text="1、最低提现金额为1000元"
+            android:text="1、提现后，预计1-3个工作日到账"
             android:textSize="14sp" />
 
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_marginRight="20dp"
-        android:layout_width="match_parent"
-        android:minHeight="25dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="95dp"
-        android:gravity="center_vertical"
-        android:text="2、提现去人后，预计1-3个工作日到账"
-        android:textSize="14sp" />
+
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_marginRight="20dp"
@@ -244,7 +238,7 @@
         android:lineSpacingExtra="5dp"
         android:layout_marginLeft="95dp"
         android:gravity="center_vertical"
-        android:text="3、如有问题请联系客服，电话010-7483737"
+        android:text="2、如有问题请联系客服，电话400-775-0008"
         android:textSize="14sp" />
 
 

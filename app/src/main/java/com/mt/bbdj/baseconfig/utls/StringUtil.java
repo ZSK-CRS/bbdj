@@ -132,6 +132,15 @@ public class StringUtil {
     }
 
     //判断身份证是否合法
+    public static boolean isID(String idNumber) {
+        if (idNumber == null || "".equals(idNumber)) {
+            return false;
+        }
+        String regular = "(^\\d{15}$)|(^\\d{17}([0-9]|X)$)";
+        return idNumber.matches(regular);
+    }
+
+    //判断身份证是否合法
     public static boolean isIDNumber(String IDNumber) {
         if (IDNumber == null || "".equals(IDNumber)) {
             return false;

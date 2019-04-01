@@ -28,6 +28,8 @@ import com.wildma.idcardcamera.utils.ImageUtils;
 import com.wildma.idcardcamera.utils.PermissionUtils;
 import com.wildma.idcardcamera.utils.ScreenUtils;
 
+import java.util.UUID;
+
 
 /**
  * Author       wildma
@@ -318,10 +320,11 @@ public class CameraActivity extends Activity implements View.OnClickListener {
                 if (FileUtils.createOrExistsDir(Constant.DIR_ROOT)) {
                     StringBuffer buffer = new StringBuffer();
                     String imagePath = "";
+                    UUID uuid = UUID.randomUUID();
                     if (mType == TYPE_IDCARD_FRONT) {
-                        imagePath = buffer.append(Constant.DIR_ROOT).append(Constant.APP_NAME).append(".").append("idCardFrontCrop.jpg").toString();
+                        imagePath = buffer.append(Constant.DIR_ROOT).append(Constant.APP_NAME).append(".").append(uuid+".").append("idCardFrontCrop.jpg").toString();
                     } else if (mType == TYPE_IDCARD_BACK) {
-                        imagePath = buffer.append(Constant.DIR_ROOT).append(Constant.APP_NAME).append(".").append("idCardBackCrop.jpg").toString();
+                        imagePath = buffer.append(Constant.DIR_ROOT).append(Constant.APP_NAME).append(".").append(uuid+".").append("idCardBackCrop.jpg").toString();
                     }
 
                     if (ImageUtils.save(bitmap, imagePath, Bitmap.CompressFormat.JPEG)) {

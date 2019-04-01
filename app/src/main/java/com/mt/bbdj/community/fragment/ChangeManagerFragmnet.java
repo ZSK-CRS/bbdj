@@ -1,5 +1,6 @@
 package com.mt.bbdj.community.fragment;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,6 +36,7 @@ import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MyDecoration;
 import com.mt.bbdj.baseconfig.view.SignView;
+import com.mt.bbdj.community.activity.SignatureActivity;
 import com.mt.bbdj.community.adapter.ChangeManagerAdapter;
 import com.mt.bbdj.community.adapter.RechargeRecodeAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -54,6 +56,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.Signature;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -122,6 +125,8 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
             ToastUtil.showShort("无交接数据！");
             return;
         }
+
+      //  Intent intent = new Intent(getActivity(),SignatureActivity.class);
         if (popupWindow != null && !popupWindow.isShowing()) {
             popupWindow.showAtLocation(buttonPanel, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         }

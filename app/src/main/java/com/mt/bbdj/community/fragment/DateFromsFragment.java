@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -103,6 +104,7 @@ public class DateFromsFragment extends BaseFragment {
     private final int REQUEST_DATE_REPORT = 100;     //请求日报数据
     private WaitDialog dialogLoading;
     private TextView titmeTitle;    //时间选择
+    private boolean isGetData = false;
 
     private List<HashMap<String, String>> mList = new ArrayList<>();
 
@@ -117,6 +119,23 @@ public class DateFromsFragment extends BaseFragment {
         return bf;
     }
 
+    @Override
+    public Animation onCreateAnimation(int transit, boolean enter, int nextAnim) {
+        if (enter&& !isGetData) {
+            isGetData = true;
+            requestData();
+        } else {
+            isGetData = false;
+        }
+        return super.onCreateAnimation(transit, enter, nextAnim);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        isGetData = false;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -126,7 +145,7 @@ public class DateFromsFragment extends BaseFragment {
         initView(view);
         initDialog();
         initListener();
-        requestData();
+      //  requestData();
         return view;
     }
 
@@ -226,7 +245,7 @@ public class DateFromsFragment extends BaseFragment {
 
         tvCurrentTime.setText(DateUtil.getCurrentTimeFormat("yyyy年MM月dd日"));
 
-        startTime = DateUtil.getCurrentTimeStamp();
+        startTime = DateUtil.getSomeDayStamp(DateUtil.getCurrentTimeFormat("yyyy-MM-dd")+" 00:00:00");
 
         barChart = view.findViewById(R.id.chart_barchart);
         chart = view.findViewById(R.id.chart);

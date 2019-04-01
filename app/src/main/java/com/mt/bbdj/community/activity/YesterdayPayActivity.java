@@ -105,7 +105,7 @@ public class YesterdayPayActivity extends BaseActivity implements XRecyclerView.
         String[] current = currentTime.split(" ");
         String[] timeArray = current[0].split("-");
 
-        tvTime.setText(timeArray[0]+"年"+timeArray[1]+"月"+timeArray[2]+"日");
+        tvTime.setText(timeArray[0] + "年" + timeArray[1] + "月" + timeArray[2] + "日");
 
         String tempTime = currentTime;
 
@@ -163,7 +163,7 @@ public class YesterdayPayActivity extends BaseActivity implements XRecyclerView.
                 current = DateUtil.dayDate(DateUtil.getSpecifiedDayAfter("yyyy-MM-dd", current) + " 00:00:00");
                 endTime = DateUtil.getSomeDayStamp(current);
                 rlDetail.refresh();
-                tvTime.setText(DateUtil.getStrDate(date,"yyyy年MM月dd日"));
+                tvTime.setText(DateUtil.getStrDate(date, "yyyy年MM月dd日"));
             }
         })
                 .setDate(selectedDate)

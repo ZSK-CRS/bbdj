@@ -128,7 +128,7 @@ public class YesterdSendPayActivity extends BaseActivity {
 
     private void initRecycler() {
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
+      /*  LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -138,9 +138,9 @@ public class YesterdSendPayActivity extends BaseActivity {
             public boolean canScrollVertically() {
                 return false;
             }
-        };
+        };*/
 
-        rlDetail.setLayoutManager(linearLayoutManager);
+        rlDetail.setLayoutManager(new LinearLayoutManager(this));
         rlDetail.addItemDecoration(new MyDecoration(this, LinearLayoutManager.VERTICAL, Color.parseColor("#eeeeee"), 1));
         rlDetail.setFocusable(false);
         mAdapter = new YesterDaySendAdapter(this,mList,headll,1);
