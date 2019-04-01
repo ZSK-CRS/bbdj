@@ -75,7 +75,9 @@ public class NoHttpRequest {
      * @return
      */
     public static Request<String> commitRegisterRequest(String phone, String password, String realname, String idcard,
-                                                        String just_card, String back_card, String license,String number) {
+                                                        String just_card, String back_card, String license,String number,
+                                                        String contacts,String contact_number,String province,String city,
+                                                        String area,String address,String door_photo,String internal_photo) {
         String timeStamp = DateUtil.getCurrentTimeStamp();
         String randomStr = StringUtil.getRandomNumberString(7);
         String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
@@ -95,6 +97,14 @@ public class NoHttpRequest {
         request.add("just_card", just_card);    //正面照片
         request.add("back_card", back_card);   //背面照片
         request.add("license", license);      //营业执照
+        request.add("contacts", contacts);      //联系人
+        request.add("contact_number", contact_number);      //联系人电话
+        request.add("province", province);      //省
+        request.add("city", city);      //市
+        request.add("area", area);      //县
+        request.add("address", address);      //详细地址
+        request.add("door_photo", door_photo);      //门头照
+        request.add("internal_photo", internal_photo); //内部照
         return request;
     }
 
@@ -2031,6 +2041,23 @@ public class NoHttpRequest {
         return request;
     }
 
+    //微信支付请求接口
+    public static Request<String> getAliaPayforRequest(String user_id,String money){
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest("http://www.81dja.com/Payment/WeChatPay", RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CANNEL_ORDER_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("money", money);
+        return request;
+    }
+
     /**
      * 首页全局搜索
      * @param user_id    用户id
@@ -2149,6 +2176,53 @@ public class NoHttpRequest {
         request.add("starttime", starttime);
         request.add("endtime", endtime);
         request.add("types", types);
+        return request;
+    }
+
+    /**
+     * 获取日报数据
+     * @param user_id    用户id
+     * @param starttime   选择的时间
+     * @return
+     */
+    public static Request<String> getReportBydateRequest(String user_id,String starttime) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACTION_REPORT_DATE_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_REPORT_DATE_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("starttime", starttime);
+        return request;
+    }
+
+    /**
+     * 获取月报数据
+     * @param user_id    用户id
+     * @param starttime   选择的时间
+     * @return
+     */
+    public static Request<String> getReportByMonthRequest(String user_id,String starttime,String endtime) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS
+                + InterApi.ACITON_REPORT_MONTH_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACITON_REPORT_MONTH_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
         return request;
     }
 

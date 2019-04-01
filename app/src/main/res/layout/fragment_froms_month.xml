@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#00000000"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:orientation="horizontal"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
-        app:cardUseCompatPadding="true"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        app:cardUseCompatPadding="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,6 +45,7 @@
 
 
                 <TextView
+                    android:id="@+id/tv_current_time"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -101,28 +102,28 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="寄件人(件)"
+                    android:text="寄件数(件)"
                     android:textColor="@color/grey_2"
                     android:textSize="14sp" />
 
                 <View
-                    android:background="@color/grey_2"
                     android:layout_width="1dp"
-                    android:layout_height="10dp"/>
+                    android:layout_height="10dp"
+                    android:background="@color/grey_2" />
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="派件人(件)"
+                    android:text="派件数(件)"
                     android:textColor="@color/grey_2"
                     android:textSize="14sp" />
 
                 <View
-                    android:background="@color/grey_2"
                     android:layout_width="1dp"
-                    android:layout_height="10dp"/>
+                    android:layout_height="10dp"
+                    android:background="@color/grey_2" />
 
                 <TextView
                     android:layout_width="0dp"
@@ -136,45 +137,47 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="25dp"
+                android:layout_marginTop="3dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/tv_send_number"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="125"
-                    android:textStyle="bold"
+                    android:text="10"
                     android:textColor="@color/mainColor"
-                    android:textSize="20sp" />
-
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
 
                 <TextView
+                    android:id="@+id/tv_pai_number"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="35"
-                    android:textStyle="bold"
+                    android:text="5"
                     android:textColor="@color/mainColor"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
 
                 <TextView
+                    android:id="@+id/tv_service_number"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:text="436"
-                    android:textStyle="bold"
+                    android:text="10"
                     android:textColor="@color/mainColor"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -184,18 +187,117 @@
     </android.support.v7.widget.CardView>
 
     <View
-        android:background="@color/grey_6"
         android:layout_width="match_parent"
-        android:layout_height="10dp"/>
+        android:layout_height="10dp"
+        android:background="@color/grey_6" />
 
-    <TextView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="10dp"
-        android:paddingLeft="20dp"
-        android:text="月报统计"
-        android:textColor="@color/grey_10"
-        android:textSize="15sp" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:descendantFocusability="blocksDescendants"
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:paddingLeft="20dp"
+                android:text="日报统计"
+                android:textColor="@color/grey_10"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_date_title"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:paddingLeft="20dp"
+                android:text=""
+                android:textColor="@color/grey_2"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:gravity="center_vertical"
+                android:paddingLeft="23dp"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="25dp">
+
+                <ImageView
+                    android:background="@drawable/shape_rectgle_yellow"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:text=" 寄件数(件)"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:background="@drawable/shape_rectgle_blue"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:text=" 派件数(件)"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:background="@drawable/shape_rectgle_green"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp" />
+
+                <TextView
+                    android:layout_width="85dp"
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:text=" 服务数(件)"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <com.mt.bbdj.baseconfig.view.BarHorizontalChart
+                android:id="@+id/chart"
+                android:layout_width="match_parent"
+                android:background="#ffffff"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="20dp"
+                android:layout_height="750dp" />
+
+            <com.github.mikephil.charting.charts.HorizontalBarChart
+                android:visibility="gone"
+                android:id="@+id/chart_barchart"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:minHeight="400dp"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"/>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 
 </LinearLayout>

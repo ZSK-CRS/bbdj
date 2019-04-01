@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_left_close"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#00000000"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/shap_ll_bg"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/tv_k_n"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#dedede" />
+
+        <TextView
+            android:id="@+id/bt_date"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="日排行榜"
+            android:textColor="@color/grey_7"
+            android:textSize="@dimen/standardtitleSize"></TextView>
+
+        <View
+            android:id="@+id/tk_num"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#dedede" />
+
+        <TextView
+            android:id="@+id/bt_month"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="#ffffff"
+            android:gravity="center_vertical"
+            android:paddingLeft="20dp"
+            android:text="月排行榜"
+            android:textColor="@color/grey_7"
+            android:textSize="@dimen/standardtitleSize"></TextView>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

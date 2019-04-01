@@ -101,13 +101,72 @@ public class DateUtil {
         return dateString;
     }
 
+
+    //根据指定月份获取第一天
+    public static String getFisrtDayOfMonth(int year, int month) {
+        Calendar cal = Calendar.getInstance();
+        //设置年份
+        cal.set(Calendar.YEAR, year);
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        //获取某月最小天数
+        int firstDay = cal.getActualMinimum(Calendar.DAY_OF_MONTH);
+        //设置日历中月份的最小天数
+        cal.set(Calendar.DAY_OF_MONTH, firstDay);
+        //格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String firstDayOfMonth = sdf.format(cal.getTime());
+
+        return firstDayOfMonth;
+    }
+
+    //获取指定月份的最后一天
+    public static String getLastDayOfMonth(int year, int month) {
+        Calendar cal = Calendar.getInstance();
+        //设置年份
+        cal.set(Calendar.YEAR, year);
+        //设置月份
+        cal.set(Calendar.MONTH, month - 1);
+        //获取某月最小天数
+        int lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        //设置日历中月份的最小天数
+        cal.set(Calendar.DAY_OF_MONTH, lastDay);
+        //格式化日期
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String lastDayOfMonth = sdf.format(cal.getTime());
+
+        return lastDayOfMonth;
+    }
+
+
+    //获取当前月第一天0点
+    public static String getCurrentMonthFirstDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, 0);
+        c.set(Calendar.DAY_OF_MONTH, 1);//设置为1号,当前日期既为本月第一天
+        String first = format.format(c.getTime());
+        return first + " 00:00:00";
+    }
+
+    //当前月最后一天
+    public static String getCurrentMonthLastDate() {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        //获取前月的最后一天
+        Calendar cale = Calendar.getInstance();
+        cale.set(Calendar.DAY_OF_MONTH, cale.getActualMaximum(Calendar.DAY_OF_MONTH));
+        String last = format.format(cale.getTime());
+        return last + " 23:59:59";
+    }
+
+
     //获取当天零点的时间戳
     public static String getTadayStartTimeStamp() {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.set(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH), calendar1.get(Calendar.DAY_OF_MONTH),
                 0, 0, 0);
         Date beginOfDate = calendar1.getTime();
-        String timestamp = String.valueOf(beginOfDate.getTime()/1000);
+        String timestamp = String.valueOf(beginOfDate.getTime() / 1000);
         return timestamp;
     }
 
@@ -121,7 +180,7 @@ public class DateUtil {
             e.printStackTrace();
         }
         long mills = time.getTime();
-    //    long zero = (mills / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset()) / 1000;
+        //    long zero = (mills / (1000 * 3600 * 24) * (1000 * 3600 * 24) - TimeZone.getDefault().getRawOffset()) / 1000;
         long zero = mills / 1000;
         return zero + "";
     }
@@ -257,7 +316,7 @@ public class DateUtil {
     public static String dayDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String dateStr = sdf.format(date);
-        dateStr = dateStr+" 00:00:00";
+        dateStr = dateStr + " 00:00:00";
         return dateStr;
     }
 
@@ -282,7 +341,6 @@ public class DateUtil {
         String dateStr = sdf.format(date);
         return dateStr;
     }
-
 
 
     public static String dayTime3() {
@@ -635,9 +693,21 @@ public class DateUtil {
         return Integer.parseInt(year);
     }
 
+    //返回给定年
+    public static int getYear(Date date) {
+        String year = new SimpleDateFormat("yyyy").format(date);
+        return Integer.parseInt(year);
+    }
+
     // 返回当前月份
     public static int getMonth() {
         Date date = new Date();
+        String month = new SimpleDateFormat("MM").format(date);
+        return Integer.parseInt(month);
+    }
+
+    //返回给定的月份
+    public static int getMonth(Date date) {
         String month = new SimpleDateFormat("MM").format(date);
         return Integer.parseInt(month);
     }
@@ -895,6 +965,13 @@ public class DateUtil {
             e.printStackTrace();
         }
         return unixTimestamp + "";
+    }
+
+    //获取昨天
+    public static String getYesterdayStr(String format) {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        return new SimpleDateFormat(format).format(cal.getTime());
     }
 
     /**

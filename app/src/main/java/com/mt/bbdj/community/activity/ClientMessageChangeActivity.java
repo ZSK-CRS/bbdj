@@ -316,6 +316,7 @@ public class ClientMessageChangeActivity extends BaseActivity {
         pvOptions.show();
     }
 
+
     private void initAreaData() {
         ArrayList<JsonBean> jsonBean = new ArrayList<>();
         provincesList = mProvinceDao.queryBuilder().list();

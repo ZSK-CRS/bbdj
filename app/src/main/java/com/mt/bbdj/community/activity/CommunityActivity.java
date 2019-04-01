@@ -36,6 +36,7 @@ import com.mt.bbdj.baseconfig.internet.down.DownLoadPictureService;
 import com.mt.bbdj.baseconfig.internet.down.ImageDownLoadCallBack;
 import com.mt.bbdj.baseconfig.model.AddressBean;
 import com.mt.bbdj.baseconfig.model.Area;
+import com.mt.bbdj.baseconfig.model.Constant;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
@@ -145,57 +146,14 @@ public class CommunityActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
-
+        Constant.context = this;
         ButterKnife.bind(this);
         initView();
         initParams();
-        loadAddressData();
         //下载快递logo
         upLoadexpressLogo();
     }
 
-    private void loadAddressData() {
-
-        mProvinceDao.deleteAll();
-        mCountyDao.deleteAll();
-        mCityDao.deleteAll();
-
-        String json = StringUtil.getJson(this, "adress.json");
-        AddressBean addressBean = com.alibaba.fastjson.JSONObject.parseObject(json, AddressBean.class);
-        List<com.mt.bbdj.baseconfig.model.Province> provinceList = addressBean.getProvince();
-        List<com.mt.bbdj.baseconfig.model.City> cityList = addressBean.getCity();
-        List<Area> areaList = addressBean.getArea();
-
-        List<Province> db_Province = new ArrayList<>();
-        List<City> db_City = new ArrayList<>();
-        List<County> db_County = new ArrayList<>();
-
-        for (int i = 0;i<provinceList.size();i++) {
-            com.mt.bbdj.baseconfig.model.Province entity = provinceList.get(i);
-            Province province = new Province(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
-            db_Province.add(province);
-            province = null;
-        }
-
-        for (int i = 0;i<cityList.size();i++) {
-            com.mt.bbdj.baseconfig.model.City entity = cityList.get(i);
-            City city = new City(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
-            db_City.add(city);
-            city = null;
-        }
-
-        for (int i = 0;i<areaList.size();i++) {
-            Area entity = areaList.get(i);
-            County county = new County(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
-            db_County.add(county);
-            county = null;
-        }
-
-
-        mProvinceDao.saveInTx(db_Province);
-        mCountyDao.saveInTx(db_County);
-        mCityDao.saveInTx(db_City);
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

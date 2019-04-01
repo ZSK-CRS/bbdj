@@ -9,10 +9,17 @@
     <RelativeLayout
         android:layout_width="100dp"
         android:layout_height="320dp"
-        android:layout_centerInParent="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
         android:background="@drawable/shap_ll_bg"
         android:gravity="center">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/tl_fast_list"
+            android:layout_width="80dp"
+            android:layout_height="300dp">
+
+        </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 
 

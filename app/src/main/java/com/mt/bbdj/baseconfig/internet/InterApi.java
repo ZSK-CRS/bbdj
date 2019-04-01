@@ -416,4 +416,14 @@ public class InterApi {
      */
     public static final String ACTION_SORT_REQUEST = "getRankingList1050";
 
+    /**
+     * 获取数据日报
+     */
+    public static final String ACTION_REPORT_DATE_REQUEST = "getDilyData1050";
+
+    /**
+     * 获取月报数据
+     */
+    public static final String ACITON_REPORT_MONTH_REQUEST = "getMonthlyData1050";
+
 }

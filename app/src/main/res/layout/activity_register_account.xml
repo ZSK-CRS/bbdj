@@ -253,7 +253,7 @@
                     android:layout_marginLeft="7sp"
                     android:gravity="center_vertical"
                     android:text="兵兵到家注册协议"
-                    android:textColor="@color/grey_2"
+                    android:textColor="@color/mainColor"
                     android:textSize="@dimen/standardTextSize" />
 
             </LinearLayout>

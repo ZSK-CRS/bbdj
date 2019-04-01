@@ -1,17 +1,24 @@
 package com.mt.bbdj.baseconfig.activity;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v4.widget.ImageViewCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +29,40 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.AMapLocationQualityReport;
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.ocr.sdk.model.IDCardParams;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
+import com.kongzue.dialog.v2.SelectDialog;
+import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
+import com.mt.bbdj.baseconfig.db.City;
+import com.mt.bbdj.baseconfig.db.County;
+import com.mt.bbdj.baseconfig.db.Province;
+import com.mt.bbdj.baseconfig.db.UserBaseMessage;
+import com.mt.bbdj.baseconfig.db.gen.CityDao;
+import com.mt.bbdj.baseconfig.db.gen.CountyDao;
+import com.mt.bbdj.baseconfig.db.gen.DaoSession;
+import com.mt.bbdj.baseconfig.db.gen.ProvinceDao;
+import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.DestroyEvent;
 import com.mt.bbdj.baseconfig.model.ImageCutEvent;
+import com.mt.bbdj.baseconfig.model.JsonBean;
+import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.MiPictureHelper;
@@ -37,6 +70,9 @@ import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.SystemUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
+import com.mt.bbdj.community.activity.GoodsDetailActivity;
+import com.mt.bbdj.community.activity.MyAddressActivity;
+import com.mt.bbdj.community.activity.PayforOrderFromShopingCardActivity;
 import com.wildma.idcardcamera.camera.CameraActivity;
 import com.yanzhenjie.durban.Durban;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -63,6 +99,8 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import top.zibin.luban.Luban;
+import top.zibin.luban.OnCompressListener;
 
 import static com.wildma.idcardcamera.camera.CameraActivity.REQUEST_CODE;
 
@@ -96,22 +134,54 @@ public class RegisterCompleteActivity extends BaseActivity {
     ImageView mIvRegisterIdLicence;           //营业执照
     @BindView(R.id.bt_register_complete)
     Button btRegisterComplete;
+    @BindView(R.id.et_contact)
+    EditText etContact;         //联系人
+    @BindView(R.id.et_contact_phone)
+    EditText etContactPhone;    //联系人电话
+    @BindView(R.id.et_contact_address)
+    TextView tvContactAddress;    //联系人省市县
+    @BindView(R.id.et_contact_address_detail)
+    EditText detailAddress;     //联系人详细地址
+
+    @BindView(R.id.ic_mentou)
+    ImageView mentouPicture;   //门头照
+    @BindView(R.id.ic_neibu)
+    ImageView neibuPicture;    //内部照
+
 
     @BindView(R.id.et_main_register_username)
     EditText mRegisterUsername;              //用户名
     @BindView(R.id.et_main_register_idnumber)
     EditText mRegisterIdnumber;              //身份证号
+    @BindView(R.id.ll_get_current_location)
+    LinearLayout currentLocation;    //获取当前的位置信息
 
 
     public static final int PHOTOHRAPH = 300;// 拍照
     private static final int REQUEST_CODE_SYSTEM = 200;    //系统相机
     private static final int PHOTORESOULT = 1;    //结果处理
 
+    private static final int LOCATION_CODE = 400;    //定位权限
+
+    private ArrayList<JsonBean> options1Items = new ArrayList<>();    //省
+    private ArrayList<ArrayList<String>> options2Items = new ArrayList<>();   //市
+    private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();     //县/区
+
+    private List<Province> provincesList = new ArrayList<Province>();
+    private List<City> citysList = new ArrayList<City>();
+    private List<County> areasList = new ArrayList<County>();
+
+    private String mProvince;
+    private String mCity;
+    private String mCountry;
+
 
     private PopupWindow popupWindow;
     private View selectView;
 
     private String picturePath = "/bbdj/picture";
+
+    private String IMAGE_DIR = Environment.getExternalStorageDirectory() + "/bbdj/picture";
     private File f = new File(Environment.getExternalStorageDirectory(), picturePath);
     private File photoFile;
     private File compressPicture;
@@ -119,13 +189,23 @@ public class RegisterCompleteActivity extends BaseActivity {
     private int clickType = 0;    //图片类型
     private String pictureType;    //图片名称
 
-    private ImageView[] imageViews = new ImageView[3];
+    private ImageView[] imageViews = new ImageView[5];
 
     private RequestQueue mRequestQueue;    //请求队列
 
     private SharedPreferences.Editor mEditor;
     private SharedPreferences mSharedPreferences;
     private HkDialogLoading dialogLoading;
+    private String user_id;
+    private ProvinceDao mProvinceDao;
+    private CityDao mCityDao;
+    private CountyDao mCountyDao;
+    private MyLocationListenner myListener;
+    private LocationClient mLocationClient;
+    private AMapLocationClient locationClient;
+    private AMapLocationClientOption locationOption;
+    private LocationManager lm;
+    private WaitDialog waitDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,7 +213,143 @@ public class RegisterCompleteActivity extends BaseActivity {
         setContentView(R.layout.activity_register_complete);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
+        initParams();
         initData();
+        initAreaData();
+    }
+
+    private void initParams() {
+        //初始化请求队列
+        mRequestQueue = NoHttp.newRequestQueue();
+        DaoSession mDaoSession = GreenDaoManager.getInstance().getSession();
+        UserBaseMessageDao mUserMessageDao = mDaoSession.getUserBaseMessageDao();
+        List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
+        if (list != null && list.size() != 0) {
+            user_id = list.get(0).getUser_id();
+        }
+        mProvinceDao = mDaoSession.getProvinceDao();
+        mCityDao = mDaoSession.getCityDao();
+        mCountyDao = mDaoSession.getCountyDao();
+
+
+        LocationByGaode();    //高德导航
+
+      /*  myListener = new MyLocationListenner();
+        mLocationClient = new LocationClient(getApplicationContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+        //注册监听函数
+        LocationClientOption option = new LocationClientOption();
+
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setOpenGps(true);// 打开gps
+        option.setCoorType("bd09ll"); // 设置坐标类型
+        option.setIsNeedAddress(true); //当前点的地址信息，此处必须为true
+        option.setWifiCacheTimeOut(5*60*1000);
+        option.setEnableSimulateGps(false);
+        option.setLocationNotify(true);
+        // option.setScanSpan(100);
+        option.setIsNeedLocationPoiList(true);    //获得周边POI信息
+        mLocationClient.setLocOption(option);
+        mLocationClient.start();*/
+    }
+
+    private void LocationByGaode() {
+        //初始化Client
+        locationClient = new AMapLocationClient(this.getApplicationContext());
+        locationOption = getDefaultOption();
+        //设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 设置定位监听
+        locationClient.setLocationListener(locationListener);
+    }
+
+    private AMapLocationClientOption getDefaultOption() {
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setGpsFirst(true);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(true);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(true);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+        mOption.setGeoLanguage(AMapLocationClientOption.GeoLanguage.DEFAULT);//可选，设置逆地理信息的语言，默认值为默认语言（根据所在地区选择语言）
+        return mOption;
+
+    }
+
+    AMapLocationListener locationListener = new AMapLocationListener() {
+
+        @Override
+        public void onLocationChanged(AMapLocation location) {
+            if (null != location) {
+                StringBuffer sb = new StringBuffer();
+                //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+                if (location.getErrorCode() == 0) {
+                    String province = location.getProvince();    //省
+                    String city = location.getCity();     //市
+                    String area = location.getDistrict();   //区
+                    String address = location.getAddress();   //地址
+                    String poiName = location.getPoiName();   //兴趣点
+
+                    String addressOne = address.replace(province, "");
+                    String addressTwo = addressOne.replace(city, "");
+                    String addressThress = addressTwo.replace(area, "");
+
+                    if (province.contains("市")) {
+                        province = province.replace("市", "");
+                    }
+
+                    mProvince = province;
+                    mCity = city;
+                    mCountry = area;
+
+                    tvContactAddress.setText(province+city+area);
+                    detailAddress.setText(addressThress);
+
+                } else {
+                    ToastUtil.showShort("定位失败，请重试");
+                }
+            } else {
+                ToastUtil.showShort("定位失败，请重试");
+            }
+            if (waitDialog != null) {
+                waitDialog.doDismiss();
+            }
+        }
+    };
+
+
+    /**
+     * 获取GPS状态的字符串
+     *
+     * @param statusCode GPS状态码
+     * @return
+     */
+    private String getGPSStatusString(int statusCode) {
+        String str = "";
+        switch (statusCode) {
+            case AMapLocationQualityReport.GPS_STATUS_OK:
+                str = "GPS状态正常";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_NOGPSPROVIDER:
+                str = "手机中没有GPS Provider，无法进行GPS定位";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_OFF:
+                str = "GPS关闭，建议开启GPS，提高定位质量";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_MODE_SAVING:
+                str = "选择的定位模式中不包含GPS定位，建议选择包含GPS定位的模式，提高定位质量";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_NOGPSPERMISSION:
+                str = "没有GPS定位权限，建议开启gps定位权限";
+                break;
+        }
+        return str;
     }
 
     private void initData() {
@@ -158,6 +374,8 @@ public class RegisterCompleteActivity extends BaseActivity {
         imageViews[0] = mIvRegisterIdFront;
         imageViews[1] = mIvRegisterIdBack;
         imageViews[2] = mIvRegisterIdLicence;
+        imageViews[3] = mentouPicture;
+        imageViews[4] = neibuPicture;
     }
 
     private void initPictureSelectPop() {
@@ -192,7 +410,7 @@ public class RegisterCompleteActivity extends BaseActivity {
                 Glide.with(RegisterCompleteActivity.this)
                         .load(cutPath)
                         .into(mIvRegisterIdLicence);
-              uploadPicture(cutPath);
+                uploadPicture(cutPath);
             }
         }
     }
@@ -221,7 +439,8 @@ public class RegisterCompleteActivity extends BaseActivity {
 
     //拍照点击事件
     @OnClick({R.id.iv_back, R.id.ic_register_id_front_fl, R.id.ic_register_id_back_fl,
-            R.id.ic_register_id_licence_fl, R.id.bt_register_complete})
+            R.id.ic_register_id_licence_fl, R.id.bt_register_complete, R.id.et_contact_address,
+            R.id.rl_dianmain, R.id.ic_neibu, R.id.ll_get_current_location})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:        //返回
@@ -245,7 +464,99 @@ public class RegisterCompleteActivity extends BaseActivity {
             case R.id.bt_register_complete:       //完成
                 handleCompleteEvent();
                 break;
+            case R.id.et_contact_address:    //选择省市县
+                handleContactAddress();
+                break;
+            case R.id.rl_dianmain:     //门头照
+                clickType = 3;
+                pictureType = "door_photo";
+                applyCameraPermission();
+                break;
+            case R.id.ic_neibu:     //内部照
+                clickType = 4;
+                pictureType = "internal_photo";
+                applyCameraPermission();
+                break;
+            case R.id.ll_get_current_location:    //获取当前的定位
+                getCurrentLocation();
+                break;
         }
+    }
+
+    private void getCurrentLocation() {
+        if (appLocationPersion()) {
+            waitDialog = WaitDialog.show(RegisterCompleteActivity.this, "定位中...").setCanCancel(true);
+            locationClient.startLocation();
+        }
+    }
+
+    private boolean appLocationPersion() {
+        //判断时候开启定位权限
+        lm = (LocationManager) RegisterCompleteActivity.this.getSystemService(RegisterCompleteActivity.this.LOCATION_SERVICE);
+        boolean ok = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+
+        if (ok) {
+            if (ContextCompat.checkSelfPermission(RegisterCompleteActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                // 没有权限，申请权限。
+                // 申请授权。
+                ActivityCompat.requestPermissions(RegisterCompleteActivity.this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        LOCATION_CODE);
+            } else {
+                return true;
+            }
+        } else {
+            showStartGPSPermission();    //开启定位权限
+
+        }
+        return false;
+    }
+
+    private void showStartGPSPermission() {
+        SelectDialog.show(this, "提示", "请先开启定位权限", "确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        startActivityForResult(intent, 1315);
+                    }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                }).setCanCancel(true);
+    }
+
+    private void handleContactAddress() {
+        if (options1Items.size() > 0 && options2Items.size() > 0 && options3Items.size() > 0) {
+            showPickerView();
+        }
+    }
+
+    private void showPickerView() {
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                mProvince = options1Items.get(options1).getPickerViewText();
+                mCity = options2Items.get(options1).get(options2);
+                mCountry = options3Items.get(options1).get(options2).get(options3);
+                tvContactAddress.setText(mProvince + mCity + mCountry);
+            }
+        }).setSelectOptions(0, 0, 0)  //设置默认选中项
+                .setTitleText("地区选择")
+                .setTitleSize(16)
+                .setDividerColor(Color.BLACK)
+                .setTextColorCenter(Color.BLACK) //设置选中项文字颜色
+                .setContentTextSize(16)
+                .setLineSpacingMultiplier(2.5f)
+                .setCancelColor(Color.parseColor("#0da95f"))
+                .setSubmitColor(Color.parseColor("#0da95f"))
+                .build();
+        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
+        pvOptions.show();
     }
 
     private void takePictureFromAlbum() {
@@ -301,6 +612,11 @@ public class RegisterCompleteActivity extends BaseActivity {
 
     private void takePictureBySystem(Intent data) {
         String pickPath = MiPictureHelper.getPath(RegisterCompleteActivity.this, data.getData());
+
+        if (clickType == 3 || clickType == 4 || clickType == 2) {
+            compressFile(pickPath);
+            return;
+        }
         Durban.with(RegisterCompleteActivity.this)
                 .requestCode(PHOTORESOULT)
                 .statusBarColor(ContextCompat.getColor(RegisterCompleteActivity.this, R.color.colorPrimary))
@@ -313,7 +629,56 @@ public class RegisterCompleteActivity extends BaseActivity {
                 .start();
     }
 
+    private void compressFile() {
+        Luban.with(this)
+                .load(photoFile)
+                .ignoreBy(100)
+                .setTargetDir(IMAGE_DIR)
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        Glide.with(RegisterCompleteActivity.this).load(file.getPath()).into(imageViews[clickType]);
+                        uploadPicture(file.getAbsolutePath());    //上传图片
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+                }).launch();
+    }
+
+    private void compressFile(String filePath) {
+        Luban.with(this)
+                .load(filePath)
+                .ignoreBy(100)
+                .setTargetDir(IMAGE_DIR)
+                .setCompressListener(new OnCompressListener() {
+                    @Override
+                    public void onStart() {
+                    }
+
+                    @Override
+                    public void onSuccess(File file) {
+                        Glide.with(RegisterCompleteActivity.this).load(file.getPath()).into(imageViews[clickType]);
+                        uploadPicture(file.getAbsolutePath());    //上传图片
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+                }).launch();
+    }
+
     private void takePictureByCamera() {
+        if (clickType == 3 || clickType == 4 || clickType == 2) {
+            String picturePath = Uri.fromFile(photoFile).getPath();
+            compressFile();
+            return;
+        }
         Durban.with(RegisterCompleteActivity.this)
                 .requestCode(PHOTORESOULT)
                 .statusBarColor(ContextCompat.getColor(RegisterCompleteActivity.this, R.color.colorPrimary))
@@ -374,7 +739,6 @@ public class RegisterCompleteActivity extends BaseActivity {
             finish();
         }
     }
-
 
     private void uploadPicture(String filePath) {
         if (!new File(filePath).exists()) {
@@ -439,7 +803,12 @@ public class RegisterCompleteActivity extends BaseActivity {
                 mIvRegisterIdLicence.setImageBitmap(null);
                 icLicenceAdd.setBackgroundResource(R.drawable.ic_add);
                 break;
-
+            case "door_photo":
+                mentouPicture.setImageBitmap(null);
+                break;
+            case "internal_photo":
+                neibuPicture.setImageBitmap(null);
+                break;
         }
     }
 
@@ -458,7 +827,15 @@ public class RegisterCompleteActivity extends BaseActivity {
         String back_card = mSharedPreferences.getString("back_card", "");
         String license = mSharedPreferences.getString("license", "");
         String businessNumber = mSharedPreferences.getString("businessNumber", "");
-        Request<String> request = NoHttpRequest.commitRegisterRequest(phone, password, realname, idcard, just_card, back_card, license, businessNumber);
+        String door_photo = mSharedPreferences.getString("door_photo", "");
+        String internal_photo = mSharedPreferences.getString("internal_photo", "");
+
+        String contactPerson = etContact.getText().toString();
+        String contactPhone = etContactPhone.getText().toString();
+        String detail_Address = detailAddress.getText().toString();
+
+        Request<String> request = NoHttpRequest.commitRegisterRequest(phone, password, realname, idcard, just_card,
+                back_card, license, businessNumber, contactPerson, contactPhone, mProvince, mCity, mCountry, detail_Address, door_photo, internal_photo);
         mRequestQueue.add(2, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -504,14 +881,31 @@ public class RegisterCompleteActivity extends BaseActivity {
     private boolean completeMessage() {
         String userName = mRegisterUsername.getText().toString();
         String idNumber = mRegisterIdnumber.getText().toString();
+
+        String contactPerson = etContact.getText().toString();
+        String contactPhone = etContactPhone.getText().toString();
+        String contactAddress = tvContactAddress.getText().toString();
+        String detail_Address = detailAddress.getText().toString();
+
         String frontIDImg = mSharedPreferences.getString("just_card", "");
         String backIDImg = mSharedPreferences.getString("back_card", "");
-        if ("".equals(userName) || "".equals(frontIDImg) || "".equals(backIDImg)) {
+        String door_photo = mSharedPreferences.getString("door_photo", "");
+        String internal_photo = mSharedPreferences.getString("internal_photo", "");
+
+        if ("".equals(userName) || "".equals(frontIDImg) || "".equals(backIDImg) ||
+                "".equals(contactPerson) || "".equals(contactAddress)
+                || "".equals(detail_Address) || "".equals(door_photo) || "".equals(internal_photo)) {
             ToastUtil.showShort("请完善注册信息！");
             return false;
         }
+
         if (!StringUtil.isIDNumber(idNumber)) {
             ToastUtil.showShort("身份证不合法！");
+            return false;
+        }
+
+        if (!StringUtil.isMobile(contactPhone)) {
+            ToastUtil.showShort("手机号码不合法！");
             return false;
         }
         return true;
@@ -521,6 +915,9 @@ public class RegisterCompleteActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        locationClient.onDestroy();
+        locationClient = null;
+        locationOption = null;
     }
 
     private void showSelectDialog() {
@@ -576,4 +973,96 @@ public class RegisterCompleteActivity extends BaseActivity {
         }
     }
 
+    private void initAreaData() {
+        ArrayList<JsonBean> jsonBean = new ArrayList<>();
+        provincesList = mProvinceDao.queryBuilder().list();
+        for (int i = 0; i < provincesList.size(); i++) {
+            JsonBean item = new JsonBean();
+            item.setName(provincesList.get(i).getRegion_name());
+            item.setProvince(provincesList.get(i).getId());
+            List<JsonBean.CityBean> cityBeansList = new ArrayList<>();
+            citysList = mCityDao.queryBuilder().where(CityDao.Properties.Parent_id.eq(provincesList.get(i).getId())).list();
+            for (int il = 0; il < citysList.size(); il++) {
+                JsonBean.CityBean item1 = new JsonBean.CityBean();
+                item1.setName(citysList.get(il).getRegion_name());
+                item1.setCity(citysList.get(il).getId());
+                List<String> area = new ArrayList<>();
+                List<String> areaId = new ArrayList<>();
+                areasList = mCountyDao.queryBuilder().where(CountyDao.Properties.Parent_id.eq(citysList.get(il).getId())).list();
+                for (int i2 = 0; i2 < areasList.size(); i2++) {
+                    area.add(areasList.get(i2).getRegion_name());
+                    areaId.add(areasList.get(i2).getId());
+                }
+                if (area.size() < 0) {
+                    area.add(citysList.get(il).getRegion_name());
+                    areaId.add(citysList.get(il).getId());
+                }
+                item1.setArea(area);
+                item1.setAreaId(areaId);
+                cityBeansList.add(item1);
+            }
+            if (citysList.size() <= 0) {
+                JsonBean.CityBean item1 = new JsonBean.CityBean();
+                item1.setName(provincesList.get(i).getRegion_name());
+                item1.setCity(provincesList.get(i).getId());
+                List<String> area = new ArrayList<>();
+                List<String> areaId = new ArrayList<>();
+
+                area.add(provincesList.get(i).getRegion_name());
+                areaId.add(provincesList.get(i).getId());
+
+
+                item1.setArea(area);
+                item1.setAreaId(areaId);
+                cityBeansList.add(item1);
+            }
+            item.setCityList(cityBeansList);
+            jsonBean.add(item);
+        }
+        options1Items = jsonBean;
+
+        for (int i = 0; i < jsonBean.size(); i++) {   //遍历省份
+            ArrayList<String> cityList = new ArrayList<>();     //该省的城市列表
+            ArrayList<ArrayList<String>> province_AreaList = new ArrayList<>();    //该省的所有地区列表
+
+            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {   //遍历该省的所有城市
+                String cityName = jsonBean.get(i).getCityList().get(c).getName();
+                cityList.add(cityName);   //添加城市
+                ArrayList<String> city_ArrayList = new ArrayList<>();    //该城市的所有地区列表
+
+                //若是无地区数据，天剑空字符串，放置数据为null 导致三个选型的长度不匹配造成崩溃
+                if (jsonBean.get(i).getCityList().get(c).getArea() == null ||
+                        jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
+                    city_ArrayList.add("");
+                } else {
+                    city_ArrayList.addAll(jsonBean.get(i).getCityList().get(c).getArea());
+                }
+                province_AreaList.add(city_ArrayList);   //添加该省所有地区数据
+            }
+
+            //添加城市数据
+            options2Items.add(cityList);
+
+            //添加地区数据
+            options3Items.add(province_AreaList);
+        }
+    }
+
+
+    public class MyLocationListenner extends BDAbstractLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            String addr = location.getAddrStr();    //获取详细地址信息
+            String country = location.getCountry();    //获取国家
+            String province = location.getProvince();    //获取省份
+            String city = location.getCity();    //获取城市
+            String district = location.getDistrict();    //获取区县
+            String street = location.getStreet();    //获取街道信息
+            String describe = location.getLocationDescribe();
+
+            tvContactAddress.setText(province + city + district);
+            detailAddress.setText(street);
+        }
+    }
 }

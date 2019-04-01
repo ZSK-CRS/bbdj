@@ -2,7 +2,9 @@ package com.mt.bbdj.baseconfig.application;
 
 import android.app.Application;
 import android.app.Notification;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.multidex.MultiDex;
 
 import com.baidu.ocr.sdk.OCR;
 import com.baidu.ocr.sdk.OnResultListener;
@@ -61,6 +63,12 @@ public class MyApplication extends Application {
         //bug收集
        // CrashHandler.getInstance().init(this);
 
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     private void initPushSetting() {

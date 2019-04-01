@@ -24,6 +24,8 @@ import com.mt.bbdj.baseconfig.db.gen.MingleAreaDao;
 import com.mt.bbdj.baseconfig.db.gen.ProvinceDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
+import com.mt.bbdj.baseconfig.model.AddressBean;
+import com.mt.bbdj.baseconfig.model.Area;
 import com.mt.bbdj.baseconfig.model.Constant;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
@@ -90,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         applyPermission();    //申请权限
         setPushSetting();     //设置推送别名
         initData();
+        loadAddressData();
         mUsername.setCursorVisible(false);
         mPassword.setCursorVisible(false);
         mUsername.setOnClickListener(new View.OnClickListener() {
@@ -295,5 +298,46 @@ public class LoginActivity extends AppCompatActivity {
                     .callback(this)
                     .start();
         }
+    }
+    private void loadAddressData() {
+        mProvinceDao.deleteAll();
+        mCountyDao.deleteAll();
+        mCityDao.deleteAll();
+
+        String json = StringUtil.getJson(this, "adress.json");
+        AddressBean addressBean = com.alibaba.fastjson.JSONObject.parseObject(json, AddressBean.class);
+        List<com.mt.bbdj.baseconfig.model.Province> provinceList = addressBean.getProvince();
+        List<com.mt.bbdj.baseconfig.model.City> cityList = addressBean.getCity();
+        List<Area> areaList = addressBean.getArea();
+
+        List<Province> db_Province = new ArrayList<>();
+        List<City> db_City = new ArrayList<>();
+        List<County> db_County = new ArrayList<>();
+
+        for (int i = 0;i<provinceList.size();i++) {
+            com.mt.bbdj.baseconfig.model.Province entity = provinceList.get(i);
+            Province province = new Province(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
+            db_Province.add(province);
+            province = null;
+        }
+
+        for (int i = 0;i<cityList.size();i++) {
+            com.mt.bbdj.baseconfig.model.City entity = cityList.get(i);
+            City city = new City(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
+            db_City.add(city);
+            city = null;
+        }
+
+        for (int i = 0;i<areaList.size();i++) {
+            Area entity = areaList.get(i);
+            County county = new County(entity.getId(),entity.getRegion_name(),entity.getParent_id(),entity.getRegion_code());
+            db_County.add(county);
+            county = null;
+        }
+
+
+        mProvinceDao.saveInTx(db_Province);
+        mCountyDao.saveInTx(db_County);
+        mCityDao.saveInTx(db_City);
     }
 }
