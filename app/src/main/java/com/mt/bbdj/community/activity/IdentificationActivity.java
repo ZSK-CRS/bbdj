@@ -546,7 +546,6 @@ public class IdentificationActivity extends AppCompatActivity {
             request = NoHttpRequest.commitIdentificationForManager(user_id,mail_id, personName, personNumber,
                     just_card, back_card);
         }
-
         mRequestQueue.add(REQUEST_COMMIT_IDMESSAGE, request, onResultListener);
     }
 

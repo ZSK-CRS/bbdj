@@ -11,10 +11,11 @@ public class InterApi {
      * 服务器地址
      */
     // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
-    // public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+     public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
-     public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
-    // public static fin    al String SERVER_ADDRESS = "http://web1.mingtaikeji.cn/BbdjApi/";
+    // public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
+    // public static final String SERVER_ADDRESS = "http://web1.mingtaikeji.cn/BbdjApi/";
+
 
     /**
      * 获取验证码

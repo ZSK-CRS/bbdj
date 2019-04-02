@@ -36,10 +36,6 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.baidu.ocr.sdk.model.IDCardParams;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -200,8 +196,6 @@ public class RegisterCompleteActivity extends BaseActivity {
     private ProvinceDao mProvinceDao;
     private CityDao mCityDao;
     private CountyDao mCountyDao;
-    private MyLocationListenner myListener;
-    private LocationClient mLocationClient;
     private AMapLocationClient locationClient;
     private AMapLocationClientOption locationOption;
     private LocationManager lm;
@@ -230,28 +224,7 @@ public class RegisterCompleteActivity extends BaseActivity {
         mProvinceDao = mDaoSession.getProvinceDao();
         mCityDao = mDaoSession.getCityDao();
         mCountyDao = mDaoSession.getCountyDao();
-
-
         LocationByGaode();    //高德导航
-
-      /*  myListener = new MyLocationListenner();
-        mLocationClient = new LocationClient(getApplicationContext());
-        //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);
-        //注册监听函数
-        LocationClientOption option = new LocationClientOption();
-
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setOpenGps(true);// 打开gps
-        option.setCoorType("bd09ll"); // 设置坐标类型
-        option.setIsNeedAddress(true); //当前点的地址信息，此处必须为true
-        option.setWifiCacheTimeOut(5*60*1000);
-        option.setEnableSimulateGps(false);
-        option.setLocationNotify(true);
-        // option.setScanSpan(100);
-        option.setIsNeedLocationPoiList(true);    //获得周边POI信息
-        mLocationClient.setLocOption(option);
-        mLocationClient.start();*/
     }
 
     private void LocationByGaode() {
@@ -1047,21 +1020,4 @@ public class RegisterCompleteActivity extends BaseActivity {
         }
     }
 
-
-    public class MyLocationListenner extends BDAbstractLocationListener {
-
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-            String addr = location.getAddrStr();    //获取详细地址信息
-            String country = location.getCountry();    //获取国家
-            String province = location.getProvince();    //获取省份
-            String city = location.getCity();    //获取城市
-            String district = location.getDistrict();    //获取区县
-            String street = location.getStreet();    //获取街道信息
-            String describe = location.getLocationDescribe();
-
-            tvContactAddress.setText(province + city + district);
-            detailAddress.setText(street);
-        }
-    }
 }

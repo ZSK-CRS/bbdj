@@ -56,7 +56,6 @@
 
     </com.jcodecraeer.xrecyclerview.XRecyclerView>
 
-
     <Button
         android:id="@+id/bt_singture"
         android:layout_width="match_parent"
@@ -69,8 +68,5 @@
         android:text="确认签字"
         android:textColor="#ffffff"
         android:textSize="15sp" />
-
-
 </LinearLayout>
-
 

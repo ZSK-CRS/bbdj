@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
@@ -104,7 +105,7 @@ public class RegisterAccountActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.tv_identify_number, R.id.bt_register_next, R.id.iv_back,R.id.tv_read_agreement})
+    @OnClick({R.id.tv_identify_number, R.id.bt_register_next, R.id.iv_back, R.id.tv_read_agreement})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_identify_number:
@@ -123,7 +124,7 @@ public class RegisterAccountActivity extends BaseActivity {
     }
 
     private void handleReadAgreementEvent() {
-        Intent intent = new Intent(this,RegisterAggreementActivity.class);
+        Intent intent = new Intent(this, RegisterAggreementActivity.class);
         startActivity(intent);
     }
 
@@ -134,14 +135,14 @@ public class RegisterAccountActivity extends BaseActivity {
         String businessNumber = mBusinessNumber.getText().toString();
 
         if (!mRegisterPhone.equals(currentPhone)) {
-             ToastUtil.showShort("注册账号发生变化！");
-             return;
+            ToastUtil.showShort("注册账号发生变化！");
+            return;
         }
         if (!mRandCode.equals(currentCode)) {
             ToastUtil.showShort("验证码有误！");
             return;
         }
-        if ("".equals(currentPassword) || currentPassword.length()< 6 || currentPassword.length() > 16) {
+        if ("".equals(currentPassword) || currentPassword.length() < 6 || currentPassword.length() > 16) {
             ToastUtil.showShort("请输入6~16位数的密码！");
             return;
         }
@@ -151,10 +152,10 @@ public class RegisterAccountActivity extends BaseActivity {
         }
         //保存账号信息
         SharedPreferences.Editor mEditor = SharedPreferencesUtil.getEditor();
-        mEditor.putString("phone",currentPhone);
-        mEditor.putString("identifyCode",currentCode);
-        mEditor.putString("password",currentPassword);
-        mEditor.putString("businessNumber",businessNumber);
+        mEditor.putString("phone", currentPhone);
+        mEditor.putString("identifyCode", currentCode);
+        mEditor.putString("password", currentPassword);
+        mEditor.putString("businessNumber", businessNumber);
         mEditor.commit();
 
         Intent intent = new Intent(this, RegisterCompleteActivity.class);
@@ -168,12 +169,12 @@ public class RegisterAccountActivity extends BaseActivity {
         boolean isRight = StringUtil.isMobile(phoneNumber);
         if (!isRight) {
             ToastUtil.showShort("请输入正确的手机号码！");
-            return ;
+            return;
         }
 
         mRegisterPhone = phoneNumber;
 
-        Request<String> request = NoHttpRequest.getIdentifyCodeRequest(phoneNumber,"1");
+        Request<String> request = NoHttpRequest.getIdentifyCodeRequest(phoneNumber, "1");
         mRequestQueue.add(0, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -196,7 +197,7 @@ public class RegisterAccountActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-               //
+                //
                 // mCountDownTimer.cancel();
             }
 
@@ -236,7 +237,7 @@ public class RegisterAccountActivity extends BaseActivity {
                     identifyTv.setClickable(true);
                     identifyTv.setText("获取验证码");
                     cancel();
-                } else{
+                } else {
                     identifyTv.setText(millisUntilFinished / 1000 + "s");
                 }
             }

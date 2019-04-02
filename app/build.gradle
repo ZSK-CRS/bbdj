@@ -7,7 +7,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
-        versionName "1.0.15"
+        versionName "1.0.16"
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -15,7 +15,6 @@ android {
         compileOptions {
 
             sourceCompatibility JavaVersion.VERSION_1_8
-
             targetCompatibility JavaVersion.VERSION_1_8
 
         }
@@ -90,14 +89,12 @@ android {
         implementation 'top.zibin:Luban:1.1.3'
         implementation 'com.android.support:multidex:1.0.3'
 
-        implementation 'com.amap.api:search:latest.integration'   //高德导航
-        implementation 'com.amap.api:location:latest.integration'  //高德搜索
-        implementation 'com.amap.api:navi-3dmap:latest.integration'  //高德定位
+
     }
 }
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     implementation project(':zxlib')
-    implementation files('src/main/jniLibs/BaiduLBS_Android.jar')
+    implementation files('libs/AMap_Location_V4.5.0_20190121.jar')
 }
