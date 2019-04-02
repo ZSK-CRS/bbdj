@@ -32,11 +32,14 @@ import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.BindAccountModel;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
+import com.mt.bbdj.baseconfig.utls.FileUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.RecognizeService;
 import com.mt.bbdj.baseconfig.utls.SystemUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.CommonDialog;
+import com.mt.bbdj.community.activity.PayforOrderActivity;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -92,6 +95,7 @@ public class BindBankcardFragment extends Fragment {
     private File photoFile;
     private File compressPicture;
     private final int TAKE_BANK = 100;
+    private WaitDialog waitDialog1;
 
     public static BindBankcardFragment getInstance() {
         BindBankcardFragment bf = new BindBankcardFragment();
@@ -113,11 +117,17 @@ public class BindBankcardFragment extends Fragment {
         btCommit.setClickable(false);
         btCommit.setBackgroundResource(R.drawable.shap_bt_cirle);
         btCommit.setTextColor(Color.parseColor("#ffffff"));
+        takeCamera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takeBankPicture();
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void receiveMessage(TargetEvent targetEvent){
-        //两者都绑定或者值班顶银行卡则赋值
+    public void receiveMessage(TargetEvent targetEvent) {
+        //两者都绑定或者只绑定银行卡则赋值
         if (targetEvent.getTarget() == TargetEvent.BIND_BANK_ACCOUNT || targetEvent.getTarget() == TargetEvent.BIND_ACCOUNT_BUTTON) {
             BindAccountModel bindAccountModel = (BindAccountModel) targetEvent.getObject();
             etAccountName.setText(bindAccountModel.getBank_realName());
@@ -126,7 +136,7 @@ public class BindBankcardFragment extends Fragment {
             etAccount.setEnabled(false);
             etAccountName.setEnabled(false);
             etAccountBank.setEnabled(false);
-
+            takeCamera.setClickable(false);
         } else {
             btCommit.setClickable(true);
             btCommit.setBackgroundResource(R.drawable.bt_bg_8);
@@ -134,6 +144,7 @@ public class BindBankcardFragment extends Fragment {
             etAccount.setEnabled(true);
             etAccountName.setEnabled(true);
             etAccountBank.setEnabled(true);
+            takeCamera.setClickable(true);
         }
     }
 
@@ -143,16 +154,11 @@ public class BindBankcardFragment extends Fragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.iv_identify_bank, R.id.bt_commit,R.id.rl_take_camera})
+    @OnClick({R.id.bt_commit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.iv_identify_bank:
-                break;
             case R.id.bt_commit:
                 commitAccount();
-                break;
-            case R.id.rl_take_camera:
-                takeBankPicture();
                 break;
         }
     }
@@ -166,7 +172,7 @@ public class BindBankcardFragment extends Fragment {
             String path2 = uuid + ".jpg";
             photoFile = new File(f, path2);
             compressPicture = new File(f, uuid);
-            Uri photoURI = FileProvider.getUriForFile(getActivity(),  MyApplication.getInstance().getPackageName() + ".provider", photoFile);
+            Uri photoURI = FileProvider.getUriForFile(getActivity(), MyApplication.getInstance().getPackageName() + ".provider", photoFile);
             Intent intent = new Intent();
 
             intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -180,34 +186,42 @@ public class BindBankcardFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == TAKE_BANK && resultCode == RESULT_OK) {
+            waitDialog1 = WaitDialog.show(getActivity(), "识别中...").setCanCancel(true);
             identifyBank();    //识别银行卡
         }
     }
 
     private void identifyBank() {
-      /*  BankCardParams params = new BankCardParams();
-        params.setDetectDirection(true);
-        params.setVertexesLocation(true);
-        params.setRecognizeGranularity(GeneralParams.GRANULARITY_SMALL);
-        param.setImageFile(new File(filePath));
-        OCR.getInstance(getActivity()).recognizeBankCard();*/
+        RecognizeService.recBankCard(getActivity(), photoFile.getAbsolutePath(), new RecognizeService.ServiceListener() {
+            @Override
+            public void onResult(String result) {
+                String[] resultArray = result.split("\n");
+                String accountNumber = resultArray[0];
+                String realAccount = accountNumber.replace("卡号：", "");
+                etAccount.setText(realAccount);
 
+                String bankName = resultArray[2];
+                String realBank = bankName.replace("发卡行：", "");
+                etAccountBank.setText(realBank);
+                waitDialog1.doDismiss();
+            }
+        });
     }
 
     private void showCommitDialog(final String accountName, final String account, final String accountBank) {
 
         SelectDialog.show(getActivity(), "提示", "请确认绑定账号，绑定之后不可更改！", "确定",
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                commitAccountMessage(accountName,account,accountBank);
-            }
-        }, "取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        commitAccountMessage(accountName, account, accountBank);
+                    }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-            }
-        }).setCanCancel(true);
+                    }
+                }).setCanCancel(true);
     }
 
 
@@ -225,17 +239,17 @@ public class BindBankcardFragment extends Fragment {
         String accountName = etAccountName.getText().toString();
         String account = etAccount.getText().toString();
         String accountBank = etAccountBank.getText().toString();
-        if (isCommit(accountName, account,accountBank)){
-            showCommitDialog(accountName, account,accountBank);
+        if (isCommit(accountName, account, accountBank)) {
+            showCommitDialog(accountName, account, accountBank);
         }
     }
 
-    private void commitAccountMessage(String accountName, String account,String accountBank) {
-        Request<String> request = NoHttpRequest.getBindAccountRequest(user_id,"1",accountName,"",accountBank,account);
+    private void commitAccountMessage(String accountName, String account, String accountBank) {
+        Request<String> request = NoHttpRequest.getBindAccountRequest(user_id, "1", accountName, "", accountBank, account);
         mRequestQueue.add(ACTION_BIND_ACCOUNT, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-                waitDialog = WaitDialog.show(getActivity(),"提交中...");
+                waitDialog = WaitDialog.show(getActivity(), "提交中...");
             }
 
             @Override
@@ -244,11 +258,16 @@ public class BindBankcardFragment extends Fragment {
                 try {
                     JSONObject jsonObject = new JSONObject(response.get());
                     String code = jsonObject.getString("code");
-                    String msg  = jsonObject.getString("msg");
+                    String msg = jsonObject.getString("msg");
                     if ("5001".equals(code)) {
                         btCommit.setClickable(false);
                         btCommit.setBackgroundResource(R.drawable.shap_bt_cirle);
                         btCommit.setTextColor(Color.parseColor("#ffffff"));
+
+                        etAccount.setEnabled(false);
+                        etAccountName.setEnabled(false);
+                        etAccountBank.setEnabled(false);
+                        takeCamera.setClickable(false);
                     }
                     ToastUtil.showShort(msg);
 
@@ -270,7 +289,7 @@ public class BindBankcardFragment extends Fragment {
         });
     }
 
-    private boolean isCommit(String accountName, String account,String accountBank) {
+    private boolean isCommit(String accountName, String account, String accountBank) {
         if ("".equals(accountName)) {
             ToastUtil.showShort("姓名不可为空！");
             return false;

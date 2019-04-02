@@ -525,7 +525,6 @@ public class SendResByHandActivity extends BaseActivity {
         });
     }
 
-
     private void isIdentify(JSONObject jsonObject) throws JSONException {
         isIdentification.setText("已认证");
     }
