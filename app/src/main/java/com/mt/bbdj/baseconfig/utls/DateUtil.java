@@ -170,6 +170,21 @@ public class DateUtil {
         return timestamp;
     }
 
+    //获取当天零点的时间戳
+    public static String getTadayStartTimeZeroStamp() {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentTime = sf.format(new Date());
+        return getSomeDayStamp(currentTime+" 00:00:00");
+    }
+
+    //获取当天最晚的时间戳
+    public static String getTadayEndTimeLastStamp() {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentTime = sf.format(new Date());
+        return getSomeDayStamp(currentTime+" 23:59:59");
+    }
+
+
     //获取给定时间零点的时间戳
     public static String getSomeDayStamp(String date) {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -320,6 +335,14 @@ public class DateUtil {
         return dateStr;
     }
 
+    public static String dayDateEnd(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String dateStr = sdf.format(date);
+        dateStr = dateStr + " 23:59:59";
+        return dateStr;
+    }
+
+
 
     public static String dayDate(String format) {
         Date date = new Date();
@@ -382,7 +405,6 @@ public class DateUtil {
         String dateStr = sdf.format(date);
         return dateStr;
     }
-
 
     public static String dayStringDate() {
         Date date = new Date();

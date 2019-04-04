@@ -103,6 +103,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".community.activity.CommunityActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
@@ -328,6 +329,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".community.activity.ChangeManagerdActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".community.activity.MoneyFormatManagerActivity"
@@ -377,7 +379,9 @@
             android:name=".community.activity.YesterdSendPayActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".community.activity.SignatureActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
     </application>
 

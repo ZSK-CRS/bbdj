@@ -3,52 +3,108 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#ffffff"
-    android:orientation="vertical"
     android:layout_height="match_parent"
+    android:background="#f2f2f4"
+    android:orientation="vertical"
     tools:context=".community.activity.SignatureActivity">
+
+    <TextView
+        android:id="@+id/tv_handle_write"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:textColor="@color/grey_7"
+        android:text="以上交接的数量、重量双方确认无误后签字生效"
+        android:textSize="14sp" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="5dp"
-        android:layout_weight="1"
-       >
+        android:layout_marginRight="5dp"
+        android:layout_weight="1">
 
         <com.mt.bbdj.baseconfig.view.SignView
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:id="@+id/signView"
             android:layout_width="match_parent"
-            android:background="@drawable/rl_sign_bg"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/white"/>
 
-        <TextView
-            android:id="@+id/tv_handle_write"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="收货人"
-            android:textSize="23sp" />
+
+        <View
+            android:layout_centerInParent="true"
+            android:background="#f2f2f4"
+            android:layout_width="10dp"
+            android:layout_height="match_parent"/>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_weight="1">
+
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:text="驿站签字"
+                android:textColor="@color/grey_7"
+                android:textSize="14sp" />
+
+
+            <View
+                android:layout_centerInParent="true"
+                android:background="#f2f2f4"
+                android:layout_width="10dp"
+                android:layout_height="match_parent"/>
+
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center"
+                android:textColor="@color/grey_7"
+                android:text="收件员签字"
+                android:textSize="14sp" />
+
+
+        </LinearLayout>
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/tv_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
             android:background="@drawable/bg_tv_sign"
             android:gravity="center"
-            android:padding="15dp"
+            android:layout_marginLeft="100dp"
             android:text="擦除重签"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_skip"
@@ -57,10 +113,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="暂不采集，跳过此步骤"
-            android:textColor="@color/white"
+            android:textColor="@color/mainColor"
             android:textSize="12sp"
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
 
         <TextView
             android:id="@+id/tv_view"
@@ -68,22 +123,22 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingBottom="15dp"
             android:paddingTop="15dp"
+            android:paddingBottom="15dp"
             android:text=""
             android:textSize="18sp"
             android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_commit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:background="@drawable/bg_tv_sign"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:layout_marginRight="100dp"
+            android:background="@drawable/bg_tv_sign_1"
             android:gravity="center"
-            android:padding="15dp"
             android:text="确认签名"
-            android:textSize="18sp" />
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
     </LinearLayout>
 

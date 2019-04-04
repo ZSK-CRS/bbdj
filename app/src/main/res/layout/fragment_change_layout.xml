@@ -27,12 +27,12 @@
             android:textSize="14sp" />
 
         <TextView
-            android:layout_marginLeft="8dp"
             android:id="@+id/tv_number"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_marginLeft="8dp"
             android:gravity="center_vertical"
-            android:text="30"
+            android:text=""
             android:textColor="@color/mainColor"
             android:textSize="14sp" />
 

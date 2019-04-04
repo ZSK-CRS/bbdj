@@ -427,4 +427,9 @@ public class InterApi {
      */
     public static final String ACITON_REPORT_MONTH_REQUEST = "getMonthlyData1050";
 
+    /**
+     * 添加备注
+     */
+    public static final String ACTION_ADD_MARK_REQUEST = "saveHandoverContent980";
+
 }

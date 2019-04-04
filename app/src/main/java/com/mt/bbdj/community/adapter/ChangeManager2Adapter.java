@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mt.bbdj.R;
-import com.mt.bbdj.baseconfig.utls.DateUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -18,11 +17,11 @@ import java.util.List;
  * Date : 2019/3/2
  * Description :
  */
-public class ChangeManagerAdapter extends RecyclerView.Adapter<ChangeManagerAdapter.ChangeManagerViewHolder> {
+public class ChangeManager2Adapter extends RecyclerView.Adapter<ChangeManager2Adapter.ChangeManagerViewHolder> {
 
     private List<HashMap<String,String>> mList;
 
-    public ChangeManagerAdapter(List<HashMap<String,String>> mList) {
+    public ChangeManager2Adapter(List<HashMap<String,String>> mList) {
         this.mList = mList;
     }
 
@@ -49,22 +48,21 @@ public class ChangeManagerAdapter extends RecyclerView.Adapter<ChangeManagerAdap
         holder.tvWeight.setText(map.get("goods_weight")+"kg");
         String conntent = map.get("content");
         String isShowAddMark = map.get("isShowAddMark");
-        holder.tvAddMark.setVisibility(View.VISIBLE);
 
         //判断是否显示添加备注按钮
-        if ("0".equals(isShowAddMark)) {
+     /*   if ("0".equals(isShowAddMark)) {
             holder.tvAddMark.setVisibility(View.VISIBLE);
         } else{
             holder.tvAddMark.setVisibility(View.GONE);
-        }
+        }*/
 
         //是否显示备注布局
-        if ("".equals(conntent)) {
+       /* if ("".equals(conntent)) {
             holder.ll_mark.setVisibility(View.GONE);
         } else {
             holder.ll_mark.setVisibility(View.VISIBLE);
             holder.tvMark.setText(conntent);
-        }
+        }*/
 
         String type = map.get("type");
         if ("1".equals(type)) {

@@ -1,35 +1,17 @@
 package com.mt.bbdj.community.fragment;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.text.InputType;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.kongzue.dialog.listener.InputDialogOkButtonClickListener;
-import com.kongzue.dialog.util.InputInfo;
-import com.kongzue.dialog.v2.CustomDialog;
-import com.kongzue.dialog.v2.InputDialog;
-import com.kongzue.dialog.v2.Notification;
-import com.kongzue.dialog.v2.TipDialog;
 import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
@@ -41,16 +23,14 @@ import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
-import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
-import com.mt.bbdj.baseconfig.view.MyDecoration;
-import com.mt.bbdj.baseconfig.view.MyInputDialog;
 import com.mt.bbdj.baseconfig.view.SignView;
+import com.mt.bbdj.community.activity.PayforOrderFromShopingCardActivity;
 import com.mt.bbdj.community.activity.SignatureActivity;
+import com.mt.bbdj.community.adapter.ChangeManager2Adapter;
 import com.mt.bbdj.community.adapter.ChangeManagerAdapter;
-import com.mt.bbdj.community.adapter.RechargeRecodeAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -64,22 +44,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.security.Signature;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Author : ZSK
  * Date : 2019/3/2
  * Description :  交接
  */
-public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView.LoadingListener {
+public class ChangeManagerFragmnet2 extends BaseFragment implements XRecyclerView.LoadingListener {
 
     private int type = 1;
     private XRecyclerView recyclerView;
@@ -96,19 +70,13 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
     private boolean isFresh = true;
 
     private Button bt_singture;
-    private SignView signView;
-
-    private final int REQUEST_SEND_PICTURE = 100;   //上传签名文件
-    private final int REQUEST_CONFIRM_CHANGE = 200;   //确认交接
-    private final int REQUEST_ADD_MARK = 300;    //添加备注
-
-    private String filePath = android.os.Environment.getExternalStorageDirectory() + "/bbdj/sign/";
     private String starttime;
     private String endtime;
     private WaitDialog waitDialog;
 
-    public static ChangeManagerFragmnet getInstance(int type) {
-        ChangeManagerFragmnet cmf = new ChangeManagerFragmnet();
+
+    public static ChangeManagerFragmnet2 getInstance(int type) {
+        ChangeManagerFragmnet2 cmf = new ChangeManagerFragmnet2();
         cmf.type = type;
         return cmf;
     }
@@ -120,63 +88,12 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
         EventBus.getDefault().register(this);
         initParams();
         initView(view);
-        initListener();
         return view;
-    }
-
-    private void initListener() {
-        //签名
-        bt_singture.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showSelectDialog();
-            }
-        });
-
-        //添加备注
-        mAdapter.setOnItemAddmarkClick(new ChangeManagerAdapter.OnItemAddmarkClick() {
-            @Override
-            public void addMarkClick(int position) {
-                showAddMarkDialog(position);
-            }
-        });
-    }
-
-    private void showAddMarkDialog(int position) {
-        HashMap<String,String> map = mData.get(position);
-        MyInputDialog.show(getActivity(), "提示", "请输入备注信息", new InputDialogOkButtonClickListener() {
-            @Override
-            public void onClick(Dialog dialog, String inputText) {
-                map.put("content",inputText);
-                String mailing_id =  map.get("mailing_id");
-                // TODO: 2019/4/4 提交之后再显示
-                addMarkRequest(inputText,mailing_id);
-                dialog.dismiss();
-            }
-        });
-
-    }
-
-    private void addMarkRequest(String inputText,String mailing_id) {
-        if ("".equals(inputText)) {
-            return ;
-        }
-        Request<String> request = NoHttpRequest.addMarkRequest(user_id,mailing_id,inputText);
-        mRequestQueue.add(REQUEST_ADD_MARK,request,onResponseListener);
-    }
-
-    private void showSelectDialog() {
-        if (mData.size() == 0) {
-            ToastUtil.showShort("无交接数据！");
-            return;
-        }
-        Intent intent = new Intent(getActivity(), SignatureActivity.class);
-        startActivity(intent);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveMessage(TargetEvent targetEvent) {
-        if (targetEvent.getTarget() == 300) {
+        if (targetEvent.getTarget() == 301) {
             HashMap<String,String> data = (HashMap<String,String>)targetEvent.getObject();
             starttime = data.get("starttime");
             endtime = data.get("endtime");
@@ -186,88 +103,13 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
 
         //刷新自身
         if (targetEvent.getTarget() == TargetEvent.REFRESH_ALEADY_CHAGNE) {
-            String typeStr = targetEvent.getData();
-            type = Integer.parseInt(typeStr);
+           /* String typeStr = targetEvent.getData();
+            type = Integer.parseInt(typeStr);*/
+            type = 2;
             recyclerView.refresh();
         }
-
-        //签名图片的路径 发送
-        if (targetEvent.getTarget() == TargetEvent.SEND_SIGN_PICTURE) {
-            String signPicture = targetEvent.getData();
-            //直接上传
-            sendChangeRequest(signPicture);
-        }
-    }
-    private OnResponseListener<String> onResponseListener = new OnResponseListener<String>() {
-        @Override
-        public void onStart(int what) {
-
-        }
-
-        @Override
-        public void onSucceed(int what, Response<String> response) {
-            LogUtil.i("photoFile", "ChangeManagerFragmnet::" + response.get());
-            try {
-                JSONObject jsonObject = new JSONObject(response.get());
-                String code = jsonObject.get("code").toString();
-                String message = jsonObject.get("msg").toString();
-                if ("5001".equals(code)) {
-                    switch (what) {
-                        case REQUEST_CONFIRM_CHANGE:   //确认交接
-                            handldChangeResult(jsonObject);
-                            break;
-                        case REQUEST_ADD_MARK:    //添加备注
-                            handleAddmark(jsonObject);
-                            break;
-                    }
-                } else {
-                    ToastUtil.showShort(message);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                ToastUtil.showShort("当前网络不佳，请重试！");
-            }
-
-        }
-
-        @Override
-        public void onFailed(int what, Response<String> response) {
-
-        }
-
-        @Override
-        public void onFinish(int what) {
-
-        }
-    };
-
-    private void handleAddmark(JSONObject jsonObject) {
-        mAdapter.notifyDataSetChanged();
     }
 
-    private void handldChangeResult(JSONObject jsonObject) {
-        EventBus.getDefault().post(new TargetEvent(TargetEvent.REFRESH_ALEADY_CHAGNE,type+""));
-        ToastUtil.showShort("交接成功！");
-    }
-
-    private void handleSingntureResult(JSONObject jsonObject) throws JSONException {
-        JSONObject dataObject = jsonObject.getJSONObject("data");
-        String pictureUrl = dataObject.getString("picurl");
-        sendChangeRequest(pictureUrl);  //交接请求
-    }
-
-    private void sendChangeRequest(String pictureUrl) {
-        StringBuilder sb = new StringBuilder();
-        for (HashMap<String, String> map : mData) {
-            String mailing_id = map.get("mailing_id");
-            sb.append(mailing_id);
-            sb.append(",");
-        }
-        String cartId = sb.toString();
-        cartId = cartId.substring(0, cartId.lastIndexOf(","));
-        Request<String> request = NoHttpRequest.sendChangeRequest(user_id, pictureUrl, cartId);
-        mRequestQueue.add(REQUEST_CONFIRM_CHANGE, request, onResponseListener);
-    }
 
     private void initParams() {
         //初始化请求队列
@@ -295,14 +137,14 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
 
     private void requestData() {
         Request<String> request = NoHttpRequest.getChangeManagerRequest(user_id, express_id, type,starttime,endtime);
-        mRequestQueue.add(1, request, new OnResponseListener<String>() {
+        mRequestQueue.add(2, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
             }
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-                LogUtil.i("photoFile", "ChangeManagerFragmnet::" + response.get());
+                LogUtil.i("photoFile", "ChangeManagerFragmnet2::" + response.get());
                 try {
                     JSONObject jsonObject = new JSONObject(response.get());
                     String code = jsonObject.get("code").toString();
@@ -346,7 +188,7 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
                             map.put("type", type + "");
                             map.put("handover_time", DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm:ss", handover_time));
                             map.put("content",StringUtil.handleNullResultForString(content));
-                            map.put("isShowAddMark","0");    //表示显示添加按钮
+                            map.put("isShowAddMark","1");    //表示显示不添加按钮
                             mData.add(map);
                             map = null;
                         }
@@ -359,6 +201,7 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
 
             @Override
             public void onFailed(int what, Response<String> response) {
+
             }
 
             @Override
@@ -382,9 +225,8 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
         recyclerView.setLoadingListener(this);
         mAdapter = new ChangeManagerAdapter(mData);
         recyclerView.setAdapter(mAdapter);
-
-        bt_singture.setVisibility(type == 2 ? View.GONE : View.VISIBLE);
-        tv_title.setText(type == 2 ? "交接数量:" : "待交接数量:");
+        bt_singture.setVisibility(View.GONE);
+        tv_title.setText("交接数量:");
     }
 
     @Override

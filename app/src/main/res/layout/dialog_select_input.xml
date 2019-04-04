@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/bkg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="30dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_dialog_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:text="标题"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_dialog_tip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="中文内容"
+                android:textColor="@color/black"
+                android:textSize="13dp" />
+
+            <RelativeLayout
+                android:id="@+id/box_custom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"></RelativeLayout>
+
+            <EditText
+                android:id="@+id/txt_input"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/editbox_bkg_ios"
+                android:gravity="top"
+                android:paddingTop="3dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:hint="输入文本"
+                android:text=""
+                android:textColor="@color/grey_7"
+                android:textSize="14sp" />
+
+            <View
+                android:id="@+id/split_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_marginTop="5dp"
+                android:background="@color/grey_12" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/btn_selectNegative"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_dialog_left"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="取消"
+                    android:textColor="@color/ios_dlg_text"
+                    android:textSize="17dp" />
+
+                <View
+                    android:id="@+id/split_vertical"
+                    android:layout_width="1px"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_12" />
+
+                <TextView
+                    android:id="@+id/btn_selectPositive"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_dialog_right"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="确定"
+                    android:textColor="@color/ios_dlg_text"
+                    android:textSize="17dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

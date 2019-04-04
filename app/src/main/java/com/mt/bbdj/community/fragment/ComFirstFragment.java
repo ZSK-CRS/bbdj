@@ -13,6 +13,7 @@ import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -159,6 +160,7 @@ public class ComFirstFragment extends BaseFragment {
     private ProgressDialog mProgressBar;
 
     final String fileName = "bbdj.apk";
+    private boolean isGetData = false;
 
     public static ComFirstFragment getInstance() {
         ComFirstFragment comFirstFragment = new ComFirstFragment();
@@ -241,7 +243,6 @@ public class ComFirstFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        //更新界面的信息
         requestPannelMessage();
     }
 
@@ -249,6 +250,7 @@ public class ComFirstFragment extends BaseFragment {
         Request<String> request = NoHttpRequest.getPannelmessageRequest(user_id);
         mRequestQueue.add(REQUEST_PANNEL_MESSAGE, request, mResponseListener);
     }
+
 
     private void initData() {
 

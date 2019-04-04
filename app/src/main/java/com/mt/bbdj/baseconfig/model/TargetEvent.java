@@ -1,5 +1,7 @@
 package com.mt.bbdj.baseconfig.model;
 
+import java.util.HashMap;
+
 /**
  * Author : ZSK
  * Date : 2019/1/10
@@ -24,6 +26,7 @@ public class TargetEvent {
     public static int SEARCH_GLOBAL_SEND = 417;     //首页搜索内寄件
     public static int SEARCH_GLOBAL_PAI = 418;    //首页搜索派件
     public static int CLEAR_SEARCH_DATA = 419;    //清空首页搜索信息
+    public static int SEND_SIGN_PICTURE = 420;    //发送签名文件
 
     private int target;
 
