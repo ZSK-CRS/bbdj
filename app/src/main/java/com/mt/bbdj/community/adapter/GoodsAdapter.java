@@ -1,6 +1,7 @@
 package com.mt.bbdj.community.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,13 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.GoodsViewHol
 
     private Context mContext;
 
-    public GoodsAdapter(Context mContext,List<HashMap<String, String>> list) {
+    private int mPosition = -1;   //当前选中位置
+
+    public void setPosition(int position) {
+        this.mPosition = position;
+    }
+
+    public GoodsAdapter(Context mContext, List<HashMap<String, String>> list) {
         this.mData = list;
         this.mContext = mContext;
     }
@@ -48,6 +55,14 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.GoodsViewHol
             return;
         }
         holder.goodsName.setText(mData.get(position).get("name"));
+
+        if (mPosition == position) {
+            holder.goodsName.setBackgroundResource(R.drawable.bg_green_circle);
+            holder.goodsName.setTextColor(Color.parseColor("#ffffff"));
+        } else {
+            holder.goodsName.setBackgroundResource(R.drawable.tv_bg_grey_circle);
+            holder.goodsName.setTextColor(Color.parseColor("#353535"));
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +90,7 @@ public class GoodsAdapter extends RecyclerView.Adapter<GoodsAdapter.GoodsViewHol
         }
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onItemClick(int position);
     }
 }

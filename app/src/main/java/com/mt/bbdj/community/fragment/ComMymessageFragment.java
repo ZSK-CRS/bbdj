@@ -28,6 +28,7 @@ import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
+import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.activity.AboutAppActivity;
 import com.mt.bbdj.community.activity.BaseMessageActivity;
@@ -277,9 +278,9 @@ public class ComMymessageFragment extends BaseFragment {
                     String contact_number = dataObj.getString("contact_number");
                     String contact_email = dataObj.getString("contact_email");
                     String contact_account = dataObj.getString("contact_account");
-                    String birthday = dataObj.getString("birthday");
-                    String balance = dataObj.getString("balance");
-                    String min_balance = dataObj.getString("min_balance");    //境界余额
+                    String birthday = StringUtil.handleNullResultForNumber(dataObj.getString("birthday"));
+                    String balance = StringUtil.handleNullResultForNumber(dataObj.getString("balance"));
+                    String min_balance = StringUtil.handleNullResultForNumber(dataObj.getString("min_balance"));    //境界余额
                     UserBaseMessage userBaseMessage = new UserBaseMessage();
                     userBaseMessage.setUser_id(user_id);
                     userBaseMessage.setHeadimg(headimg);

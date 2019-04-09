@@ -109,7 +109,7 @@ public class ChangeManagerFragmnet extends BaseFragment implements XRecyclerView
 
     public static ChangeManagerFragmnet getInstance(int type) {
         ChangeManagerFragmnet cmf = new ChangeManagerFragmnet();
-        cmf.type = type;
+        cmf.type     = type;
         return cmf;
     }
 

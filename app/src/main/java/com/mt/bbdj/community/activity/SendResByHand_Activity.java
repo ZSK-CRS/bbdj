@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Editable;
@@ -15,7 +14,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.kongzue.dialog.v2.InputDialog;
 import com.kongzue.dialog.v2.MessageDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
@@ -42,8 +39,6 @@ import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MarginDecoration;
-import com.mt.bbdj.baseconfig.view.MyInputDialog;
-import com.mt.bbdj.baseconfig.view.MyMessageDialog;
 import com.mt.bbdj.community.adapter.GoodsAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
@@ -58,7 +53,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +62,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 //手动寄件
-public class SendResByHandActivity extends BaseActivity {
+public class SendResByHand_Activity extends BaseActivity {
 
     @BindView(R.id.iv_back)
     RelativeLayout ivBack;     //返回键
@@ -76,6 +70,16 @@ public class SendResByHandActivity extends BaseActivity {
     LinearLayout llSendMessage;    //选择寄件人
     @BindView(R.id.ll_receive_message)
     LinearLayout llReceiveMessage;   //选择收件人
+    @BindView(R.id.iv_send_one)
+    ImageView ivSendOne;
+    @BindView(R.id.iv_send_two)
+    ImageView ivSendTwo;
+    @BindView(R.id.iv_send_three)
+    ImageView ivSendThree;
+    @BindView(R.id.iv_send_four)
+    ImageView ivSendFour;
+    @BindView(R.id.iv_send_five)
+    ImageView ivSendFive;
     @BindView(R.id.tv_send_res)
     TextView tvSendRes;             //寄件人提示
     @BindView(R.id.tv_send_name)
@@ -98,7 +102,9 @@ public class SendResByHandActivity extends BaseActivity {
     LinearLayout llReceiveLayout;
 
     @BindView(R.id.fl_select_expressage)
-    LinearLayout flSelectExpressage;       //选择快递
+    FrameLayout flSelectExpressage;       //选择快递
+    @BindView(R.id.ll_expressage_title)
+    LinearLayout flexpressTitle;
     @BindView(R.id.ll_pressage_layot)
     LinearLayout llselectExpressage;      //显示快递
     @BindView(R.id.iv_select_ic)
@@ -111,31 +117,20 @@ public class SendResByHandActivity extends BaseActivity {
     @BindView(R.id.tv_goods_select)
     TextView tvGoodsSelect;
 
+    @BindView(R.id.tv_is_identification)
+    TextView isIdentification;    //认证标识
+    @BindView(R.id.rl_ic_layout)
+    RelativeLayout rlIcLayout;
+    @BindView(R.id.et_weight)
+    EditText etWeight;
     @BindView(R.id.et_mark)
     EditText etMark;
-    @BindView(R.id.ll_select_layout)
-    LinearLayout llselectLayout;
-    @BindView(R.id.rl_add_send_address)
-    RelativeLayout rlSendAddress;   //寄件人地址
-    @BindView(R.id.rl_add_receive_address)
-    RelativeLayout rlReceiveAddress;   //收件人地址
-    @BindView(R.id.tv_send_detail_address)
-    TextView tvSendDetailAddress;
-    @BindView(R.id.tv_receive_detail_address)
-    TextView tvReceiveDetailAddress;
-    @BindView(R.id.tv_identify_state)
-    TextView tvIdentifyState;   //认证状态
-    @BindView(R.id.ll_identification_layout)
-    LinearLayout identificationLayout;    //认证标题
-    @BindView(R.id.tv_cannel_title)
-    RelativeLayout cannelTitle;    //取消标题
 
     @BindView(R.id.tv_money)
     TextView tvMoney;       //预估价格
     @BindView(R.id.tv_time)
     TextView tvTime;   //花费时间
 
-    private boolean isIdentifyState = false;   //认证状态
 
     private RequestQueue mRequestQueue;
     private HkDialogLoading dialogLoading;
@@ -153,18 +148,11 @@ public class SendResByHandActivity extends BaseActivity {
     private View selectView;
 
     private GoodsAdapter goodsAdapter;
-    private int mGoodsPosition = -1;
-    private String selectGoodsName = "";
-    private String selectWeight = "";
 
 
     private final int SELECT_SEND_MESSAGE = 1;      //寄件人
     private final int SELECT_RECEIVE_MESSAGE = 2;    //收件人
     private final int SELECT_IDENTIFICATION = 3;    //身份认证
-    private final int ADD_SEND_ADDRESS = 4;     //添加寄件人
-    private final int ADD_RECEIVE_ADDRESS = 5;   //添加收件人
-    private final int CHANGE_SEND_ADDRESS = 6;    //修改寄件人
-    private final int CHANEE_RECEIVE_ADDRESS = 7;   //修改收件人
 
     private final int REQUEST_GOODS_REQUEST = 101;   //请求物品类型的请求
     private final int REQUEST_IS_IDENTIFY_REQUEST = 102;    //是否实名
@@ -188,20 +176,13 @@ public class SendResByHandActivity extends BaseActivity {
 
     private String mWeight = "";   //重量
     private String user_id = "";
-    private String mCountry;
-    private TextView etWeightOther;
-    private TextView weithOne;
-    private TextView weithTwo;
-    private TextView weithThree;
-    private TextView weightOther;
-    private TextView[] weights;
-    private TextView weihtTag;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        setContentView(R.layout.activity_send_res_by_hand);
+        setContentView(R.layout.activity_send_res_by_hand_);
         ButterKnife.bind(this);
         EventBus.getDefault().register(this);
         initView();
@@ -210,10 +191,25 @@ public class SendResByHandActivity extends BaseActivity {
     }
 
     private void initListener() {
-        cannelTitle.setOnClickListener(new View.OnClickListener() {
+        etWeight.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                identificationLayout.setVisibility(View.GONE);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                mWeight = s.toString();
+                if ("".equals(mWeight) || "0".equals(mWeight)) {
+                    return;
+                }
+                mWeight = Integer.parseInt(mWeight) + "";
+                requestPredictMoney();
             }
         });
     }
@@ -250,87 +246,35 @@ public class SendResByHandActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.iv_back, R.id.ll_send_message, R.id.ll_receive_message,
-            R.id.ll_pressage_layot, R.id.ll_select_goods, R.id.fl_select_expressage,
-            R.id.bt_commit, R.id.rl_add_send_address, R.id.rl_add_receive_address, R.id.tv_send_res,
-            R.id.tv_receive_res, R.id.ll_receive_layout, R.id.ll_send_layout, R.id.tv_identify_one,
-            R.id.tv_identify_state})
+    @OnClick({R.id.iv_back, R.id.ll_send_message, R.id.ll_receive_message, R.id.fl_select_expressage,
+            R.id.ll_pressage_layot, R.id.ll_expressage_title, R.id.ll_select_goods, R.id.ll_identification,
+            R.id.bt_commit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
-            case R.id.rl_add_send_address:     //选择寄件人地址
+            case R.id.ll_send_message:     //选择寄件人地址
                 selectMessageAbout(SELECT_SEND_MESSAGE);
                 break;
-            case R.id.rl_add_receive_address:  //选择收件人地址
+            case R.id.ll_receive_message:  //选择收件人地址
                 selectMessageAbout(SELECT_RECEIVE_MESSAGE);
                 break;
-            case R.id.ll_pressage_layot:  //选择快递公司列表
-            case R.id.fl_select_expressage:
+            case R.id.fl_select_expressage:   //选择快递公司列表
+            case R.id.ll_pressage_layot:
+            case R.id.ll_expressage_title:
                 selectExpressage();
                 break;
             case R.id.ll_select_goods:     //选择商品类型
                 showSelectTypeDialog();
                 break;
-            case R.id.tv_identify_one:    //身份认证
-            case R.id.tv_identify_state:    //身份认证
+            case R.id.ll_identification:    //身份认证
                 identificationID();
                 break;
             case R.id.bt_commit:
                 commitAllData();
                 break;
-            case R.id.tv_send_res:    //添加寄件人地址
-                addSendAddress();
-                break;
-            case R.id.ll_send_layout:    //修改寄件人地址
-                changeSendAddress();
-                break;
-            case R.id.tv_receive_res:    //添加收件人地址
-                addReceiveAddress();
-                break;
-            case R.id.ll_receive_layout:   //修改收件人地址
-                changeReceiveAddress();
-                break;
-
         }
-    }
-
-
-    private void changeReceiveAddress() {
-        Intent intent = new Intent(this, ChangeMessageActivity.class);
-        intent.putExtra("book_id", book_id);
-        intent.putExtra("book_name", tvReceiveName.getText().toString());
-        intent.putExtra("book_telephone", tvReceivePhone.getText().toString());
-        intent.putExtra("book_region", tvReceiveAddress.getText().toString());
-        intent.putExtra("book_address", tvReceiveDetailAddress.getText().toString());
-        intent.putExtra("book_province", start_province);
-        intent.putExtra("book_city", start_city);
-        intent.putExtra("book_area", mCountry);
-        startActivityForResult(intent, CHANEE_RECEIVE_ADDRESS);
-    }
-
-    private void addReceiveAddress() {
-        Intent intent = new Intent(this, ChangeMessageActivity.class);
-        startActivityForResult(intent, ADD_RECEIVE_ADDRESS);
-    }
-
-    private void changeSendAddress() {
-        Intent intent = new Intent(this, ChangeMessageActivity.class);
-        intent.putExtra("book_id", book_id);
-        intent.putExtra("book_name", tvSendName.getText().toString());
-        intent.putExtra("book_telephone", tvSendPhone.getText().toString());
-        intent.putExtra("book_region", tvSendAddress.getText().toString());
-        intent.putExtra("book_address", tvSendDetailAddress.getText().toString());
-        intent.putExtra("book_province", end_province);
-        intent.putExtra("book_city", end_city);
-        intent.putExtra("book_area", mCountry);
-        startActivityForResult(intent, CHANGE_SEND_ADDRESS);
-    }
-
-    private void addSendAddress() {
-        Intent intent = new Intent(this, ChangeMessageActivity.class);
-        startActivityForResult(intent, ADD_SEND_ADDRESS);
     }
 
 
@@ -340,14 +284,20 @@ public class SendResByHandActivity extends BaseActivity {
         if (list != null && list.size() != 0) {
             user_id = list.get(0).getUser_id();
         }
+        String weight = etWeight.getText().toString();
         String mark = etMark.getText().toString();
 
         if (!isRightAboutOrderMessage()) {
             return;
         }
+        if ("".equals(weight)) {
+            ToastUtil.showShort("请填写重量！");
+            return;
+        }
+
 
         Request<String> request = NoHttpRequest.commitOrderRequest(user_id, express_id,
-                send_id, receive_id, type_id, mWeight, mark);
+                send_id, receive_id, type_id, weight, mark);
         mRequestQueue.add(REQUEST_COMMIT_ORDER, request, mOnresponseListener);
     }
 
@@ -357,7 +307,7 @@ public class SendResByHandActivity extends BaseActivity {
             ToastUtil.showShort("请完善信息！");
             return false;
         }
-        if (!isIdentifyState) {
+        if (!"已认证".equals(isIdentification.getText().toString())) {
             ToastUtil.showShort("请先实名认证！");
             return false;
         }
@@ -370,8 +320,8 @@ public class SendResByHandActivity extends BaseActivity {
             return;
         }
 
-        if (isIdentifyState) {
-            return;
+        if ("已认证".equals(isIdentification.getText().toString())) {
+            return ;
         }
         Intent intent = new Intent(this, IdentificationActivity.class);
         intent.putExtra("come_type", true);
@@ -393,43 +343,30 @@ public class SendResByHandActivity extends BaseActivity {
             return;
         }
         switch (requestCode) {
-            case SELECT_SEND_MESSAGE:     //选择寄件人地址
+            case SELECT_SEND_MESSAGE:     //添加寄件人地址
                 handleSendMessage(data);
                 break;
-            case SELECT_RECEIVE_MESSAGE:   //选择收件人地址
+            case SELECT_RECEIVE_MESSAGE:   //添加收件人地址
                 handleReceiveMessage(data);
                 break;
             case SELECT_IDENTIFICATION:    //身份认证
                 handleIdentification(data);
                 break;
-            case ADD_SEND_ADDRESS:    //添加寄件人地址
-                handleSendMessage(data);
-                break;
-            case ADD_RECEIVE_ADDRESS:   //添加收件人地址
-                handleReceiveMessage(data);
-                break;
-            case CHANEE_RECEIVE_ADDRESS:    //修改收件人地址
-                handleReceiveMessage(data);
-                break;
-            case CHANGE_SEND_ADDRESS:    //修改收件人地址
-                handleSendMessage(data);
-                break;
         }
     }
 
-
     private void handleIdentification(Intent data) {
-        requestIdentification();
+        isIdentification.setText("已认证");
     }
 
     //选择快递公司
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveMessage(ExpressageEvent expressageEvent) {
         flSelectExpressage.setVisibility(View.GONE);
+        flexpressTitle.setVisibility(View.GONE);
         llselectExpressage.setVisibility(View.VISIBLE);
         ivSelectLogo.setVisibility(View.VISIBLE);
         tvExpressageName.setText(expressageEvent.getExpress_name());
-        llselectLayout.setVisibility(View.GONE);
         express_id = expressageEvent.getExpress_id();
         Glide.with(this)
                 .load(expressageEvent.getExpress_logo())
@@ -441,14 +378,15 @@ public class SendResByHandActivity extends BaseActivity {
         if (data == null) {
             return;
         }
+
         end_province = data.getStringExtra("book_province");
         end_city = data.getStringExtra("book_city");
+
         receive_id = data.getStringExtra("book_id");
         tvReceiveRes.setVisibility(View.GONE);
         llReceiveLayout.setVisibility(View.VISIBLE);
         tvReceiveName.setText(data.getStringExtra("book_name"));
-        tvReceiveAddress.setText(data.getStringExtra("book_region"));
-        tvReceiveDetailAddress.setText(data.getStringExtra("book_address"));
+        tvReceiveAddress.setText(data.getStringExtra("book_region") + data.getStringExtra("book_address"));
         tvReceivePhone.setText(data.getStringExtra("book_telephone"));
         requestPredictMoney();   //获取预估价格
     }
@@ -459,14 +397,12 @@ public class SendResByHandActivity extends BaseActivity {
         }
         start_province = data.getStringExtra("book_province");
         start_city = data.getStringExtra("book_city");
-        mCountry = data.getStringExtra("book_area");
         book_id = data.getStringExtra("book_id");
         send_id = data.getStringExtra("book_id");
         tvSendRes.setVisibility(View.GONE);
         llSendLayout.setVisibility(View.VISIBLE);
         tvSendName.setText(data.getStringExtra("book_name"));
-        tvSendAddress.setText(data.getStringExtra("book_region"));
-        tvSendDetailAddress.setText(data.getStringExtra("book_address"));
+        tvSendAddress.setText(data.getStringExtra("book_region") + data.getStringExtra("book_address"));
         tvSendPhone.setText(data.getStringExtra("book_telephone"));
         requestIdentification();   //是否认证过
         requestPredictMoney();   //获取预估价格
@@ -501,6 +437,7 @@ public class SendResByHandActivity extends BaseActivity {
 
 
     private void initView() {
+        initLogoImage();
         tvSendRes.setVisibility(View.VISIBLE);
         llSendLayout.setVisibility(View.GONE);
 
@@ -508,6 +445,10 @@ public class SendResByHandActivity extends BaseActivity {
         llReceiveLayout.setVisibility(View.GONE);
 
         initPopuStyle();    //初始化popuwindow的样式
+    }
+
+    private void initLogoImage() {
+        logoImages = new ImageView[]{ivSendOne, ivSendTwo, ivSendThree, ivSendFour, ivSendFive};
     }
 
 
@@ -527,9 +468,7 @@ public class SendResByHandActivity extends BaseActivity {
                     handleRequestData(what, jsonObject);
                 } else {
                     if (what == REQUEST_IS_IDENTIFY_REQUEST) {
-                        tvIdentifyState.setVisibility(View.VISIBLE);
-                        identificationLayout.setVisibility(View.VISIBLE);
-                        isIdentifyState = false;
+                        isIdentification.setText("未认证");
                     }
                 }
             } catch (JSONException e) {
@@ -585,9 +524,7 @@ public class SendResByHandActivity extends BaseActivity {
     }
 
     private void isIdentify(JSONObject jsonObject) throws JSONException {
-        tvIdentifyState.setVisibility(View.GONE);
-        identificationLayout.setVisibility(View.GONE);
-        isIdentifyState = true;
+        isIdentification.setText("已认证");
     }
 
     private void setGoodsData(JSONObject jsonObject) throws JSONException {
@@ -608,7 +545,7 @@ public class SendResByHandActivity extends BaseActivity {
             mGoodsData.add(map);
         }
 
-        int account = expressArray.length() > 5 ? 5 : expressArray.length();
+        int account  = expressArray.length() > 5?5:expressArray.length();
 
         for (int j = 0; j < account; j++) {
             JSONObject expressObj = expressArray.getJSONObject(j);
@@ -617,7 +554,7 @@ public class SendResByHandActivity extends BaseActivity {
             List<ExpressLogo> expressLogos = mExpressLogoDao.queryBuilder()
                     .where(ExpressLogoDao.Properties.Express_id.eq(expressId)).list();
             if (expressLogos == null || expressLogos.size() == 0) {
-                return;
+                return ;
             }
             ExpressLogo expressLogo = expressLogos.get(0);
             if (expressLogo == null) {
@@ -626,7 +563,17 @@ public class SendResByHandActivity extends BaseActivity {
                 logoPaths[j] = expressLogo.getLogoLocalPath();
             }
         }
+
+        setLogo();   //设置logo
         goodsAdapter.notifyDataSetChanged();
+    }
+
+    private void setLogo() {
+        for (int i = 0; i < 5; i++) {
+            Glide.with(this)
+                    .load(logoPaths[i])
+                    .into(logoImages[i]);
+        }
     }
 
     private void initPopuStyle() {
@@ -635,39 +582,6 @@ public class SendResByHandActivity extends BaseActivity {
         } else {
             selectView = getLayoutInflater().inflate(R.layout.pop_goods_type_layout, null);
             myGridView = selectView.findViewById(R.id.gv_goods);
-            TextView tvSure = selectView.findViewById(R.id.sure);
-            TextView tvcannel = selectView.findViewById(R.id.cannel);
-            initWeightListenre(selectView);   //重量选择
-
-            tvcannel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupWindow.dismiss();
-                }
-            });
-
-
-            tvSure.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ("".equals(mWeight)) {
-                        mWeight = etWeightOther.getText().toString();
-                        if ("".equals(mWeight)) {
-                            ToastUtil.showShort("请选择重量！");
-                            return;
-                        }
-                    }
-                    if (mGoodsPosition == -1) {
-                        ToastUtil.showShort("请选择物品类型！");
-                        return;
-                    }
-
-                    tvGoodsSelect.setText(selectGoodsName + " " + mWeight + " kg");
-                    requestPredictMoney();
-                    popupWindow.dismiss();
-                }
-            });
-
             initRecycler();
             popupWindow = new PopupWindow(selectView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             //设置动画
@@ -682,71 +596,10 @@ public class SendResByHandActivity extends BaseActivity {
             layout_pop_close.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //  popupWindow.dismiss();
+                    popupWindow.dismiss();
                 }
             });
         }
-    }
-
-    private void initWeightListenre(View selectView) {
-        weithOne = selectView.findViewById(R.id.tv_weight_one);
-        weithTwo = selectView.findViewById(R.id.tv_weight_two);
-        weithThree = selectView.findViewById(R.id.tv_weight_three);
-        weightOther = selectView.findViewById(R.id.tv_other);
-        etWeightOther = selectView.findViewById(R.id.id_other_weight);
-        weights = new TextView[]{weithOne, weithTwo, weithThree, weightOther};
-        weihtTag = selectView.findViewById(R.id.tv_weiht_tag);
-
-        weithOne.setOnClickListener(mWeightClickListenr);
-        weithTwo.setOnClickListener(mWeightClickListenr);
-        weithThree.setOnClickListener(mWeightClickListenr);
-        weightOther.setOnClickListener(mWeightClickListenr);
-    }
-
-    private View.OnClickListener mWeightClickListenr = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()) {
-                case R.id.tv_weight_one:
-                    mWeight = "1";
-                    setWightState(0);
-                    break;
-                case R.id.tv_weight_two:
-                    mWeight = "2";
-                    setWightState(1);
-                    break;
-                case R.id.tv_weight_three:
-                    mWeight = "3";
-                    setWightState(2);
-                    break;
-                case R.id.tv_other:
-                    setWightState(3);
-                    mWeight = "";
-                    break;
-            }
-        }
-    };
-
-
-    //设置重量选择按钮的状态
-    public void setWightState(int position) {
-        restoreWeithState();    //重置选择状态
-        TextView weightTextView = weights[position];
-        weightTextView.setBackgroundResource(R.drawable.bg_green_circle);
-        weightTextView.setTextColor(Color.parseColor("#ffffff"));
-        if (position == 3) {
-            etWeightOther.setVisibility(View.VISIBLE);
-            weihtTag.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private void restoreWeithState() {
-        for (TextView weitht : weights) {
-            weitht.setBackgroundResource(R.drawable.tv_bg_grey_circle);
-            weitht.setTextColor(Color.parseColor("#353535"));
-        }
-        etWeightOther.setVisibility(View.INVISIBLE);
-        weihtTag.setVisibility(View.INVISIBLE);
     }
 
     private void initRecycler() {
@@ -754,17 +607,15 @@ public class SendResByHandActivity extends BaseActivity {
         myGridView.setAdapter(goodsAdapter);
         myGridView.addItemDecoration(new MarginDecoration(this));
         myGridView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        goodsAdapter.notifyDataSetChanged();
         goodsAdapter.setOnItemClickListener(new GoodsAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                mGoodsPosition = position;
                 HashMap<String, String> map = mGoodsData.get(position);
                 String goodsName = map.get("name");
-                selectGoodsName = goodsName;
                 type_id = map.get("goods_id");
-                goodsAdapter.setPosition(position);
-                // popupWindow.dismiss();
-                goodsAdapter.notifyDataSetChanged();
+                tvGoodsSelect.setText(goodsName);
+                popupWindow.dismiss();
             }
         });
     }

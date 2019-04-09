@@ -212,7 +212,6 @@ public class MyInputDialog extends ModalBaseDialog {
                 rootView = LayoutInflater.from(context).inflate(R.layout.dialog_select_input, null);
                 alertDialog.setView(rootView);
                 kongzueDialogHelper.show(fragmentManager, "kongzueDialog");
-                
                 window.setWindowAnimations(R.style.iOSAnimStyle);
                 bkg = (RelativeLayout) rootView.findViewById(R.id.bkg);
                 txtDialogTitle = rootView.findViewById(R.id.txt_dialog_title);

@@ -110,7 +110,6 @@ public class ChangeMessageActivity extends AppCompatActivity {
 
     }
 
-
     private void initParams() {
         mIntent = getIntent();
         book_id = mIntent.getStringExtra("book_id");
@@ -183,7 +182,6 @@ public class ChangeMessageActivity extends AppCompatActivity {
         if (!isRightAboutMessage(realName, telephone, region, address)) {
             return;
         }
-
         Request<String> request = NoHttpRequest.addAddressBook(user_id, realName, telephone, mProvince,mCity,mCountry, address, mType + "");
         mRequestQueue.add(TYPE_ADD_ADDRESS, request, mResponseListener);
     }
@@ -221,15 +219,26 @@ public class ChangeMessageActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(response.get());
                 String code = jsonObject.get("code").toString();
                 String msg = jsonObject.get("msg").toString();
+                JSONObject  data = jsonObject.getJSONObject("data");
+                String book_id = data.getString("book_id");
                 ToastUtil.showShort(msg);
                 if ("5001".equals(code)) {
-                    setResult(RESULT_OK);
+                    Intent intent = new Intent();
+                    intent.putExtra("book_id",book_id);
+                    intent.putExtra("book_name",etInputName.getText().toString());
+                    intent.putExtra("book_telephone",etInputPhone.getText().toString());
+                    intent.putExtra("book_region",tvSelectGenelAddress.getText().toString());
+                    intent.putExtra("book_address",tvSelectDetailAddress.getText().toString());
+                    intent.putExtra("book_province",mProvince);
+                    intent.putExtra("book_city",mCity);
+                    intent.putExtra("book_area",mCountry);
+                    setResult(RESULT_OK,intent);
                     finish();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 dialogLoading.cancel();
-                ToastUtil.showShort("上传失败，请重试！");
+                ToastUtil.showShort("提交失败，请重试！");
             }
             dialogLoading.cancel();
         }

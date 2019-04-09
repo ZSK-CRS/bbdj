@@ -7,24 +7,180 @@
     android:gravity="bottom"
     android:orientation="vertical">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <TextView
+            android:id="@+id/cannel"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/mainColor"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/sure"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="@color/mainColor"
+            android:textSize="14sp" />
+    </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="-5dp"
         android:background="@color/whilte"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
-        android:text="选择物品类型"
+        android:text="物品类型"
+        android:textColor="@color/grey_7"
         android:textSize="14sp" />
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/gv_goods"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp"
-        android:paddingBottom="15dp"
         android:background="@color/whilte"
-        android:id="@+id/gv_goods">
+        android:paddingLeft="20dp"
+        android:paddingBottom="15dp">
 
     </android.support.v7.widget.RecyclerView>
 
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="5dp"
+        android:text="@string/no_trans"
+        android:textColor="@color/grey_7"
+        android:textSize="13sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="-5dp"
+        android:background="@color/whilte"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="预估重量"
+        android:textColor="@color/grey_7"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:id="@+id/tv_weight_one"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/tv_bg_grey_circle"
+            android:gravity="center"
+            android:text="1kg"
+            android:textColor="@color/grey_7"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/tv_weight_two"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/tv_bg_grey_circle"
+            android:gravity="center"
+            android:text="2kg"
+            android:textColor="@color/grey_7"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/tv_weight_three"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/tv_bg_grey_circle"
+            android:gravity="center"
+            android:text="3kg"
+            android:textColor="@color/grey_7"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="@color/white"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/tv_other"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@drawable/tv_bg_grey_circle"
+            android:gravity="center"
+            android:text="其他"
+            android:textColor="@color/grey_7"
+            android:textSize="13sp" />
+
+        <EditText
+            android:id="@+id/id_other_weight"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:singleLine="true"
+            android:hint="请输入重量"
+            android:inputType="number|numberDecimal"
+            android:textColor="@color/grey_7"
+            android:textSize="14sp"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_weiht_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="kg"
+            android:textColor="@color/grey_7"
+            android:textSize="15sp"
+            android:visibility="invisible" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@color/white" />
 
 </LinearLayout>

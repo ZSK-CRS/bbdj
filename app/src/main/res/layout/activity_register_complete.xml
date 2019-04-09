@@ -405,6 +405,7 @@
                 android:layout_marginTop="15dp">
 
                 <ImageView
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -416,7 +417,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:gravity="center_vertical"
-                    android:text="店面照片"
+                    android:text="店面照片（选填）"
                     android:textColor="@color/grey_2"
                     android:textSize="15sp"
                     android:textStyle="bold" />

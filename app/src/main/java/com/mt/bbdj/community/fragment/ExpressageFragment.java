@@ -149,7 +149,6 @@ public class ExpressageFragment extends BaseFragment implements XRecyclerView.Lo
 
 
     private void requestExpressage() {
-
         Request<String> request = NoHttpRequest.getExpressageRequest(user_id, mType + "");
         mRequestQueue.add(1, request, new OnResponseListener<String>() {
             @Override
