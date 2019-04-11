@@ -71,7 +71,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
             android:gravity="center"
-            android:text="(5)"
+            android:text="(0/30)"
             android:textColor="@color/whilte"
             android:textSize="15sp" />
 
@@ -124,7 +124,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:text="250267"
+            android:text=""
             android:textColor="@color/grey_7"
             android:textSize="15sp" />
     </LinearLayout>

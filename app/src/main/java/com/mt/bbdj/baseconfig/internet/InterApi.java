@@ -11,9 +11,11 @@ public class InterApi {
      * 服务器地址
      */
     // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
-     public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+    // public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+     public static final String SERVER_ADDRESS_ENTER = "http://192.168.1.116/Pie/";
+
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
-    // public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
+      public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
     // public static final String SERVER_ADDRESS = "http://web1.mingtaikeji.cn/BbdjApi/";
 
 
@@ -431,5 +433,25 @@ public class InterApi {
      * 添加备注
      */
     public static final String ACTION_ADD_MARK_REQUEST = "saveHandoverContent980";
+
+    /**
+     * 检测快递公司id
+     */
+    public static final String ACTION_CHECK_WAY_BILL = "TestingExpress2010";
+
+    /**
+     * 全部入库
+     */
+    public static final String ACTION_ENTER_RECORDE_REQUEST = "WarehousingData2010";
+
+    /**
+     * 入库列表
+     */
+    public static final String ACTION_ENTER_REPERTORY_REQUEST = "getWarehouselist2010";
+
+    /**
+     * 出库列表
+     */
+    public static final String ACTION_OUT_REPERTORY_REQUEST = "getOutWarehouselist2010";
 
 }

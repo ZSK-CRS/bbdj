@@ -617,7 +617,7 @@ public class BluetoothSearchActivity extends BaseActivity {
             HPRTPrinterHelper.Expanded("443", "940", bitmap4, (byte) 0);//二维码
             InputStream inbmp3 = this.getResources().getAssets().open("ic_logo_mini.png");
             Bitmap bitmap3 = BitmapFactory.decodeStream(inbmp3);
-            HPRTPrinterHelper.Expanded("20", "975", bitmap3, (byte) 0);//第二联 兵兵logo
+            HPRTPrinterHelper.Expanded("20", "960", bitmap3, (byte) 0);//第二联 兵兵logo
 
             HPRTPrinterHelper.AutLine("65","365",500,3,false,false,Receiver_address + Receiver_address1);
             HPRTPrinterHelper.AutLine("65","748",500,3,false,false,Receiver_address + Receiver_address1);
@@ -670,10 +670,10 @@ public class BluetoothSearchActivity extends BaseActivity {
                 fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
                 break;
-            case "100102":    //顺丰
+          /*  case "100102":    //顺丰
                 fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
-                break;
+                break;*/
             case "100103":    //韵达
                 fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
@@ -698,9 +698,9 @@ public class BluetoothSearchActivity extends BaseActivity {
                 fastLogoBig = "ic_yousu_big.png";
                 fastLogoMini = "ic_yousu_mini.png";
                 break;
-            case "100109":    //圆通
-                fastLogoBig = "ic_yuantong_big.png";
-                fastLogoMini = "ic_yuantong_mini.png";
+            case "100102":    //圆通
+                fastLogoBig = "ic_yuantong_big.jpg";
+                fastLogoMini = "ic_yuantong_mini.jpg";
                 break;
             case "100110":    //百世
                 fastLogoBig = "ic_baishi_big.png";

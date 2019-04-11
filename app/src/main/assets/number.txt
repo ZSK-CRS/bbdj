@@ -1,10 +1,8 @@
-! 0 200 200 1360 1
+! 0 200 200 500 1
 PAGE-WIDTH 580
 
-SETBOLD 1
-TEXT 8 0 420 35 快递寄件平台
-SETBOLD 0
-
+TEXT 5 0 320 10 驿站代码 [stageCode]
+TEXT 5 0 320 45 客服热线 [servicePhone]
 LINE 0 80 558 80 2
 LINE 0 218 558 218 2
 LINE 0 278 558 278 2
@@ -34,7 +32,7 @@ LINE 435 1310 435 1340 2
 CENTER
 SETBOLD 3
 SETMAG 2 2
-TEXT 20 0 0 233 [packageCode]
+TEXT 0 0 0 233 [packageCode]
 ;Restore default font sizes
 SETMAG 1 1
 SETBOLD 1
@@ -85,9 +83,7 @@ TEXT 3 0 65 728 [Receiver] [Receiver_Phone]
 TEXT 3 0 65  808 [Sender] [Sender_Phone]
 TEXT 3 0 65  828 [Sender_address_all]
 
-TEXT 8 0 110 1050 客服热线 [servicePhone]
-TEXT 5 0 280 970 驿站代码
-TEXT 5 0 275 1005 [stageCode]
+TEXT 8 0 240 1000 让生活更便捷！
 TEXT 55 0 448 1062 兵兵到家公众号
 SETBOLD 0
 TEXT 3 0 65  878 内容品名:[goodName]

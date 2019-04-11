@@ -32,10 +32,10 @@ import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.BluetoothMessage;
 import com.mt.bbdj.baseconfig.db.gen.BluetoothMessageDao;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
+import com.mt.bbdj.baseconfig.model.PrintNumberModel;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
-import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
@@ -59,7 +59,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import HPRTAndroidSDKA300.HPRTPrinterHelper;
 import HPRTAndroidSDKA300.PublicFunction;
@@ -67,7 +66,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class BluetoothSearchAgainActivity extends BaseActivity {
+public class BluetoothNumberActivity extends BaseActivity {
 
     @BindView(R.id.iv_back)
     RelativeLayout ivBack;            //返回
@@ -103,7 +102,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     private SharedPreferences mShared;
     private String fastLogoBig;
     private String fastLogoMini;
-    private String printType;     //表示进入此界面的途径，用于打印后的界面刷新  “1” ： 待收件界面   “2” ：待打印界面
+    private String printType;     //表示进入此界面的途径，用于打印后的界面刷新  “1” ： 待收件界面   “2” ：待打印界面  "3" : 已完界面
 
     Handler handler = new Handler() {
         @Override
@@ -118,8 +117,6 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
                 printPanel();    //打印面单
                 //打印完成之后刷新任务列表
                 refreshDataList();
-                mPrintTimer.schedule(mTimerTask, 5000);
-
             }
         }
     };
@@ -130,6 +127,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_search);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         initData();
         initSetting();
@@ -138,18 +136,17 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     }
 
 
-    TimerTask mTimerTask = new TimerTask() {
-        @Override
-        public void run() {
-            EventBus.getDefault().post(new TargetEvent(TargetEvent.DESTORY));
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveMessage(TargetEvent targetEvent) {
+        if (targetEvent.getTarget() == TargetEvent.DESTORY) {
             finish();
         }
-    };
+    }
 
     private void initSetting() {
         String paper = PFun.ReadSharedPreferencesData("papertype");
         if (!"".equals(paper)) {
-            BluetoothSearchAgainActivity.paper = paper;
+            BluetoothNumberActivity.paper = paper;
         }
     }
 
@@ -159,6 +156,11 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
         initClickListenr();   //给列表的中的蓝牙设备创建监听事件
     }
 
+
+    private void actionToPrintDetail() {
+        Intent intent = new Intent(this, PrintPreviewActivity.class);
+        startActivity(intent);
+    }
 
     private void refreshDataList() {
         if ("1".equals(printType)) {
@@ -176,7 +178,8 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
         mPairehAdapter.setConnectClickListener(new BluetoothSearchAdapter.OnItemConnectClickListener() {
             @Override
             public void onConnect(int position) {
-                dialogLoading = WaitDialog.show(BluetoothSearchAgainActivity.this,"连接中...").setCanCancel(true);
+                dialogLoading = WaitDialog.show(BluetoothNumberActivity.this,"连接中...").setCanCancel(true);
+
                 try {
                     if (mBtAdapter.isDiscovering()) {
                         mBtAdapter.cancelDiscovery();
@@ -228,6 +231,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
                 if (mBtAdapter == null) {
                     return;
                 }
+
                 Set<BluetoothDevice> bondedDevices = mBtAdapter.getBondedDevices();
                 for (BluetoothDevice device : bondedDevices) {
                     unpairDevice(device);
@@ -243,7 +247,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             @Override
             public void onClick(int position) {
                 mNewDeviceData.remove(position);
-                mNewAdapter.setData(mPaireDevicesData);
+                mNewAdapter.setData(mNewDeviceData);
             }
         });
 
@@ -251,7 +255,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
         mNewAdapter.setConnectClickListener(new BluetoothSearchAdapter.OnItemConnectClickListener() {
             @Override
             public void onConnect(int position) {
-                dialogLoading = WaitDialog.show(BluetoothSearchAgainActivity.this,"连接中...").setCanCancel(true);
+                dialogLoading = WaitDialog.show(BluetoothNumberActivity.this,"连接中...").setCanCancel(true);
                 try {
                     if (mBtAdapter.isDiscovering()) {
                         mBtAdapter.cancelDiscovery();
@@ -358,10 +362,10 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
 
         if (Build.VERSION.SDK_INT >= 23) {
             //校验是否已具有模糊定位权限
-            if (ContextCompat.checkSelfPermission(BluetoothSearchAgainActivity.this,
+            if (ContextCompat.checkSelfPermission(BluetoothNumberActivity.this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)
                     != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(BluetoothSearchAgainActivity.this,
+                ActivityCompat.requestPermissions(BluetoothNumberActivity.this,
                         new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                         110);
             } else {
@@ -519,7 +523,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     private String Sender_Phone;
     private String Sender_address;
     private String Sender_address1;
-    private String number;     //驿站代码
+    private String number;     //"123123"
     private String goods_name;     //商品名称
     private String weight;     //计费重量
     private String express_id;     //快递公司id
@@ -527,34 +531,17 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     private String code;     //标识码
 
     private void initPannelData() {
-        mail_id = mShared.getString("mail_id", "");
-        barcode = mShared.getString("yundanhao", "");
-        date = mShared.getString("transit", "");
-        siteName = mShared.getString("place", "");
-        Receiver = mShared.getString("collect_name", "");
-        Receiver_Phone = mShared.getString("collect_phone", "");
-        Receiver_address = mShared.getString("collect_region", "");
-        Receiver_address1 = mShared.getString("collect_address", "");
-        packageCode = mShared.getString("code", "");
+        Intent intent = getIntent();
+        PrintNumberModel printData = (PrintNumberModel) intent.getSerializableExtra("printData");
+        List<PrintNumberModel.EnterModel> dataList = printData.getDataList();
 
-        Sender = mShared.getString("send_name", "");
-        Sender_Phone = mShared.getString("send_phone", "");
-        Sender_address = mShared.getString("send_region", "");
-        Sender_address1 = mShared.getString("send_address", "");
-        number = mShared.getString("number", "");
-        goods_name = mShared.getString("goods_name", "");
-        weight = mShared.getString("weight", "");
-        express_id = mShared.getString("express_id", "");
-        printTime = DateUtil.getCurrentTimeFormat("yyyy-MM-dd");
     }
-
-
 
     private void printPanel() {
         try {
             HashMap<String, String> pum = new HashMap<String, String>();
-            // pum.put("[packageCode]", packageCode);
-            pum.put("[packageCode]", packageCode);
+           // pum.put("[packageCode]", packageCode);
+            pum.put("[packageCode]", "192土左旗");
             pum.put("[barcode]", barcode);
             pum.put("[date]", date);
             pum.put("[siteName]", siteName);
@@ -605,7 +592,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             HPRTPrinterHelper.Expanded("443", "940", bitmap4, (byte) 0);//二维码
             InputStream inbmp3 = this.getResources().getAssets().open("ic_logo_mini.png");
             Bitmap bitmap3 = BitmapFactory.decodeStream(inbmp3);
-            HPRTPrinterHelper.Expanded("20", "960", bitmap3, (byte) 0);//第二联 兵兵logo
+            HPRTPrinterHelper.Expanded("20", "975", bitmap3, (byte) 0);//第二联 兵兵logo
 
             HPRTPrinterHelper.AutLine("65","365",500,3,false,false,Receiver_address + Receiver_address1);
             HPRTPrinterHelper.AutLine("65","748",500,3,false,false,Receiver_address + Receiver_address1);
@@ -625,11 +612,27 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             InputStream inbmp2 = this.getResources().getAssets().open(fastLogoBig);
             Bitmap bitmap2 = BitmapFactory.decodeStream(inbmp2);
             HPRTPrinterHelper.Expanded("310", "1135", bitmap2, (byte) 0);//第三联 快递公司logo
-            if ("1".equals(BluetoothSearchActivity.paper)) {
+            if ("1".equals(BluetoothNumberActivity.paper)) {
                 HPRTPrinterHelper.Form();
             }
             HPRTPrinterHelper.Form();
             HPRTPrinterHelper.Print();
+
+            int endStatus = HPRTPrinterHelper.getEndStatus(16);//获取打印状态
+            HPRTPrinterHelper.openEndStatic(false);//关闭
+
+            if (endStatus == 0) {
+                //从已处理界面传递过来
+                if ("3".equals(printType)) {
+                    finish();
+                } else {
+                    //打印成功，跳转到打印详情列表
+                    actionToPrintDetail();
+                }
+            } else {
+                ToastUtil.showShort("打印失败！");
+            }
+
 
         } catch (Exception e) {
             Log.e("HPRTSDKSample", (new StringBuilder("Activity_Main --> PrintSampleReceipt ")).append(e.getMessage()).toString());
@@ -642,7 +645,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
                 fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
                 break;
-         /*   case "100102":    //顺丰
+          /*  case "100102":    //顺丰
                 fastLogoBig = "ic_zhongtong_big.png";
                 fastLogoMini = "ic_zhongtong_mini.png";
                 break;*/
@@ -671,8 +674,8 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
                 fastLogoMini = "ic_yousu_mini.png";
                 break;
             case "100102":    //圆通
-                fastLogoBig = "ic_yuantong_big.png";
-                fastLogoMini = "ic_yuantong_mini.png";
+                fastLogoBig = "ic_yuantong_big.jpg";
+                fastLogoMini = "ic_yuantong_mini.jpg";
                 break;
             case "100110":    //百世
                 fastLogoBig = "ic_baishi_big.png";
@@ -708,6 +711,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
         }
@@ -725,6 +729,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             if (mScaneceiver != null) {
                 unregisterReceiver(mScaneceiver);
             }
+
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -753,5 +758,7 @@ public class BluetoothSearchAgainActivity extends BaseActivity {
             AndPermission.defaultSettingDialog(this, 110).show();
         }
     }
+
+
 
 }

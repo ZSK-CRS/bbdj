@@ -54,9 +54,9 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
     private TextView tv_no_address;
     private XRecyclerView rlRepertory;
     private boolean isFresh = true;
-    private List<HashMap<String,String>> mList;
+    private List<HashMap<String, String>> mList;
     private RepertoryAdapter mAdapter;
-    private TextView tvFast,tvLast,tvCurrentTime;
+    private TextView tvFast, tvLast, tvCurrentTime;
     private RequestQueue mRequestQueue;
     private DaoSession mDaoSession;
     private UserBaseMessageDao mUserMessageDao;
@@ -64,19 +64,20 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
     private String express_id;
     private String keyword;
     private int mPage = 1;
-    private String start_time;
+    private String start_time, end_time;
     private String currentTime;
     private int mType = 0;
 
     public static RepertoryFragment getInstance(int mType) {
         RepertoryFragment rf = new RepertoryFragment();
         rf.mType = mType;
-        return  rf;
+        return rf;
     }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view  = inflater.inflate(R.layout.fragment_repertory,container,false);
+        View view = inflater.inflate(R.layout.fragment_repertory, container, false);
         EventBus.getDefault().register(this);
         initData();
         initView(view);
@@ -88,8 +89,8 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
         mAdapter.setOnItemClickListener(new RepertoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(getActivity(),RepertoryDetailActivity.class);
-                intent.putExtra("type",mType);
+                Intent intent = new Intent(getActivity(), RepertoryDetailActivity.class);
+                intent.putExtra("type", mType);
                 startActivity(intent);
             }
         });
@@ -99,13 +100,13 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
     @Override
     public void onResume() {
         super.onResume();
-       // rlRepertory.refresh();
+        rlRepertory.refresh();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveMessage(TargetEvent targetEvent) {
         if (targetEvent.getTarget() == 300 || targetEvent.getTarget() == 301) {
-           // rlRepertory.refresh();
+            // rlRepertory.refresh();
         }
     }
 
@@ -121,7 +122,8 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
             user_id = list.get(0).getUser_id();
         }
 
-        start_time = DateUtil.getTadayStartTimeStamp();
+        start_time = DateUtil.getTadayStartTimeZeroStamp();
+        end_time = DateUtil.getTadayEndTimeLastStamp();
 
         currentTime = DateUtil.dayDate();   //当前时间
     }
@@ -138,24 +140,12 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
         rlRepertory = view.findViewById(R.id.rl_repertory);
         mList = new ArrayList<>();
         mAdapter = new RepertoryAdapter(getActivity(), mList);
-        initListData();
+        // initListData();
         rlRepertory.setFocusable(false);
         rlRepertory.setNestedScrollingEnabled(false);
         rlRepertory.setLoadingListener(this);
         rlRepertory.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         rlRepertory.setAdapter(mAdapter);
-    }
-
-    private void initListData() {
-        for (int i = 0;i<10;i++) {
-            HashMap<String,String> map = new HashMap<>();
-            map.put("order","74551255621232");
-            map.put("express","中通快递");
-            map.put("time","2019-03-12 12:33:08");
-            map.put("tag_number","121526");
-            mList.add(map);
-        }
-        mAdapter.notifyDataSetChanged();
     }
 
     private View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -182,9 +172,13 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
         }
     };
 
-    public void  requestData(){
-        Request<String> request = NoHttpRequest.getFinishEventRequest(user_id, express_id, keyword,
-                mPage + "", start_time);
+    public void requestData() {
+        Request<String> request = null;
+        if (mType == 0) {
+            request = NoHttpRequest.getEnterRepertoryRequest(user_id, start_time, end_time, express_id, mPage + "");
+        } else {
+            request = NoHttpRequest.getOutRepertoryRequest(user_id, start_time, end_time, express_id, mPage + "");
+        }
         mRequestQueue.add(1, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -198,7 +192,6 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
                     JSONObject jsonObject = new JSONObject(response.get());
                     String code = jsonObject.get("code").toString();
                     String msg = jsonObject.get("msg").toString();
-                    JSONArray jsonArray = jsonObject.getJSONArray("data");
                     if (isFresh) {
                         mList.clear();
                         rlRepertory.refreshComplete();
@@ -206,11 +199,31 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
                         rlRepertory.loadMoreComplete();
                     }
                     if ("5001".equals(code)) {
+                        JSONObject jsonObj = jsonObject.getJSONObject("data");
+                        JSONArray jsonArray = jsonObj.getJSONArray("list");
 
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            String express_name = jsonObject1.getString("express_name");
+                            String number = jsonObject1.getString("number");
+                            String codeTag = jsonObject1.getString("code");
+                            String time = jsonObject1.getString("time");
+                            String effectiveTime = DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm:ss", time);
+                            String is_signatory = jsonObject1.getString("is_signatory");
+
+                            HashMap<String, String> map = new HashMap<>();
+                            map.put("order", number);
+                            map.put("express", express_name);
+                            map.put("time", effectiveTime);
+                            map.put("tag_number", codeTag);
+                            mList.add(map);
+                            map = null;
+                        }
+                        mAdapter.notifyDataSetChanged();
                     } else {
                         ToastUtil.showShort(msg);
                     }
-                    mAdapter.notifyDataSetChanged();
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -254,13 +267,15 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
     @Override
     public void onRefresh() {
         isFresh = true;
-        rlRepertory.refreshComplete();
+        mPage = 1;
+        requestData();
     }
 
     @Override
     public void onLoadMore() {
         isFresh = false;
-        rlRepertory.loadMoreComplete();
+        mPage++;
+        requestData();
     }
 
     @Override

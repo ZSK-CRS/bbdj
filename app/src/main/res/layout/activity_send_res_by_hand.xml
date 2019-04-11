@@ -167,6 +167,7 @@
                 <TextView
                     android:id="@+id/tv_identify_state"
                     android:layout_marginLeft="5dp"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingLeft="6dp"
@@ -176,6 +177,21 @@
                     android:text="未认证"
                     android:textColor="@color/white"
                     android:background="@drawable/shap_tv_bg_4"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/tv_identify_state_have"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="6dp"
+                    android:paddingRight="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:text="已认证"
+                    android:textColor="@color/white"
+                    android:background="@drawable/shap_tv_bg_5"
                     android:textSize="13sp" />
             </LinearLayout>
 

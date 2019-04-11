@@ -124,7 +124,9 @@ public class SendResByHandActivity extends BaseActivity {
     @BindView(R.id.tv_receive_detail_address)
     TextView tvReceiveDetailAddress;
     @BindView(R.id.tv_identify_state)
-    TextView tvIdentifyState;   //认证状态
+    TextView tvIdentifyState;   //未认证状态
+    @BindView(R.id.tv_identify_state_have)
+    TextView tvIdentifyStateHave;    //已认证
     @BindView(R.id.ll_identification_layout)
     LinearLayout identificationLayout;    //认证标题
     @BindView(R.id.tv_cannel_title)
@@ -528,6 +530,7 @@ public class SendResByHandActivity extends BaseActivity {
                 } else {
                     if (what == REQUEST_IS_IDENTIFY_REQUEST) {
                         tvIdentifyState.setVisibility(View.VISIBLE);
+                        tvIdentifyStateHave.setVisibility(View.GONE);
                         identificationLayout.setVisibility(View.VISIBLE);
                         isIdentifyState = false;
                     }
@@ -586,6 +589,7 @@ public class SendResByHandActivity extends BaseActivity {
 
     private void isIdentify(JSONObject jsonObject) throws JSONException {
         tvIdentifyState.setVisibility(View.GONE);
+        tvIdentifyStateHave.setVisibility(View.VISIBLE);
         identificationLayout.setVisibility(View.GONE);
         isIdentifyState = true;
     }

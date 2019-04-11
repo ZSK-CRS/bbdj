@@ -157,15 +157,15 @@ public class MailingdetailActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.iv_back,R.id.bt_first_save,R.id.bt_cannel_order})
+    @OnClick({R.id.iv_back, R.id.bt_first_save, R.id.bt_cannel_order})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
                 finish();
                 break;
             case R.id.bt_first_save:
-                Intent intent = new Intent(MailingdetailActivity.this,BluetoothSearchActivity.class);
-                intent.putExtra("printType","3");
+                Intent intent = new Intent(MailingdetailActivity.this, BluetoothSearchActivity.class);
+                intent.putExtra("printType", "3");
                 startActivity(intent);
                 finish();
                 break;
@@ -175,11 +175,17 @@ public class MailingdetailActivity extends AppCompatActivity {
         }
     }
 
+    private boolean isEffectiveChange = false;
+
     private void selectCannelReason() {
-        Intent intent1 = new Intent(MailingdetailActivity.this,CauseForcannelOrderActivity.class);
-        intent1.putExtra("user_id",user_id);
-        intent1.putExtra("mail_id",mail_id);
-        intent1.putExtra("type","MailingdetailActivity");
+        if (!isEffectiveChange) {
+            ToastUtil.showShort("快递公司已揽收不可取消！");
+            return;
+        }
+        Intent intent1 = new Intent(MailingdetailActivity.this, CauseForcannelOrderActivity.class);
+        intent1.putExtra("user_id", user_id);
+        intent1.putExtra("mail_id", mail_id);
+        intent1.putExtra("type", "MailingdetailActivity");
         startActivity(intent1);
     }
 
@@ -198,6 +204,8 @@ public class MailingdetailActivity extends AppCompatActivity {
         String goods_name = jsonObject.getString("goods_name");
         String weight = jsonObject.getString("weight");
         String content = jsonObject.getString("content");
+        String handover_states = jsonObject.getString("handover_states");     // 1 :未交接   2： 已交接
+        isEffectiveChange = "1".equals(handover_states) ? true : false;
         tvOrderExpress.setText(express_name);   //快递公司
         tvOrderTime.setText(DateUtil.changeStampToStandrdTime("yyyy-MMM-dd HH:mm", time));  //下单时间
         tvSendName.setText(send_name);
@@ -211,7 +219,8 @@ public class MailingdetailActivity extends AppCompatActivity {
         tvGoodsWeiht.setText(weight);
         tvGoodsMark.setText(content);
 
-      //  JSONObject dataObj = jsonObject.getJSONObject("data");
+
+        //  JSONObject dataObj = jsonObject.getJSONObject("data");
         String mail_id = jsonObject.getString("mail_id");       //订单id
         String express_id = jsonObject.getString("express_id");     //快递公司id
         String number = jsonObject.getString("number");      //驿站代码

@@ -78,7 +78,7 @@ public class WaitCollectAdapter extends RecyclerView.Adapter<WaitCollectAdapter.
         holder.sendPhone.setText(map.get("send_phone"));
         holder.sendAddress.setText(map.get("send_raddress"));
         String create_time = map.get("create_time");
-        create_time = DateUtil.changeStampToStandrdTime("HH:mm",create_time);
+        create_time = DateUtil.changeStampToStandrdTime("MM-dd HH:mm",create_time);
         holder.sendTime.setText(create_time);
         holder.receivePerson.setText(map.get("collect_name"));
         holder.receiveAddress.setText(map.get("collect_address"));

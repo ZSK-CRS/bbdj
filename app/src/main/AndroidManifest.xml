@@ -374,6 +374,9 @@
             android:name=".community.activity.YesterdSendPayActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".community.activity.BluetoothNumberActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".community.activity.SignatureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

@@ -2255,4 +2255,111 @@ public class NoHttpRequest {
         return request;
     }
 
+    /**
+     * 检测快递的运单号
+     * @param user_id    用户id
+     * @param express_id  快递公司id
+     * @param number  运单号
+     * @return
+     */
+    public static Request<String> checkWaybillRequest(String user_id,String express_id,String number) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS_ENTER
+                + InterApi.ACTION_CHECK_WAY_BILL, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_CHECK_WAY_BILL);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("express_id", express_id);
+        request.add("number", number);
+        return request;
+    }
+
+    /**
+     * 全部入库
+     * @param user_id   用户id
+     * @param express_id  快递公司
+     * @param str_data  数据
+     * @return
+     */
+    public static Request<String> enterRecordeRequest(String user_id,String express_id,String str_data) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS_ENTER
+                + InterApi.ACTION_ENTER_RECORDE_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_ENTER_RECORDE_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("express_id", express_id);
+        request.add("str_data", str_data);
+        return request;
+    }
+
+    /**
+     * 获取入库的列表
+     * @param user_id   用户id
+     * @param starttime   开始时间
+     * @param endtime  结束时间
+     * @param express_id  快递公司id
+     * @param page 页数
+     * @return
+     */
+    public static Request<String> getEnterRepertoryRequest(String user_id,String starttime,String endtime,String express_id,String page) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS_ENTER
+                + InterApi.ACTION_ENTER_REPERTORY_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_ENTER_REPERTORY_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("express_id", express_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
+        request.add("page", page);
+        return request;
+    }
+
+    /**
+     * 获取出库的列表
+     * @param user_id   用户id
+     * @param starttime   开始时间
+     * @param endtime  结束时间
+     * @param express_id  快递公司id
+     * @param page 页数
+     * @return
+     */
+    public static Request<String> getOutRepertoryRequest(String user_id,String starttime,String endtime,String express_id,String page) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS_ENTER
+                + InterApi.ACTION_OUT_REPERTORY_REQUEST, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_OUT_REPERTORY_REQUEST);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("user_id", user_id);
+        request.add("express_id", express_id);
+        request.add("starttime", starttime);
+        request.add("endtime", endtime);
+        request.add("page", page);
+        return request;
+    }
 }
