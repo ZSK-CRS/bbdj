@@ -94,6 +94,7 @@ public class RepertoryActivity extends BaseActivity {
         });
     }
 
+
     private void showSelectPop(View view) {
         popupWindow.showAsDropDown(view);
     }
@@ -135,6 +136,7 @@ public class RepertoryActivity extends BaseActivity {
         mFastData.clear();
         //查询快递公司的信息
         List<ExpressLogo> expressLogoList = mExpressLogoDao.queryBuilder()
+                .where(ExpressLogoDao.Properties.Property.eq(1))
                 .where(ExpressLogoDao.Properties.States.eq(1)).list();
         HashMap<String, String> map = new HashMap<>();
         map.put("express", "全部");
@@ -180,7 +182,6 @@ public class RepertoryActivity extends BaseActivity {
 
     private void initView() {
         initFragment();    //初始化填充的fragment
-
         initSelectPop();    //初始化快递公司列表
     }
 

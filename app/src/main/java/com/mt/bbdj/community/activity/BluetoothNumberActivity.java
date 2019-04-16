@@ -33,11 +33,13 @@ import com.mt.bbdj.baseconfig.db.BluetoothMessage;
 import com.mt.bbdj.baseconfig.db.gen.BluetoothMessageDao;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.model.PrintNumberModel;
+import com.mt.bbdj.baseconfig.model.PrintTagModel;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
+import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.adapter.BluetoothSearchAdapter;
 import com.yanzhenjie.permission.AndPermission;
@@ -102,7 +104,6 @@ public class BluetoothNumberActivity extends BaseActivity {
     private SharedPreferences mShared;
     private String fastLogoBig;
     private String fastLogoMini;
-    private String printType;     //表示进入此界面的途径，用于打印后的界面刷新  “1” ： 待收件界面   “2” ：待打印界面  "3" : 已完界面
 
     Handler handler = new Handler() {
         @Override
@@ -114,14 +115,21 @@ public class BluetoothNumberActivity extends BaseActivity {
             } else {
                 String bluetoothName = (String) msg.obj;
                 tvMateMache.setText(bluetoothName);
-                printPanel();    //打印面单
-                //打印完成之后刷新任务列表
-                refreshDataList();
+
+                for (HashMap<String,String> data : dataList) {
+                    String code = data.get("code");
+                    String qrcode = data.get("qrcode");
+                    code = StringUtil.handleNullResultForString(code);
+                    qrcode = StringUtil.handleNullResultForString(qrcode);
+                    printPanel(code,qrcode);    //打印面单
+                }
             }
         }
     };
 
     private Timer mPrintTimer;
+    private List<HashMap<String, String>> dataList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,23 +170,13 @@ public class BluetoothNumberActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void refreshDataList() {
-        if ("1".equals(printType)) {
-            //刷新“待收件”界面
-            EventBus.getDefault().post(new TargetEvent(0));
-        } else if ("2".equals(printType)) {
-            //刷新“待打印”界面
-            EventBus.getDefault().post(new TargetEvent(2));
-        }
-    }
-
 
     private void initClickListenr() {
         //已配对的列表
         mPairehAdapter.setConnectClickListener(new BluetoothSearchAdapter.OnItemConnectClickListener() {
             @Override
             public void onConnect(int position) {
-                dialogLoading = WaitDialog.show(BluetoothNumberActivity.this,"连接中...").setCanCancel(true);
+                dialogLoading = WaitDialog.show(BluetoothNumberActivity.this, "连接中...").setCanCancel(true);
 
                 try {
                     if (mBtAdapter.isDiscovering()) {
@@ -255,7 +253,7 @@ public class BluetoothNumberActivity extends BaseActivity {
         mNewAdapter.setConnectClickListener(new BluetoothSearchAdapter.OnItemConnectClickListener() {
             @Override
             public void onConnect(int position) {
-                dialogLoading = WaitDialog.show(BluetoothNumberActivity.this,"连接中...").setCanCancel(true);
+                dialogLoading = WaitDialog.show(BluetoothNumberActivity.this, "连接中...").setCanCancel(true);
                 try {
                     if (mBtAdapter.isDiscovering()) {
                         mBtAdapter.cancelDiscovery();
@@ -333,9 +331,6 @@ public class BluetoothNumberActivity extends BaseActivity {
         thisCon = this.getApplicationContext();
         mDaoSession = GreenDaoManager.getInstance().getSession();
         mBluetoothDao = mDaoSession.getBluetoothMessageDao();
-
-        mShared = SharedPreferencesUtil.getSharedPreference();
-        printType = mShared.getString("printType", "1");
 
         PFun = new PublicFunction(thisCon);
 
@@ -510,59 +505,20 @@ public class BluetoothNumberActivity extends BaseActivity {
         }
     };
 
-    private String packageCode;      //标识码
-    private String barcode;     //运单号
-    private String date;    //标识码和日期
-    private String siteName;    //中转站
-    private String mail_id;    //订单号
-    private String Receiver;
-    private String Receiver_Phone;
-    private String Receiver_address;
-    private String Receiver_address1;
-    private String Sender;
-    private String Sender_Phone;
-    private String Sender_address;
-    private String Sender_address1;
-    private String number;     //"123123"
-    private String goods_name;     //商品名称
-    private String weight;     //计费重量
-    private String express_id;     //快递公司id
-    private String printTime;     //打印时间
-    private String code;     //标识码
-
     private void initPannelData() {
         Intent intent = getIntent();
-        PrintNumberModel printData = (PrintNumberModel) intent.getSerializableExtra("printData");
-        List<PrintNumberModel.EnterModel> dataList = printData.getDataList();
-
+        PrintTagModel printData = (PrintTagModel) intent.getSerializableExtra("printData");
+        dataList = printData.getData();
     }
 
-    private void printPanel() {
+    private void printPanel(String code,String qrcode) {
         try {
             HashMap<String, String> pum = new HashMap<String, String>();
-           // pum.put("[packageCode]", packageCode);
-            pum.put("[packageCode]", "192土左旗");
-            pum.put("[barcode]", barcode);
-            pum.put("[date]", date);
-            pum.put("[siteName]", siteName);
-            pum.put("[Receiver]", Receiver);
-            pum.put("[Receiver_Phone]", Receiver_Phone);
-            pum.put("[Receiver_address]", Receiver_address);
-            pum.put("[Receiver_address_all]", Receiver_address + Receiver_address1);
-            pum.put("[Receiver_address1]", Receiver_address1);
-            pum.put("[Sender]", Sender);
-            pum.put("[Sender_Phone]",  Sender_Phone);
-            pum.put("[Sender_address]",  Sender_address);
-            pum.put("[Sender_address_all]", Sender_address + Sender_address1);
-            pum.put("[Sender_address1]", Sender_address1);
-            pum.put("[wight]",weight);
-            pum.put("[printTime]", printTime);
-            pum.put("[stageCode]",number);
-            pum.put("[goodName]", goods_name);
-            pum.put("[servicePhone]", "400-775-0008");
+            // pum.put("[packageCode]", packageCode);
+            pum.put("[tag]", code);
             Set<String> keySet = pum.keySet();
             Iterator<String> iterator = keySet.iterator();
-            InputStream afis = this.getResources().getAssets().open("ZhongTong.txt");//打印模版放在assets文件夹里
+            InputStream afis = this.getResources().getAssets().open("number.txt");//打印模版放在assets文件夹里
             String path = new String(InputStreamToByte(afis), "utf-8");//打印模版以utf-8无bom格式保存
             while (iterator.hasNext()) {
                 String string = (String) iterator.next();
@@ -576,45 +532,14 @@ public class BluetoothNumberActivity extends BaseActivity {
 
             InputStream inbmp = this.getResources().getAssets().open("ic_logo_mini.png");
             Bitmap bitmap = BitmapFactory.decodeStream(inbmp);
-            HPRTPrinterHelper.Expanded("20", "10", bitmap, (byte) 0);//第一联 顶部兵兵logo
+            HPRTPrinterHelper.Expanded("35", "30", bitmap, (byte) 0);//第一联 顶部兵兵logo
 
-            InputStream inbmp6 = this.getResources().getAssets().open("ic_send_logo.png");
-            Bitmap bitmap6 = BitmapFactory.decodeStream(inbmp6);
-            HPRTPrinterHelper.Expanded("525", "100", bitmap6, (byte) 0);// 第一联 派
-            InputStream inbmp7 = this.getResources().getAssets().open("ic_receive_logo.png");
-            Bitmap bitmap7 = BitmapFactory.decodeStream(inbmp7);
-            HPRTPrinterHelper.Expanded("525", "675", bitmap7, (byte) 0);// 第二联 收
-            InputStream inbmp8 = this.getResources().getAssets().open("ic_post_logo.png");
-            Bitmap bitmap8 = BitmapFactory.decodeStream(inbmp8);
-            HPRTPrinterHelper.Expanded("525", "1135", bitmap8, (byte) 0);// 第三联 寄
-            InputStream inbmp4 = this.getResources().getAssets().open("ic_code.png");
-            Bitmap bitmap4 = BitmapFactory.decodeStream(inbmp4);
-            HPRTPrinterHelper.Expanded("443", "940", bitmap4, (byte) 0);//二维码
-            InputStream inbmp3 = this.getResources().getAssets().open("ic_logo_mini.png");
-            Bitmap bitmap3 = BitmapFactory.decodeStream(inbmp3);
-            HPRTPrinterHelper.Expanded("20", "975", bitmap3, (byte) 0);//第二联 兵兵logo
-
-            HPRTPrinterHelper.AutLine("65","365",500,3,false,false,Receiver_address + Receiver_address1);
-            HPRTPrinterHelper.AutLine("65","748",500,3,false,false,Receiver_address + Receiver_address1);
-
-            fastLogoBig = "";
-            fastLogoMini = "";
-
-            setLogoData();   //设置logo
-            InputStream inbmp5 = this.getResources().getAssets().open(fastLogoMini);
-            Bitmap bitmap5 = BitmapFactory.decodeStream(inbmp5);
-            HPRTPrinterHelper.Expanded("410", "505", bitmap5, (byte) 0);//第一联 快递公司logo
-
-            InputStream inbmp1 = this.getResources().getAssets().open(fastLogoBig);
-            Bitmap bitmap1 = BitmapFactory.decodeStream(inbmp1);
-            HPRTPrinterHelper.Expanded("20", "605", bitmap1, (byte) 0);// 第二联 快递公司logo
-
-            InputStream inbmp2 = this.getResources().getAssets().open(fastLogoBig);
-            Bitmap bitmap2 = BitmapFactory.decodeStream(inbmp2);
-            HPRTPrinterHelper.Expanded("310", "1135", bitmap2, (byte) 0);//第三联 快递公司logo
             if ("1".equals(BluetoothNumberActivity.paper)) {
                 HPRTPrinterHelper.Form();
             }
+
+            HPRTPrinterHelper.PrintQR(HPRTPrinterHelper.BARCODE, "340", "55", "2", "6", qrcode);
+
             HPRTPrinterHelper.Form();
             HPRTPrinterHelper.Print();
 
@@ -622,65 +547,14 @@ public class BluetoothNumberActivity extends BaseActivity {
             HPRTPrinterHelper.openEndStatic(false);//关闭
 
             if (endStatus == 0) {
-                //从已处理界面传递过来
-                if ("3".equals(printType)) {
-                    finish();
-                } else {
-                    //打印成功，跳转到打印详情列表
-                    actionToPrintDetail();
-                }
+                //打印成功，跳转到打印详情列表
+               // finish();
             } else {
                 ToastUtil.showShort("打印失败！");
             }
 
-
         } catch (Exception e) {
             Log.e("HPRTSDKSample", (new StringBuilder("Activity_Main --> PrintSampleReceipt ")).append(e.getMessage()).toString());
-        }
-    }
-
-    private void setLogoData() {
-        switch (express_id) {
-            case "100101":    //中通
-                fastLogoBig = "ic_zhongtong_big.png";
-                fastLogoMini = "ic_zhongtong_mini.png";
-                break;
-          /*  case "100102":    //顺丰
-                fastLogoBig = "ic_zhongtong_big.png";
-                fastLogoMini = "ic_zhongtong_mini.png";
-                break;*/
-            case "100103":    //韵达
-                fastLogoBig = "ic_zhongtong_big.png";
-                fastLogoMini = "ic_zhongtong_mini.png";
-                break;
-            case "100104":    //申通
-                fastLogoBig = "ic_shentong_big.png";
-                fastLogoMini = "ic_shentong_mini.png";
-                break;
-            case "100105":    //德邦
-                fastLogoBig = "ic_shentong_big.png";
-                fastLogoMini = "ic_shentong_mini.png";
-                break;
-            case "100106":    //天天
-                fastLogoBig = "ic_tiantian_big.png";
-                fastLogoMini = "ic_tiantian_mini.png";
-                break;
-            case "100107":    //EMS
-                fastLogoBig = "ic_tiantian_big.png";
-                fastLogoMini = "ic_tiantian_mini.png";
-                break;
-            case "100108":    //优速
-                fastLogoBig = "ic_yousu_big.png";
-                fastLogoMini = "ic_yousu_mini.png";
-                break;
-            case "100102":    //圆通
-                fastLogoBig = "ic_yuantong_big.jpg";
-                fastLogoMini = "ic_yuantong_mini.jpg";
-                break;
-            case "100110":    //百世
-                fastLogoBig = "ic_baishi_big.png";
-                fastLogoMini = "ic_baishi_mini.png";
-                break;
         }
     }
 
@@ -758,7 +632,6 @@ public class BluetoothNumberActivity extends BaseActivity {
             AndPermission.defaultSettingDialog(this, 110).show();
         }
     }
-
 
 
 }

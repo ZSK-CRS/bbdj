@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
+import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
@@ -32,6 +34,7 @@ import com.mt.bbdj.baseconfig.utls.SoundHelper;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MarginDecoration;
 import com.mt.bbdj.baseconfig.view.MyDecoration;
+import com.mt.bbdj.baseconfig.view.MyPopuwindow;
 import com.mt.bbdj.community.adapter.EnterManagerAdapter;
 import com.mt.bbdj.community.adapter.SimpleStringAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -64,6 +67,8 @@ public class OutManagerActivity extends CaptureActivity {
     private TextView expressSelect;    //快递公司选择
     private RecyclerView recyclerView;
     private RelativeLayout ivBack;    //返回
+    private TextView tv_out_number;
+    private TextView tvOut;    //出库
     private List<HashMap<String, String>> mList = new ArrayList<>();
 
     private boolean isContinuousScan = true;
@@ -71,49 +76,32 @@ public class OutManagerActivity extends CaptureActivity {
     private String user_id;
     private RequestQueue mRequestQueue;
     private int packageCode = 1060204;
+    private WaitDialog dialogLoading;
+    private List<String> mTempList = new ArrayList<>();//临时数据
 
-    private PopupWindow popupWindow;
+    private MyPopuwindow popupWindow;
 
     private List<HashMap<String, String>> mFastData = new ArrayList<>();    //快递公司
     private ExpressLogoDao mExpressLogoDao;
+    private String express_id;
+
+    private final int CHECK_WAY_BILL_STATE = 300;    //检测运单号的状态
+    private final int OUT_WAY_BILL_REQUEST = 400;    //出库
 
     @Override
     public int getLayoutId() {
         return R.layout.activity_out_manager;
     }
 
-    Handler handler = new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 1) {
-                String result = (String) msg.obj;
-                ToastUtil.showShort(result);
-            }
-        }
-    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getBeepManager().setPlayBeep(true);
-       // getBeepManager().setVibrate(true);
+        // getBeepManager().setVibrate(true);
         initParams();
         initView();
         initListener();
-
-
-      /*  new Thread(new Runnable() {
-            @Override
-            public void run() {
-                requestOut();
-            }
-        }).start();*/
-
-        initSelectPop();
-    }
-
-    private void requestData() {
-
     }
 
     private void initListener() {
@@ -121,7 +109,11 @@ public class OutManagerActivity extends CaptureActivity {
         mAdapter.setDeleteClickListener(new EnterManagerAdapter.onDeleteClickListener() {
             @Override
             public void onDelete(int position) {
+                HashMap<String,String> map = mList.get(position);
+                String resultCode = map.get("wail_number");
                 mList.remove(position);
+                mTempList.remove(resultCode);
+                tv_out_number.setText("(" + mList.size() + ")");
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -133,167 +125,61 @@ public class OutManagerActivity extends CaptureActivity {
                 finish();
             }
         });
-    }
 
-    private void selectExpressDialog(View view) {
-        if (Build.VERSION.SDK_INT < 24) {
-            popupWindow.showAsDropDown(view);
-        } else {
-            int[] location = new int[2];
-            view.getLocationOnScreen(location);
-            int x = location[0];
-            int y = location[1];
-            popupWindow.showAtLocation(view, Gravity.CENTER , x, y + view.getHeight());
-        }
-    }
-
-    private void initSelectPop() {
-        if (popupWindow != null && popupWindow.isShowing()) {
-            popupWindow.dismiss();
-        } else {
-            View selectView = getLayoutInflater().inflate(R.layout.fast_layout_1, null);
-            RecyclerView fastList = selectView.findViewById(R.id.tl_fast_list);
-            initRecycler(fastList);
-            popupWindow = new PopupWindow(selectView, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            //设置动画
-            popupWindow.setAnimationStyle(R.style.popup_window_anim);
-            //设置背景颜色
-            popupWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-            popupWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
-            popupWindow.setTouchable(true); // 设置popupwindow可点击
-            popupWindow.setOutsideTouchable(true); // 设置popupwindow外部可点击
-            popupWindow.setFocusable(true); // 获取焦点
-            selectView.findViewById(R.id.layout_left_close).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (popupWindow != null && popupWindow.isShowing()) {
-                        popupWindow.dismiss();
-                    }
-                }
-            });
-        }
-    }
-
-    private void initRecycler(RecyclerView fastList) {
-        mFastData.clear();
-        //查询快递公司的信息
-        List<ExpressLogo> expressLogoList = mExpressLogoDao.queryBuilder()
-                .where(ExpressLogoDao.Properties.States.eq(1)).list();
-
-        if (expressLogoList != null && expressLogoList.size() != 0) {
-            for (ExpressLogo expressLogo : expressLogoList) {
-                HashMap<String, String> map1 = new HashMap<>();
-                map1.put("express", expressLogo.getExpress_name());
-                map1.put("express_id", expressLogo.getExpress_id());
-                mFastData.add(map1);
-                map1 = null;
-            }
-        }
-        SimpleStringAdapter goodsAdapter = new SimpleStringAdapter(this, mFastData);
-        goodsAdapter.setOnItemClickListener(new SimpleStringAdapter.OnItemClickListener() {
+        tvOut.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void OnItemClick(int position) {
-                //选中的快递公司id
-                String express_id = mFastData.get(position).get("express_id");
-                // sendExpressid(express_id);    //向对应的界面发送快递公司消息
-                expressSelect.setText(mFastData.get(position).get("express"));
-                popupWindow.dismiss();
+            public void onClick(View v) {
+                if (mList.size() == 0) {
+                    ToastUtil.showShort("没有出库数据！");
+                    return;
+                }
+                outOfrepertory();
             }
         });
 
-        fastList.setAdapter(goodsAdapter);
-        fastList.addItemDecoration(new MarginDecoration(this));
-        fastList.setLayoutManager(new LinearLayoutManager(this));
-        goodsAdapter.notifyDataSetChanged();
     }
 
-    private void requestOut() {
-        String pathUrl = "http://www.81dja.com/HzApi/pushWeight";
-        //建立连接
-        URL url= null;
-        try {
-            url = new URL(pathUrl);
-            HttpURLConnection httpConn=(HttpURLConnection)url.openConnection();
-            ////设置连接属性
-            httpConn.setDoOutput(true);//使用 URL 连接进行输出
-            httpConn.setDoInput(true);//使用 URL 连接进行输入
-            httpConn.setUseCaches(false);//忽略缓存
-            httpConn.setRequestMethod("POST");//设置URL请求方法
-            String requestString = "{\"companyCode\":\"GP1551345058\",\"scanType\":\"TRAN\",\"billCode\":\"73105882055384\",\"partnerCode\":\"91751552011311\",\"weight\":\"10\"}";
-
-            byte[] requestStringBytes = requestString.getBytes(ENCODING_UTF_8);
-            httpConn.setRequestProperty("Content-length", "" + requestStringBytes.length);
-            httpConn.setRequestProperty("Content-Type", "application/octet-stream");
-            httpConn.setRequestProperty("Connection", "Keep-Alive");// 维持长连接
-            httpConn.setRequestProperty("Charset", "UTF-8");
-            httpConn.setRequestProperty("x-companyid", "be0dbfb7f29742e99870ea449a79a55b");
-            httpConn.setRequestProperty("x-datadigest", "ZGJB/AtcP/3gWeUNyagF2w==");
-
-            //建立输出流，并写入数据
-            OutputStream outputStream = httpConn.getOutputStream();
-            outputStream.write(requestStringBytes);
-            outputStream.close();
-
-            String result = "";
-
-            //获得响应状态
-            int responseCode = httpConn.getResponseCode();
-            if(HttpURLConnection.HTTP_OK == responseCode){//连接成功
-
-                //当正确响应时处理数据
-                StringBuffer sb = new StringBuffer();
-                String readLine;
-                BufferedReader responseReader;
-                //处理响应流，必须与服务器响应流输出的编码一致
-                responseReader = new BufferedReader(new InputStreamReader(httpConn.getInputStream(), ENCODING_UTF_8));
-                while ((readLine = responseReader.readLine()) != null) {
-                    sb.append(readLine).append("\n");
-                }
-                responseReader.close();
-                LogUtil.i("hah",sb.toString());
-                result = sb.toString();
-            } else {
-                LogUtil.i("hah","连接失败");
-                result = "连接失败";
-            }
-            Message msg = Message.obtain();
-            msg.what = 1;
-            msg.obj = result;
-            handler.sendMessage(msg);
-        } catch (Exception e) {
-            e.printStackTrace();
+    private void outOfrepertory() {
+        StringBuilder sb = new StringBuilder();
+        for (HashMap<String,String> map : mList) {
+            String pie_id = map.get("pie_id");
+            sb.append(pie_id);
+            sb.append(",");
         }
-
-    /*    Request<String> request = NoHttpRequest.getTest();
-        mRequestQueue.add(1, request, new OnResponseListener<String>() {
+        String result = sb.toString();
+        String effectionResult = result.substring(0,result.length()-1);
+        Request<String> request = NoHttpRequest.outOfRepertoryRequest(user_id, effectionResult);
+        mRequestQueue.add(OUT_WAY_BILL_REQUEST, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-                // dialogLoading.show();
+               // dialogLoading = WaitDialog.show(OutManagerActivity.this, "提交中...").setCanCancel(true);
+
             }
 
             @Override
             public void onSucceed(int what, Response<String> response) {
-                LogUtil.i("photoFile", "OrderFragment::" + response.get());
+                LogUtil.i("photoFile", "OutManagerActivity::" + response.get());
                 try {
                     JSONObject jsonObject = new JSONObject(response.get());
+                    outofRepertoryResult(jsonObject);    //处理结果
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //  dialogLoading.cancel();
+               // dialogLoading.doDismiss();
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-                // dialogLoading.cancel();
+              //  dialogLoading.doDismiss();
             }
 
             @Override
             public void onFinish(int what) {
-                //   dialogLoading.cancel();
+              //  dialogLoading.doDismiss();
             }
-        });*/
+        });
     }
+
 
     /**
      * 是否连续扫码，如果想支持连续扫码，则将此方法返回{@code true}
@@ -317,38 +203,112 @@ public class OutManagerActivity extends CaptureActivity {
         super.onResult(result);
 
         if (isContinuousScan) {//连续扫码时，直接弹出结果
-            // TODO: 2019/3/7 请求接口
-            // requestEnter();
+
             if (result == null || "".equals(result.getText())) {
-                return ;
+                return;
             }
+
             String resultCode = handleResult(result);    //用于修正内部识别的bug
 
             if (isContain(resultCode)) {   //判断是否重复
                 SoundHelper.getInstance().playNotifiRepeatSound();
-                return;
-            } else {   //入库成功
-                SoundHelper.getInstance().playNotifiSuccessSound();
+            } else {
+                mTempList.add(resultCode);
+                checkWaybillState(resultCode);    //检测运单号的状态
             }
-
-            packageCode++;
-            HashMap<String, String> map = new HashMap<>();
-            map.put("package_code", packageCode + "");
-            map.put("wail_number",resultCode);
-            map.put("express_name","中通快递");
-            mList.add(0,map);
-            map = null;
-
-            tvWailNumber.setText(resultCode);
-            tvPackageCode.setText(packageCode+"");
-            mAdapter.notifyDataSetChanged();
         }
     }
 
-    private boolean isContain(String resultCode) {
-        for (HashMap<String,String> map : mList) {
-            String wail_number = map.get("wail_number");
-            if (resultCode.equals(wail_number)) {
+    private void checkWaybillState(String number) {
+        Request<String> request = NoHttpRequest.checkOutWailnumberStateRequest(user_id, number);
+        mRequestQueue.add(CHECK_WAY_BILL_STATE, request, mOnresponseListener);
+    }
+
+
+    private OnResponseListener<String> mOnresponseListener = new OnResponseListener<String>() {
+        @Override
+        public void onStart(int what) {
+
+        }
+
+        @Override
+        public void onSucceed(int what, Response<String> response) {
+            LogUtil.i("photoFile", "EnterManagerActivity::" + response.get());
+            try {
+                JSONObject jsonObject = new JSONObject(response.get());
+                handleResultForOut(what, jsonObject);    //处理结果
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onFailed(int what, Response<String> response) {
+
+        }
+
+        @Override
+        public void onFinish(int what) {
+
+        }
+    };
+
+    private void handleResultForOut(int what, JSONObject jsonObject) throws JSONException {
+        switch (what) {
+            case CHECK_WAY_BILL_STATE:    //运单状态
+                CheckWaybillResult(jsonObject);
+                break;
+
+        }
+    }
+
+    private void outofRepertoryResult(JSONObject jsonObject) throws JSONException {
+        String code = jsonObject.get("code").toString();
+        String msg = jsonObject.get("msg").toString();
+
+        if ("5001".equals(code)) {
+            mList.clear();
+            mAdapter.notifyDataSetChanged();
+        }
+        ToastUtil.showShort(msg);
+        tv_out_number.setText("(" + mList.size() + ")");
+    }
+
+    private void CheckWaybillResult(JSONObject jsonObject) throws JSONException {
+
+        String code = jsonObject.get("code").toString();
+        String msg = jsonObject.get("msg").toString();
+
+        if ("5001".equals(code)) {
+            JSONObject dataObj = jsonObject.getJSONObject("data");
+            String package_code = dataObj.getString("code");
+            String express = dataObj.getString("express");
+            String pie_id = dataObj.getString("pie_id");
+            String number = dataObj.getString("number");
+
+            HashMap<String, String> map = new HashMap<>();
+            map.put("package_code", package_code);
+            map.put("wail_number", number);
+            map.put("express_name", express);
+            map.put("pie_id", pie_id);
+            mList.add(0, map);
+            map = null;
+            tvWailNumber.setText(number);
+            tvPackageCode.setText(package_code);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            JSONObject dataArray = jsonObject.getJSONObject("data");
+            String resultCode = dataArray.getString("number");
+            mTempList.remove(resultCode);
+            ToastUtil.showShort(msg);
+        }
+        tv_out_number.setText("(" + mList.size() + ")");
+    }
+
+
+    private synchronized boolean isContain(String resultCode) {
+        for (String data : mTempList) {
+            if (resultCode.equals(data)) {
                 return true;
             }
         }
@@ -358,7 +318,7 @@ public class OutManagerActivity extends CaptureActivity {
     private String handleResult(Result result) {
         String resultStr = result.getText();
         int beganIndex = resultStr.lastIndexOf("-");
-        String effectiveResult = resultStr.substring(beganIndex+1);
+        String effectiveResult = resultStr.substring(beganIndex + 1);
         return effectiveResult;
     }
 
@@ -390,6 +350,8 @@ public class OutManagerActivity extends CaptureActivity {
         recyclerView = findViewById(R.id.rl_order_list);
         expressSelect = findViewById(R.id.tv_expressage_select);
         ivBack = findViewById(R.id.iv_back);
+        tv_out_number = findViewById(R.id.tv_out_number);
+        tvOut = findViewById(R.id.tv_out);
         initRecyclerView();    //初始化列表
     }
 

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollview_head"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/textView_1"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="2dp"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:text="序号"
+        android:textColor="@color/grey_7"
+        android:textSize="14sp" />
+
+
+    <com.mt.bbdj.baseconfig.view.InterceptScrollLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:focusable="false">
+
+        <com.mt.bbdj.baseconfig.view.CustomHScrollView
+            android:id="@+id/h_scrollView"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:focusable="false"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView_2"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:gravity="center"
+                    android:text="快递公司"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView_3"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1.5"
+                    android:gravity="center"
+                    android:text="运单号"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView_4"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="收件人"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView_5"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="入库时间"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+
+                <TextView
+                    android:id="@+id/textView_6"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="出库时间"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/textView_7"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="取件码"
+                    android:textColor="@color/grey_7"
+                    android:textSize="14sp" />
+
+                <View
+                    android:layout_width="15dp"
+                    android:layout_height="match_parent" />
+            </LinearLayout>
+        </com.mt.bbdj.baseconfig.view.CustomHScrollView>
+
+    </com.mt.bbdj.baseconfig.view.InterceptScrollLinearLayout>
+
+</LinearLayout>

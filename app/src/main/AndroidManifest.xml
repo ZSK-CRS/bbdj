@@ -381,6 +381,9 @@
             android:name=".community.activity.SignatureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".community.activity.YesterdPaiActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

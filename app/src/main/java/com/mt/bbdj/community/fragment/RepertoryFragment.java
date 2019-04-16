@@ -66,7 +66,7 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
     private int mPage = 1;
     private String start_time, end_time;
     private String currentTime;
-    private int mType = 0;
+    private int mType = 0;     //  0 : 表示入库  1： 表示出库
 
     public static RepertoryFragment getInstance(int mType) {
         RepertoryFragment rf = new RepertoryFragment();
@@ -89,8 +89,14 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
         mAdapter.setOnItemClickListener(new RepertoryAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
+                HashMap<String,String> map = mList.get(position);
                 Intent intent = new Intent(getActivity(), RepertoryDetailActivity.class);
                 intent.putExtra("type", mType);
+                intent.putExtra("order", map.get("order"));
+                intent.putExtra("express", map.get("express"));
+                intent.putExtra("pie_id", map.get("pie_id"));
+                intent.putExtra("time", map.get("time"));
+                intent.putExtra("tag_number", map.get("tag_number"));
                 startActivity(intent);
             }
         });
@@ -106,7 +112,8 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveMessage(TargetEvent targetEvent) {
         if (targetEvent.getTarget() == 300 || targetEvent.getTarget() == 301) {
-            // rlRepertory.refresh();
+            express_id = targetEvent.getData();
+             rlRepertory.refresh();
         }
     }
 
@@ -154,7 +161,9 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
             int type = 0;
             if (view.getId() == R.id.tv_fast) {  //前一天
                 currentTime = DateUtil.getSpecifiedDayBefore("yyyy-MM-dd HH:mm:ss", currentTime);
-                start_time = DateUtil.getSomeDayStamp(currentTime);
+                String[] efectiveTime = currentTime.split(" ");
+                start_time = DateUtil.getSomeDayStamp(efectiveTime[0]+" 00:00:00");
+                end_time = DateUtil.getSomeDayStamp(efectiveTime[0]+" 23:59:59");
             }
 
             if (view.getId() == R.id.tv_last) {  //后一天
@@ -164,11 +173,13 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
                     return;
                 }
                 currentTime = DateUtil.getSpecifiedDayAfter("yyyy-MM-dd HH:mm:ss", currentTime);
-                start_time = DateUtil.getSomeDayStamp(currentTime);
+                String[] efectiveTime = currentTime.split(" ");
+                start_time = DateUtil.getSomeDayStamp(efectiveTime[0]+" 00:00:00");
+                end_time = DateUtil.getSomeDayStamp(efectiveTime[0]+" 23:59:59");
             }
             String time = currentTime.substring(0, currentTime.indexOf(" "));
             tvCurrentTime.setText(type == 2 ? "今日" : time);
-            // rlRepertory.refresh();
+             rlRepertory.refresh();
         }
     };
 
@@ -207,6 +218,7 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
                             String express_name = jsonObject1.getString("express_name");
                             String number = jsonObject1.getString("number");
                             String codeTag = jsonObject1.getString("code");
+                            String pie_id = jsonObject1.getString("pie_id");
                             String time = jsonObject1.getString("time");
                             String effectiveTime = DateUtil.changeStampToStandrdTime("yyyy-MM-dd HH:mm:ss", time);
                             String is_signatory = jsonObject1.getString("is_signatory");
@@ -215,6 +227,7 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
                             map.put("order", number);
                             map.put("express", express_name);
                             map.put("time", effectiveTime);
+                            map.put("pie_id", pie_id);
                             map.put("tag_number", codeTag);
                             mList.add(map);
                             map = null;

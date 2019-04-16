@@ -246,12 +246,17 @@ public class MoneyFormatManagerActivity extends BaseActivity implements XRecycle
                 handleCheckSend();
                 break;
             case R.id.tv_yestday_pai:
-                ToastUtil.showShort("暂不可查看");
+                handleCheckPai();     //派件
                 break;
             case R.id.tv_yestday_service:
                 ToastUtil.showShort("暂不可查看");
                 break;
         }
+    }
+
+    private void handleCheckPai() {
+        Intent intent = new Intent(this,YesterdPaiActivity.class);
+        startActivity(intent);
     }
 
     private void handleCheckSend() {

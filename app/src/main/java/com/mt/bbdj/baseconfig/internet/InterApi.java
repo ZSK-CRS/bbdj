@@ -11,11 +11,12 @@ public class InterApi {
      * 服务器地址
      */
     // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
-    // public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+    public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+    //  public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
      public static final String SERVER_ADDRESS_ENTER = "http://192.168.1.116/Pie/";
 
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
-      public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
+    //   public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
     // public static final String SERVER_ADDRESS = "http://web1.mingtaikeji.cn/BbdjApi/";
 
 
@@ -415,6 +416,11 @@ public class InterApi {
     public static final String ACTION_GET_YESTERDAY_SEND__REQUEST = "getYesterdayMail1050";
 
     /**
+     * 获取昨天派件数量
+     */
+    public static final String ACTION_GET_YESTERDAY_PAI__REQUEST = "getYesterdayPie1050";
+
+    /**
      * 获取数据排行榜
      */
     public static final String ACTION_SORT_REQUEST = "getRankingList1050";
@@ -453,5 +459,20 @@ public class InterApi {
      * 出库列表
      */
     public static final String ACTION_OUT_REPERTORY_REQUEST = "getOutWarehouselist2010";
+
+    /**
+     * 检测出库单号状态
+     */
+    public static final String ACTION_CHECK_OUT_BILL_REQUEST = "TestingWaybillNumber2010";
+
+    /**
+     * 全部出库
+     */
+    public static final String ACTION_OUT_OF_REPERTORY_REQUEST = "getExpressDelivery2010";
+
+    /**
+     * 获取派件详情
+     */
+    public static final String ACTION_EXPRESS_DETAIL_REQUEST = "getOutWarehouseinfo2010";
 
 }

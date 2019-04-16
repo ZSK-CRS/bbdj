@@ -66,6 +66,7 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/tv_wail_number"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:gravity="center_vertical"
@@ -82,6 +83,8 @@
             android:orientation="horizontal">
 
             <ImageView
+                android:visibility="gone"
+                android:id="@+id/tv_logo"
                 android:layout_marginLeft="80dp"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
@@ -89,7 +92,8 @@
                 android:scaleType="centerInside" />
 
             <TextView
-                android:layout_marginLeft="7dp"
+                android:id="@+id/tv_express_name"
+                android:layout_marginLeft="80dp"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:gravity="center_vertical"
@@ -120,6 +124,7 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/tv_tag_number"
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:gravity="center_vertical"
@@ -149,11 +154,12 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/tv_enter_time"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:gravity="center_vertical"
-                android:text="2019-03-13 10：08：39"
+                android:text="2019-03-13 10:08:39"
                 android:textColor="@color/grey_7"
                 android:textSize="15sp" />
 
@@ -168,18 +174,20 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_out_layout"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_out_time"
                 android:layout_marginLeft="80dp"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:gravity="center_vertical"
-                android:text="2019-03-13 10：08：39"
+                android:text="2019-03-13 10:08:39"
                 android:textColor="@color/grey_7"
                 android:textSize="15sp" />
 
@@ -189,6 +197,63 @@
                 android:textColor="@color/grey_7"
                 android:gravity="center_vertical"
                 android:text="出库时间"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sign_name"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_sign_name"
+                android:layout_marginLeft="80dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="@color/grey_7"
+                android:gravity="center_vertical"
+                android:text="签收人"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_sign_layout"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_sign_time"
+                android:layout_marginLeft="80dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:gravity="center_vertical"
+                android:text="2019-03-13 10:08:39"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:textColor="@color/grey_7"
+                android:gravity="center_vertical"
+                android:text="签收时间"
                 android:textSize="15sp" />
 
         </LinearLayout>
@@ -204,22 +269,30 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="80dp">
+            android:layout_height="wrap_content">
 
             <Button
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/bt_print"
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
+                android:layout_marginRight="20dp"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:background="@drawable/bt_bg"
+                android:visibility="gone"
                 android:text="打印"
                 android:textColor="#ffffff"
                 android:textSize="15sp" />
 
 
             <Button
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:id="@+id/bt_out"
                 android:layout_marginRight="20dp"
-                android:layout_marginLeft="40dp"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="40dp"

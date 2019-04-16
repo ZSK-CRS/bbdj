@@ -437,7 +437,13 @@ public class OrderFromsFragment extends BaseFragment {
         String service = own.getString("service");
         String totalall = own.getString("total");
 
-        tvSortDescribe.setText("您的当日排行：" + StringUtil.handleNullResultForString(ranking));
+        String describeStr = "";
+        if ("日排行榜".equals(tvSortTag.getText().toString())) {
+            describeStr = "您的当日排行：";
+        } else {
+            describeStr = "您的当月排行：";
+        }
+        tvSortDescribe.setText(describeStr + StringUtil.handleNullResultForString(ranking));
         tvOrderNumber.setText(StringUtil.handleNullResultForNumber(totalall));
         tvSendNumber.setText(StringUtil.handleNullResultForNumber(mail));
         tvPaiNumber.setText(StringUtil.handleNullResultForNumber(pie));

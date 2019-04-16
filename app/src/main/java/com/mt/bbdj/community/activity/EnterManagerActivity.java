@@ -1,5 +1,6 @@
 package com.mt.bbdj.community.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
@@ -21,6 +22,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
+import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
@@ -30,6 +32,7 @@ import com.mt.bbdj.baseconfig.db.gen.ExpressLogoDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.Entermodel;
+import com.mt.bbdj.baseconfig.model.PrintTagModel;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
@@ -71,6 +74,7 @@ public class EnterManagerActivity extends CaptureActivity {
     private TextView tv_enter_number;     //入库数
     private TextView tv_enter;
     private List<HashMap<String, String>> mList = new ArrayList<>();
+    private List<HashMap<String, String>> mPrintList = new ArrayList<>();
     private List<String> mTempList = new ArrayList<>();//临时数据
 
     private boolean isContinuousScan = true;
@@ -89,6 +93,8 @@ public class EnterManagerActivity extends CaptureActivity {
     private final int ENTER_RECORDE_REQUEST = 200;    //入库
     private String resultCode;
     private String expressName;
+    private PrintTagModel printTagModel = new PrintTagModel();
+    private WaitDialog dialogLoading;
 
     @Override
     public int getLayoutId() {
@@ -157,7 +163,35 @@ public class EnterManagerActivity extends CaptureActivity {
         }
         String data_json = getEnterrecordData();
         Request<String> request = NoHttpRequest.enterRecordeRequest(user_id, express_id, data_json);
-        mRequestQueue.add(ENTER_RECORDE_REQUEST, request, mOnresponseListener);
+        mRequestQueue.add(ENTER_RECORDE_REQUEST, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                dialogLoading = WaitDialog.show(EnterManagerActivity.this, "提交中...").setCanCancel(true);
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                LogUtil.i("photoFile", "EnterManagerActivity::" + response.get());
+                try {
+                    JSONObject jsonObject = new JSONObject(response.get());
+                    enterRecorderResult(jsonObject);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                 //   dialogLoading.doDismiss();
+                }
+               // dialogLoading.doDismiss();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+               // dialogLoading.doDismiss();
+            }
+
+            @Override
+            public void onFinish(int what) {
+               // dialogLoading.doDismiss();
+            }
+        });
     }
 
     private String getEnterrecordData() {
@@ -223,9 +257,6 @@ public class EnterManagerActivity extends CaptureActivity {
             case CHECK_WAY_BILL_STATE:     //检测运单号
                 checkWaybillStateResult(jsonObject);
                 break;
-            case ENTER_RECORDE_REQUEST:    //入库
-                enterRecorderResult(jsonObject);
-                break;
         }
     }
 
@@ -246,7 +277,16 @@ public class EnterManagerActivity extends CaptureActivity {
             JSONObject jsonObject = data.getJSONObject(i);
             String code = jsonObject.getString("code");
             String qrcode = jsonObject.getString("qrcode");
+            HashMap<String,String> map = new HashMap<>();
+            map.put("code",code);
+            map.put("qrcode",qrcode);
+            mPrintList.add(map);
+            map = null;
         }
+        printTagModel.setData(mPrintList);
+        Intent intent = new Intent(EnterManagerActivity.this,BluetoothNumberActivity.class);
+        intent.putExtra("printData",printTagModel);
+        startActivity(intent);
     }
 
     private void checkWaybillStateResult(JSONObject jsonObject) throws JSONException {
@@ -315,6 +355,8 @@ public class EnterManagerActivity extends CaptureActivity {
             user_id = list.get(0).getUser_id();
         }
         mRequestQueue = NoHttp.newRequestQueue();
+        printTagModel = new PrintTagModel();
+
     }
 
     private void initView() {

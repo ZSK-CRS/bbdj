@@ -80,7 +80,7 @@ public class WithdrawCashActivity extends BaseActivity {
     private String mRegisterPhone = "";     //注册手机号
     private UserBaseMessage userBaseMessage;
     private String user_id;
-    private int type = 1;     // 1：银行卡  2：支付宝
+    private String type = "1";     // 1：银行卡  2：支付宝
     private WaitDialog waitDialog;
     private String[] bindAccountArray;
     ;
@@ -241,8 +241,15 @@ public class WithdrawCashActivity extends BaseActivity {
         builder.setSingleChoiceItems(bindAccountArray, 2, new DialogInterface.OnClickListener() {/*设置单选条件的点击事件*/
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                tvSelectAccount.setText(bindAccountArray[which]);
-                type = which + 1;
+                String resultArray = bindAccountArray[which];
+                String[] result = resultArray.split(":");
+
+                if ("银行卡".equals(result[0])) {
+                    type = "1";
+                } else {
+                    type = "2";
+                }
+                tvSelectAccount.setText(result[1]);
                 dialog.dismiss();
             }
         });
@@ -346,7 +353,7 @@ public class WithdrawCashActivity extends BaseActivity {
         String realname = payObj.getString("realname");
         String account = payObj.getString("account");
         account = StringUtil.encryptPhone(account);
-        bindAccountArray = new String[]{bankNumber, account};
+        bindAccountArray = new String[]{"银行卡:"+bankNumber, "支付宝:"+account};
     }
 
     private void handleBindBank(JSONObject jsonObject) throws JSONException {
@@ -356,7 +363,7 @@ public class WithdrawCashActivity extends BaseActivity {
         String bankNumber = cardObj.getString("number");
         String bank = cardObj.getString("bank");
         bankNumber = StringUtil.encryptBankNumber(bankNumber);
-        bindAccountArray = new String[]{bankNumber};
+        bindAccountArray = new String[]{"银行卡:"+bankNumber};
     }
 
     private void handleBindAli(JSONObject jsonObject) throws JSONException {
@@ -365,7 +372,7 @@ public class WithdrawCashActivity extends BaseActivity {
         String realname = payObj.getString("realname");
         String account = payObj.getString("account");
         account = StringUtil.encryptPhone(account);
-        bindAccountArray = new String[]{account};
+        bindAccountArray = new String[]{"支付宝:"+account};
     }
 
 }
