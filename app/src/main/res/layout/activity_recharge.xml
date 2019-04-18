@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp" />
 
-    <EditText
+    <TextView
         android:layout_marginTop="20dp"
         android:paddingLeft="20dp"
         android:background="@null"
@@ -101,6 +101,7 @@
             android:layout_height="match_parent"/>
 
         <ImageView
+            android:id="@+id/iv_check_wechat"
             android:background="@drawable/ic_check_true"
             android:layout_width="20dp"
             android:layout_height="20dp" />
@@ -120,7 +121,7 @@
 
         <ImageView
             android:scaleType="centerInside"
-            android:src="@drawable/ic_ali"
+            android:src="@drawable/ic_ali_"
             android:layout_width="25dp"
             android:layout_height="25dp" />
 
@@ -135,6 +136,7 @@
             android:layout_height="match_parent"/>
 
         <ImageView
+            android:id="@+id/iv_check_ali"
             android:background="@drawable/shap_circle_grey"
             android:layout_width="20dp"
             android:layout_height="20dp" />

@@ -1,10 +1,14 @@
 package com.mt.bbdj.community.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +16,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -71,6 +76,15 @@ public class RechargeActivity extends BaseActivity {
     private WaitDialog dialogLoading;
     private IWXAPI api;
 
+    private ImageView checkWechat;   //微信
+    private ImageView checkAli;    //支付宝
+    private boolean isWechat = true;     //微信支付  false  :支付宝支付
+
+    /**
+     * 获取权限使用的 RequestCode
+     */
+    private static final int PERMISSIONS_REQUEST_CODE = 1002;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +92,7 @@ public class RechargeActivity extends BaseActivity {
         YCAppBar.setStatusBarLightMode(this, Color.WHITE);
         StatusBarUtils.StatusBarLightMode(RechargeActivity.this);
         EventBus.getDefault().register(this);
+        requestPermission();
         initParams();
         initView();
         initListener();
@@ -108,7 +123,11 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 //提交充值
-                payfor();
+                if (isWechat) {     //微信支付
+                    payforByWechat();
+                } else {    //支付宝支付
+                    payforByAli();
+                }
             }
         });
 
@@ -123,7 +142,9 @@ public class RechargeActivity extends BaseActivity {
         weChatLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                checkWechat.setBackgroundResource(R.drawable.ic_check_true);
+                checkAli.setBackgroundResource(R.drawable.shap_circle_grey);
+                isWechat = true;
             }
         });
 
@@ -132,38 +153,34 @@ public class RechargeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 // ToastUtil.showShort("暂不支持支付宝支付");
-
+                checkWechat.setBackgroundResource(R.drawable.shap_circle_grey);
+                checkAli.setBackgroundResource(R.drawable.ic_check_true);
+                isWechat = false;
             }
         });
     }
 
     private static final int SDK_PAY_FLAG = 1;
     // String orderInfo = "app_id=2019031963597551&biz_content=%7B%22body%22%3A%22%5Cu4f59%5Cu989d%5Cu5145%5Cu503c%22%2C%22subject%22%3A%22%5Cu4f59%5Cu989d%5Cu5145%5Cu503c%22%2C%22out_trade_no%22%3A%2215536811439709%22%2C%22timeout_express%22%3A%221d%22%2C%22total_amount%22%3A0.01%2C%22seller_id%22%3A%222088431757095973%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22store_id%22%3A%22001%22%7D&charset=utf-8&method=alipay.trade.app.pay¬ify_url=http%3A%2F%2Fwww.81dja.com%2FPayment%2Fali_notify&sign_type=RSA2×tamp=2019-03-27+18%3A05%3A43&version=1.0";
-    String orderInfo = "alipay_sdk=alipay-sdk-php-20180705&app_id=2019031963597551&biz_content=%7B%22body%22%3A%22%22%2C%22subject%22%3A%22%22%2C%22out_trade_no%22%3A%22%22%2C%22timeout_express%22%3A%22m%22%2C%22total_amount%22%3A%22%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fwww.81dja.com%2FPayment%2Fali_notify&sign_type=RSA2&timestamp=2019-03-27+19%3A09%3A26&version=1.0&sign=";
+    String orderInfo = "alipay_sdk=alipay-sdk-php-20180705&app_id=2019031963597551&biz_content=%7B%22body%22%3A%22%E6%88%91%E6%98%AF%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22subject%22%3A+%22App%E6%94%AF%E4%BB%98%E6%B5%8B%E8%AF%95%22%2C%22out_trade_no%22%3A+%2220170125test01%22%2C%22timeout_express%22%3A+%2230m%22%2C%22total_amount%22%3A+%220.01%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&notify_url=http%3A%2F%2Fwww.81dja.com%2FPayment%2Fali_notify&sign_type=RSA2&timestamp=2019-04-17+17%3A38%3A05&version=1.0&sign=fFmYgxHp0XVl8iIiOEaHWHQ3nBQ%2BnE572QERujk1CaMsCgFaL25KIx3ozkV9DiESFE776nxabyixyBbspiRXW3T0OtHGAK8E%2F6U4GnN94ulraTji%2B%2FZtp%2BzkIrr6IUshar0sCCSM39VKQ6k7lMu%2FLgv0Q8mHcxknvjfpQNHm1gVh01Stqj8t1Q8JLEj955UzsZVNfpWxp1ZGLAq9m8CqaC%2BP%2FAMpX684n4ZsZg256JAxRslBeWc%2FhcOu%2Fau4KmOZZ8NMy3bOYuo309NoyEpIexR4CfcKw7mKXpH7uNhByCoWbkFCroJtX8uLW09XNZJUtyofyxV1lg2MsvcAqf0QUw%3D%3D";
 
-    private void payfor() {
+    private void payforByAli() {
         String money = etMoney.getText().toString();
         if ("".equals(money) || "0".equals(money)) {
             ToastUtil.showShort("金额不可为空！");
             return;
         }
-     /*     Runnable payRunnable = new Runnable() {
 
-            @Override
-            public void run() {
-                PayTask alipay = new PayTask(RechargeActivity.this);
-                Map <String,String> result = alipay.payV2(orderInfo,true);
+        requestPayforByAlia(money);
+    }
 
-                Message msg = new Message();
-                msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
-                mHandler.sendMessage(msg);
-            }
-        };
-
-        // 必须异步调用
-        Thread payThread = new Thread(payRunnable);
-        payThread.start();*/
+    //微信支付
+    private void payforByWechat() {
+        String money = etMoney.getText().toString();
+        if ("".equals(money) || "0".equals(money)) {
+            ToastUtil.showShort("金额不可为空！");
+            return;
+        }
         requestPayforByWechat(money);
     }
 
@@ -178,10 +195,10 @@ public class RechargeActivity extends BaseActivity {
             // 判断resultStatus 为9000则代表支付成功
             if (TextUtils.equals(resultStatus, "9000")) {
                 // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                showAlert(RechargeActivity.this, "支付成功" + payResult);
+                showAlert(RechargeActivity.this, "支付成功");
             } else {
                 // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                showAlert(RechargeActivity.this, "支付失败" + payResult);
+                showAlert(RechargeActivity.this, "支付失败");
             }
         }
 
@@ -249,7 +266,7 @@ public class RechargeActivity extends BaseActivity {
 
 
     private void requestPayforByAlia(String money) {
-        Request<String> request = NoHttpRequest.getWeiChartPayforRequest(user_id, money);
+        Request<String> request = NoHttpRequest.getAliPayforRequest(user_id, money);
         //  Request<String> request = NoHttp.createStringRequest("https://wxpay.wxutil.com/pub_v2/app/app_pay.php", RequestMethod.GET);
         mRequestQueue.add(REQUEST_WECHAT_PAY, request, new OnResponseListener<String>() {
             @Override
@@ -266,27 +283,28 @@ public class RechargeActivity extends BaseActivity {
                     String code = jsonObject.get("code").toString();
                     String msg = jsonObject.get("msg").toString();
                     if ("5001".equals(code)) {
-                        JSONObject data = jsonObject.getJSONObject("data");
+                        JSONObject resultStr = jsonObject.getJSONObject("data");
+                        String result = resultStr.getString("valurl");
+                        String orderInfo = result.replaceAll("&amp;", "&");
+                        LogUtil.d("photoFile::", orderInfo);
+                        final Runnable payRunnable = new Runnable() {
+                            @Override
+                            public void run() {
+                                PayTask alipay = new PayTask(RechargeActivity.this);
+                                Map<String, String> result = alipay.payV2(orderInfo, true);
 
-                        PayReq request = new PayReq();
-                        request.prepayId = data.getString("prepayid");
-                        request.appId = data.getString("appid");
-                        request.packageValue = data.getString("package");
-                        request.nonceStr = data.getString("noncestr");
-                        request.timeStamp = data.getString("timestamp");
-                        //request.sign = data.getString("sign");
-                        request.partnerId = data.getString("partnerid");
-                        SortedMap<String, Object> params = new TreeMap<String, Object>();
-                        params.put("appid", request.appId);
-                        params.put("partnerid", request.partnerId);
-                        params.put("prepayid", request.prepayId);
-                        params.put("package", request.packageValue);
-                        params.put("noncestr", request.nonceStr);
-                        params.put("timestamp", request.timeStamp);
-                        String sign = createSign(params);
-                        request.sign = sign;
-                        boolean isSucceff = api.sendReq(request);
+                                Message msg = new Message();
+                                msg.what = SDK_PAY_FLAG;
+                                msg.obj = result;
+                                mHandler.sendMessage(msg);
+                            }
+                        };
 
+                        // 必须异步调用
+                        Thread payThread = new Thread(payRunnable);
+                        payThread.start();
+                    } else {
+                        ToastUtil.showShort(msg);
                     }
                     dialogLoading.doDismiss();
                 } catch (JSONException e) {
@@ -332,6 +350,8 @@ public class RechargeActivity extends BaseActivity {
         etMoney = findViewById(R.id.et_money);
         weChatLayout = findViewById(R.id.ll_wechat);
         aliLayout = findViewById(R.id.ll_ali);
+        checkWechat = findViewById(R.id.iv_check_wechat);
+        checkAli = findViewById(R.id.iv_check_ali);
         etMoney.setCursorVisible(false);
         etMoney.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -356,9 +376,62 @@ public class RechargeActivity extends BaseActivity {
     private static void showAlert(Context ctx, String info, DialogInterface.OnDismissListener onDismiss) {
         new AlertDialog.Builder(ctx)
                 .setMessage(info)
-                .setPositiveButton("确定", null)
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EventBus.getDefault().post(new TargetEvent(TargetEvent.DESTORY_RECHAR));
+                        dialog.dismiss();
+                    }
+                })
                 .setOnDismissListener(onDismiss)
                 .show();
+    }
+
+    /**
+     * 检查支付宝 SDK 所需的权限，并在必要的时候动态获取。
+     * 在 targetSDK = 23 以上，READ_PHONE_STATE 和 WRITE_EXTERNAL_STORAGE 权限需要应用在运行时获取。
+     * 如果接入支付宝 SDK 的应用 targetSdk 在 23 以下，可以省略这个步骤。
+     */
+    private void requestPermission() {
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.READ_PHONE_STATE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    }, PERMISSIONS_REQUEST_CODE);
+        } else {
+
+        }
+    }
+
+    /**
+     * 权限获取回调
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_CODE: {
+
+                // 用户取消了权限弹窗
+                if (grantResults.length == 0) {
+                    ToastUtil.showShort("权限拒绝");
+                    return;
+                }
+
+                // 用户拒绝了某些权限
+                for (int x : grantResults) {
+                    if (x == PackageManager.PERMISSION_DENIED) {
+                        ToastUtil.showShort("权限拒绝");
+                        return;
+                    }
+                }
+            }
+        }
     }
 
 

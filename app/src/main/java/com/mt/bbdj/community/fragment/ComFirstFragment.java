@@ -1,6 +1,7 @@
 package com.mt.bbdj.community.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,9 +11,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -347,7 +351,8 @@ public class ComFirstFragment extends BaseFragment {
                 handleComplainEvent();
                 break;
             case "11":      //操作手册
-                ToastUtil.showShort("该功能暂未开放！");
+                //ToastUtil.showShort("该功能暂未开放！");
+                showDownLoadDialog("");
                 break;
         }
 
@@ -574,6 +579,19 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void showDownLoadDialog(String version_url) {
+       /* AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.layout_update_version,null);
+        dialog.show();
+        DisplayMetrics dm = new DisplayMetrics();   //获取屏幕的大小
+        WindowManager windowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);//获取WindowManager
+        windowManager.getDefaultDisplay().getMetrics(dm);   //是获取到Activity的实际屏幕信息
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.width = (int) (dm.widthPixels * 0.85);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().setContentView(view);*/
         DialogUtil.promptDialog1(getActivity(),"更新提示","有新版本上线，请先更新！", DetermineListener, throwListener);
     }
 

@@ -136,7 +136,7 @@ public class BindBankcardFragment extends Fragment {
             etAccount.setEnabled(false);
             etAccountName.setEnabled(false);
             etAccountBank.setEnabled(false);
-            takeCamera.setClickable(false);
+          //  takeCamera.setClickable(false);
         } else {
             btCommit.setClickable(true);
             btCommit.setBackgroundResource(R.drawable.bt_bg_8);
@@ -196,6 +196,10 @@ public class BindBankcardFragment extends Fragment {
             @Override
             public void onResult(String result) {
                 String[] resultArray = result.split("\n");
+                if (result.length() != 2) {
+                    ToastUtil.showShort("请拍摄清晰的银行卡！");
+                    return;
+                }
                 String accountNumber = resultArray[0];
                 String realAccount = accountNumber.replace("卡号：", "");
                 etAccount.setText(realAccount);
