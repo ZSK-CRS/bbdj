@@ -11,8 +11,8 @@ public class InterApi {
      * 服务器地址
      */
     // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
-    // public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
-     public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
+     public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+    // public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
     //  public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
      public static final String SERVER_ADDRESS_ENTER = "http://192.168.1.116/Pie/";
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
@@ -396,9 +396,14 @@ public class InterApi {
     public static final String ACTION_CANNEL_ORDER_REQUEST = "CancellationMail1010";
 
     /**
-     * 首页搜索
+     * 首页搜索寄件
      */
     public static final String ACTION_GLOBALE_SEND_REQUEST = "MailSearch1070";
+
+    /**
+     * 首页搜索派件
+     */
+    public static final String ACTION_GLOABLE_RECEIVE_REQUEST = "PieSearch1070";
 
     /**
      * 财务首页

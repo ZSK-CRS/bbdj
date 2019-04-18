@@ -22,7 +22,10 @@ import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.StringUtil;
+import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.adapter.GlobalHaveFinishAdapter;
+import com.mt.bbdj.community.adapter.GlobalReceiveAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -32,6 +35,7 @@ import com.yanzhenjie.nohttp.rest.Response;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -49,9 +53,11 @@ public class GlobalSearchReceiveFragment extends BaseFragment implements XRecycl
     private XRecyclerView recyclerView;
     private TextView noAddress;
     private boolean isFresh = true;
-    private GlobalHaveFinishAdapter mAdapter;
+    // private GlobalHaveFinishAdapter mAdapter;
+    private GlobalReceiveAdapter mAdapter;
     private String keyWords = "";    //搜索关键字
     private final int REQUEST_GLOBAL_SEND = 100;
+    private final int OUT_WAY_BILL_REQUEST = 200;
 
     private List<HashMap<String, String>> mList = new ArrayList<>();
     private String user_id;
@@ -75,7 +81,7 @@ public class GlobalSearchReceiveFragment extends BaseFragment implements XRecycl
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveMessage(TargetEvent targetEvent) {
-        if (targetEvent.getTarget() == TargetEvent.SEARCH_GLOBAL_PAI) {
+        if (targetEvent.getTarget() == TargetEvent.SEARCH_GLOBAL) {
             keyWords = targetEvent.getData();
             recyclerView.refresh();
         }
@@ -108,25 +114,21 @@ public class GlobalSearchReceiveFragment extends BaseFragment implements XRecycl
 
         recyclerView.setFocusable(false);
         //initTemparayData();   //模拟数据
-        mAdapter = new GlobalHaveFinishAdapter(getActivity(), mList);
+        mAdapter = new GlobalReceiveAdapter(getActivity(), mList);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLoadingListener(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mAdapter);
 
-        mAdapter.notifyDataSetChanged();
-
-
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        mAdapter.setOnItemClickOutListener(new GlobalReceiveAdapter.OnItemClickOutListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Glide.with(getActivity()).resumeRequests();//恢复Glide加载图片
-                } else {
-                    Glide.with(getActivity()).pauseRequests();//禁止Glide加载图片
-                }
+            public void onItemOutClick(int position) {
+                HashMap<String,String> map = mList.get(position);
+                String pie_id = map.get("pie_id");
+                outOfrepertory(pie_id);
             }
         });
+
     }
 
     @Override
@@ -142,7 +144,7 @@ public class GlobalSearchReceiveFragment extends BaseFragment implements XRecycl
     }
 
     private void requestData() {
-        Request<String> request = NoHttpRequest.getGlobalSendRequest(user_id, keyWords);
+        Request<String> request = NoHttpRequest.getGloableReceiveRequest(user_id, keyWords);
         mRequestQueue.add(REQUEST_GLOBAL_SEND, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
@@ -154,6 +156,7 @@ public class GlobalSearchReceiveFragment extends BaseFragment implements XRecycl
                 LogUtil.i("photoFile", "GlobalSearchSendFragment::" + response.get());
                 try {
                     if (isFresh) {
+                        mList.clear();
                         recyclerView.refreshComplete();
                     } else {
                         recyclerView.loadMoreComplete();
@@ -162,22 +165,50 @@ public class GlobalSearchReceiveFragment extends BaseFragment implements XRecycl
                     String code = jsonObject.get("code").toString();
                     String msg = jsonObject.get("msg").toString();
                     if ("5001".equals(code)) {
-
+                        JSONArray dataArray = jsonObject.getJSONArray("data");
+                        if (dataArray.length() != 0) {
+                            noAddress.setVisibility(View.GONE);
+                        } else {
+                            noAddress.setVisibility(View.VISIBLE);
+                        }
+                        for (int i = 0; i < dataArray.length(); i++) {
+                            JSONObject jsonObject1 = dataArray.getJSONObject(i);
+                            HashMap<String, String> map = new HashMap<>();
+                            String express_name = jsonObject1.getString("express_name");
+                            String pie_id = jsonObject1.getString("pie_id");
+                            String waybill_number = jsonObject1.getString("waybill_number");
+                            String tagNumber = jsonObject1.getString("code");
+                            String warehousing_time = jsonObject1.getString("warehousing_time");
+                            String out_time = jsonObject1.getString("out_time");
+                            String types = jsonObject1.getString("types");
+                            map.put("express_name", StringUtil.handleNullResultForString(express_name));
+                            map.put("pie_id", StringUtil.handleNullResultForString(pie_id));
+                            map.put("waybill_number", StringUtil.handleNullResultForString(waybill_number));
+                            map.put("tagNumber", StringUtil.handleNullResultForString(tagNumber));
+                            map.put("warehousing_time", StringUtil.handleNullResultForString(warehousing_time));
+                            map.put("out_time", StringUtil.handleNullResultForString(out_time));
+                            map.put("types", StringUtil.handleNullResultForString(types));
+                            mList.add(map);
+                            map = null;
+                        }
+                    } else {
+                        ToastUtil.showShort(msg);
                     }
+                    mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-              //  dialogLoading.doDismiss();
+                //  dialogLoading.doDismiss();
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-               // dialogLoading.doDismiss();
+                // dialogLoading.doDismiss();
             }
 
             @Override
             public void onFinish(int what) {
-               // dialogLoading.doDismiss();
+                // dialogLoading.doDismiss();
             }
         });
     }
@@ -186,5 +217,54 @@ public class GlobalSearchReceiveFragment extends BaseFragment implements XRecycl
     public void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void outOfrepertory(String pie_id) {
+        Request<String> request = NoHttpRequest.outOfRepertoryRequest(user_id, pie_id);
+        mRequestQueue.add(OUT_WAY_BILL_REQUEST, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                dialogLoading = WaitDialog.show(getActivity(), "出库中...").setCanCancel(true);
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                LogUtil.i("photoFile", "GlobalSearchReceiveFragment::" + response.get());
+                try {
+                    JSONObject jsonObject = new JSONObject(response.get());
+                    outofRepertoryResult(jsonObject);    //处理结果
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                dialogLoading.doDismiss();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                dialogLoading.doDismiss();
+            }
+
+            @Override
+            public void onFinish(int what) {
+                dialogLoading.doDismiss();
+            }
+        });
+    }
+
+    private void outofRepertoryResult(JSONObject jsonObject) throws JSONException {
+        String code = jsonObject.get("code").toString();
+        String msg = jsonObject.get("msg").toString();
+        if ("5001".equals(code)) {
+            recyclerView.refresh();
+        }
+        ToastUtil.showShort(msg);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mRequestQueue.cancelAll();
+        mRequestQueue.stop();
     }
 }

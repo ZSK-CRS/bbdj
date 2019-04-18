@@ -166,7 +166,7 @@ public class EnterManagerActivity extends CaptureActivity {
         mRequestQueue.add(ENTER_RECORDE_REQUEST, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-                dialogLoading = WaitDialog.show(EnterManagerActivity.this, "提交中...").setCanCancel(true);
+               // dialogLoading = WaitDialog.show(EnterManagerActivity.this, "提交中...").setCanCancel(true);
             }
 
             @Override

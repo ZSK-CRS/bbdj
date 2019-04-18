@@ -72,7 +72,7 @@ public class GlobalSearchSendFragment extends BaseFragment implements XRecyclerV
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.global_search_send_fragment, container, false);
+        View view = inflater.inflate(R.layout.global_search_receive_fragment, container, false);
         EventBus.getDefault().register(this);
         initParams();    //初始化参数
         initView(view);
@@ -81,7 +81,7 @@ public class GlobalSearchSendFragment extends BaseFragment implements XRecyclerV
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveMessage(TargetEvent targetEvent) {
-        if (targetEvent.getTarget() == TargetEvent.SEARCH_GLOBAL_SEND) {
+        if (targetEvent.getTarget() == TargetEvent.SEARCH_GLOBAL) {
             keyWords = targetEvent.getData();
             recyclerView.refresh();
         }
@@ -240,6 +240,9 @@ public class GlobalSearchSendFragment extends BaseFragment implements XRecyclerV
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mRequestQueue.cancelAll();
+        mRequestQueue.stop();
         EventBus.getDefault().unregister(this);
     }
+
 }

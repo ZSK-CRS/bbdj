@@ -71,14 +71,7 @@ public class GlobalSearchActivity extends BaseActivity {
                     String keywords = textViewSerach.getText().toString().trim();
 
                     if (!"".equals(keywords)) {
-                        int target = 200;
-                        if (currentItem == 0) {
-                            target = TargetEvent.SEARCH_GLOBAL_SEND;
-                        }
-                        if (currentItem == 1) {
-                            target = TargetEvent.SEARCH_GLOBAL_PAI;
-                        }
-                        EventBus.getDefault().post(new TargetEvent(target, keywords));
+                        EventBus.getDefault().post(new TargetEvent(TargetEvent.SEARCH_GLOBAL, keywords));
                         return true;
                     }
                 }
@@ -93,7 +86,6 @@ public class GlobalSearchActivity extends BaseActivity {
                 EventBus.getDefault().post(new TargetEvent(TargetEvent.CLEAR_SEARCH_DATA));
             }
         });
-
     }
 
     private void initView() {
