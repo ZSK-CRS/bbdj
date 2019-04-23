@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:scaleType="fitXY"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_update_logo"
+        android:layout_width="120dp"
+        android:layout_height="180dp" />
+    
+    <TextView
+        android:text="系统升级中"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:textColor="@color/mainColor"
+        android:layout_width="match_parent"
+        android:layout_height="25dp" />
+    
+    <com.mt.bbdj.baseconfig.view.HorizontalProgressBar
+        android:id="@+id/progress"
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+
+    <ImageView
+        android:scaleType="fitXY"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/ic_update_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

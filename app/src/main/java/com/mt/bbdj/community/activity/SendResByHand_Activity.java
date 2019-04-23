@@ -464,11 +464,14 @@ public class SendResByHand_Activity extends BaseActivity {
             try {
                 JSONObject jsonObject = new JSONObject(response.get());
                 String code = jsonObject.get("code").toString();
+                String msg = jsonObject.get("msg").toString();
                 if ("5001".equals(code)) {
                     handleRequestData(what, jsonObject);
                 } else {
                     if (what == REQUEST_IS_IDENTIFY_REQUEST) {
                         isIdentification.setText("未认证");
+                    }else if (what == REQUEST_COMMIT_ORDER){
+                        ToastUtil.showShort(msg);
                     }
                 }
             } catch (JSONException e) {

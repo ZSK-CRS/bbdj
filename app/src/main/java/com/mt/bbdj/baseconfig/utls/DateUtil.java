@@ -467,7 +467,6 @@ public class DateUtil {
     public static Date getDate(String dateStr) throws ParseException {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         return sdf.parse(dateStr);
-
     }
 
     public static String string2Date(String time) {
@@ -496,6 +495,13 @@ public class DateUtil {
     public static String month2() {
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String dateStr = sdf.format(date);
+        return dateStr;
+    }
+
+    public static String getCurrentDay() {
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("MMdd");
         String dateStr = sdf.format(date);
         return dateStr;
     }

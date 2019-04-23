@@ -13,10 +13,8 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         compileOptions {
-
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
-
         }
         ndk {
             //选择要添加的对应cpu类型的.so库。
@@ -42,7 +40,7 @@ android {
     }
 
     greendao {
-        schemaVersion 16    //版本
+        schemaVersion 21    //版本
         daoPackage 'com.mt.bbdj.baseconfig.db.gen'
         targetGenDir 'src/main/java'
     }

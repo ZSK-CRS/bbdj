@@ -54,6 +54,7 @@ import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.SystemUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
+import com.mt.bbdj.baseconfig.view.HorizontalProgressBar;
 import com.mt.bbdj.baseconfig.view.MyGridView;
 import com.mt.bbdj.community.activity.ChangeManagerdActivity;
 import com.mt.bbdj.community.activity.ClientManagerActivity;
@@ -165,6 +166,7 @@ public class ComFirstFragment extends BaseFragment {
 
     final String fileName = "bbdj.apk";
     private boolean isGetData = false;
+    private HorizontalProgressBar progressBar;
 
     public static ComFirstFragment getInstance() {
         ComFirstFragment comFirstFragment = new ComFirstFragment();
@@ -579,9 +581,16 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void showDownLoadDialog(String version_url) {
-       /* AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+    /*    AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.layout_update_version,null);
+        TextView updataNow = view.findViewById(R.id.id_update_now);
+        updataNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();   //获取屏幕的大小
         WindowManager windowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);//获取WindowManager
@@ -610,6 +619,30 @@ public class ComFirstFragment extends BaseFragment {
     };
 
     private void download() {
+
+     /*   AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        View view = inflater.inflate(R.layout.layout_update_version_procress,null);
+        progressBar = view.findViewById(R.id.progress);
+        progressBar.setProgressWithAnimation(100);
+        TextView updataNow = view.findViewById(R.id.id_update_now);
+        updataNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        dialog.show();
+        DisplayMetrics dm = new DisplayMetrics();   //获取屏幕的大小
+        WindowManager windowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);//获取WindowManager
+        windowManager.getDefaultDisplay().getMetrics(dm);   //是获取到Activity的实际屏幕信息
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
+        lp.width = (int) (dm.widthPixels * 0.85);
+        dialog.setCanceledOnTouchOutside(false);
+
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().setContentView(view);*/
+
         mProgressBar = new ProgressDialog(getActivity());
         mProgressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressBar.setTitle("正在下载");
@@ -631,7 +664,8 @@ public class ComFirstFragment extends BaseFragment {
 
             @Override
             public void onDownloading(int progress) {
-                mProgressBar.setProgress(progress);
+               mProgressBar.setProgress(progress);
+                //  progressBar.setCurrentProgress(progress);
             }
 
             @Override

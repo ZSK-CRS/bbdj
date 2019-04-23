@@ -23,7 +23,8 @@ public class GreenDaoManager {
 
     public  void init(Context context) {
         //创建数据库
-         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context.getApplicationContext(),"bbdj.db", null);
+        // DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(context.getApplicationContext(),"bbdj.db", null);
+        MyOpenHelper helper = new MyOpenHelper(context.getApplicationContext(),"bbdj.db",null);
         //创建可读写数据库
         //  mDaoMaster = new DaoMaster(helper.getEncryptedWritableDb("7334453"));
         mDaoMaster = new DaoMaster(helper.getWritableDatabase());

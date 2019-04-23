@@ -6,6 +6,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,13 +28,17 @@ import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
+import com.mt.bbdj.baseconfig.db.WaillMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.ExpressLogoDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
+import com.mt.bbdj.baseconfig.db.gen.WaillMessageDao;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.model.Entermodel;
 import com.mt.bbdj.baseconfig.model.PrintTagModel;
+import com.mt.bbdj.baseconfig.utls.DateUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
+import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SoundHelper;
@@ -94,7 +99,10 @@ public class EnterManagerActivity extends CaptureActivity {
     private String resultCode;
     private String expressName;
     private PrintTagModel printTagModel = new PrintTagModel();
-    private WaitDialog dialogLoading;
+
+    private int tagNumber = 1;
+    private HkDialogLoading dialogLoading;
+    private WaillMessageDao mWaillMessageDao;
 
     @Override
     public int getLayoutId() {
@@ -112,13 +120,21 @@ public class EnterManagerActivity extends CaptureActivity {
         initSelectPop();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        tv_enter_number.setText("(" + mList.size() + "/30)");
+        dialogLoading.dismiss();
+    }
+
     private void initListener() {
         //删除
         mAdapter.setDeleteClickListener(new EnterManagerAdapter.onDeleteClickListener() {
             @Override
             public void onDelete(int position) {
-                HashMap<String,String> map = mList.get(position);
+                HashMap<String, String> map = mList.get(position);
                 String resultCode = map.get("number");
+                mWaillMessageDao.queryBuilder().where(WaillMessageDao.Properties.WailNumber.eq(resultCode)).buildDelete();
                 mList.remove(position);
                 mTempList.remove(resultCode);
                 mAdapter.notifyDataSetChanged();
@@ -137,7 +153,6 @@ public class EnterManagerActivity extends CaptureActivity {
                 selectExpressDialog(v);
             }
         });
-
 
         //返回
         ivBack.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +181,7 @@ public class EnterManagerActivity extends CaptureActivity {
         mRequestQueue.add(ENTER_RECORDE_REQUEST, request, new OnResponseListener<String>() {
             @Override
             public void onStart(int what) {
-               // dialogLoading = WaitDialog.show(EnterManagerActivity.this, "提交中...").setCanCancel(true);
+                dialogLoading.show();
             }
 
             @Override
@@ -177,19 +192,19 @@ public class EnterManagerActivity extends CaptureActivity {
                     enterRecorderResult(jsonObject);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                 //   dialogLoading.doDismiss();
+                    dialogLoading.dismiss();
                 }
-               // dialogLoading.doDismiss();
+                dialogLoading.dismiss();
             }
 
             @Override
             public void onFailed(int what, Response<String> response) {
-               // dialogLoading.doDismiss();
+                dialogLoading.dismiss();
             }
 
             @Override
             public void onFinish(int what) {
-               // dialogLoading.doDismiss();
+                dialogLoading.dismiss();
             }
         });
     }
@@ -265,6 +280,7 @@ public class EnterManagerActivity extends CaptureActivity {
         String msg = jsonObject.get("msg").toString();
         if ("5001".equals(code)) {
             mList.clear();
+            tagNumber = 1;
             mAdapter.notifyDataSetChanged();
             JSONArray data = jsonObject.getJSONArray("data");
             printNumber(data);    //打印取件码
@@ -272,20 +288,23 @@ public class EnterManagerActivity extends CaptureActivity {
         ToastUtil.showShort(msg);
     }
 
+
     private void printNumber(JSONArray data) throws JSONException {
+        mWaillMessageDao.deleteAll();    //删除数据库中临时数据
         for (int i = 0; i < data.length(); i++) {
             JSONObject jsonObject = data.getJSONObject(i);
             String code = jsonObject.getString("code");
             String qrcode = jsonObject.getString("qrcode");
-            HashMap<String,String> map = new HashMap<>();
-            map.put("code",code);
-            map.put("qrcode",qrcode);
+            HashMap<String, String> map = new HashMap<>();
+            map.put("code", code);
+            map.put("qrcode", qrcode);
             mPrintList.add(map);
             map = null;
         }
+        dialogLoading.dismiss();
         printTagModel.setData(mPrintList);
-        Intent intent = new Intent(EnterManagerActivity.this,BluetoothNumberActivity.class);
-        intent.putExtra("printData",printTagModel);
+        Intent intent = new Intent(EnterManagerActivity.this, BluetoothNumberActivity.class);
+        intent.putExtra("printData", printTagModel);
         startActivity(intent);
     }
 
@@ -300,7 +319,14 @@ public class EnterManagerActivity extends CaptureActivity {
             String resultCode = dataArray.getString("number");
 
             HashMap<String, String> map = new HashMap<>();
-            map.put("package_code", package_code);
+            int codeTag = IntegerUtil.getStringChangeToNumber(package_code);    //最新的数据库的提货码
+            codeTag = codeTag + tagNumber;
+            String currentData = DateUtil.getCurrentDay();
+            String effectCode = StringUtil.getEffectCode(codeTag);
+            String result = currentData + effectCode;
+            LogUtil.d("tagNumber::", "codeTag::" + codeTag + "  effectCode::" + effectCode + "  tagNumber::" + tagNumber + "");
+
+            map.put("package_code", result);
             map.put("wail_number", resultCode);
             map.put("express_name", expressName);
             map.put("mobile", mobile);
@@ -308,14 +334,16 @@ public class EnterManagerActivity extends CaptureActivity {
             mList.add(0, map);
             map = null;
             tvWailNumber.setText(resultCode);
-            tvPackageCode.setText(package_code);
+            tvPackageCode.setText(result);
             mAdapter.notifyDataSetChanged();
+            tagNumber++;
         } else {
             JSONObject dataArray = jsonObject.getJSONObject("data");
             String resultCode = dataArray.getString("number");
             mTempList.remove(resultCode);
             ToastUtil.showShort(msg);
         }
+
         tv_enter_number.setText("(" + mList.size() + "/30)");
     }
 
@@ -349,14 +377,15 @@ public class EnterManagerActivity extends CaptureActivity {
     private void initParams() {
         DaoSession daoSession = GreenDaoManager.getInstance().getSession();
         UserBaseMessageDao mUserMessageDao = daoSession.getUserBaseMessageDao();
+        mWaillMessageDao = daoSession.getWaillMessageDao();
         mExpressLogoDao = daoSession.getExpressLogoDao();
+
         List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
         if (list != null && list.size() != 0) {
             user_id = list.get(0).getUser_id();
         }
         mRequestQueue = NoHttp.newRequestQueue();
         printTagModel = new PrintTagModel();
-
     }
 
     private void initView() {
@@ -368,11 +397,27 @@ public class EnterManagerActivity extends CaptureActivity {
         tv_enter = findViewById(R.id.tv_enter);
         ivBack = findViewById(R.id.iv_back);
         initRecyclerView();    //初始化列表
+
+        dialogLoading = new HkDialogLoading(EnterManagerActivity.this, "提交中...");
     }
 
     private void initRecyclerView() {
         recyclerView.setFocusable(false);
         //initTemparayData();   //模拟数据
+        List<WaillMessage> dataList = mWaillMessageDao.queryBuilder().list();
+        if (dataList != null && dataList.size() != 0) {
+            for (WaillMessage waillMessage : dataList) {
+                HashMap<String,String> map = new HashMap<>();
+                map.put("package_code", waillMessage.getTagCode());
+                map.put("wail_number", waillMessage.getWailNumber());
+                map.put("express_name", waillMessage.getExpressName());
+                map.put("mobile", waillMessage.getMobile());
+                map.put("name", waillMessage.expressName);
+                mList.add(map);
+                map = null;
+                tagNumber = waillMessage.getTagNumber();
+            }
+        }
         mAdapter = new EnterManagerAdapter(mList);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -403,7 +448,7 @@ public class EnterManagerActivity extends CaptureActivity {
                 //选中的快递公司id
                 express_id = mFastData.get(position).get("express_id");
                 expressName = mFastData.get(position).get("express");
-                // sendExpressid(express_id);    //向对应的界面发送快递公司消息
+                //sendExpressid(express_id);    //向对应的界面发送快递公司消息
                 expressSelect.setText(mFastData.get(position).get("express"));
                 popupWindow.dismiss();
             }
@@ -452,7 +497,7 @@ public class EnterManagerActivity extends CaptureActivity {
 
             if (mList.size() == 30) {
                 ToastUtil.showShort("扫描已至30件，请先入库！");
-                return ;
+                return;
             }
             //用于修正内部识别的bug
             String resultCode = handleResult(result);
@@ -509,5 +554,26 @@ public class EnterManagerActivity extends CaptureActivity {
         }
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mWaillMessageDao.deleteAll();
+        List<WaillMessage> lists = new ArrayList<>();
+        for (HashMap<String, String> map : mList) {
+            String package_code = map.get("package_code");
+            String wail_number = map.get("wail_number");
+            String mobile = map.get("mobile");
+            String express_name = map.get("express_name");
+            String name = map.get("name");
+            WaillMessage waillMessage = new WaillMessage();
+            waillMessage.setName(name);
+            waillMessage.setExpressName(express_name);
+            waillMessage.setTagCode(package_code);
+            waillMessage.setMobile(mobile);
+            waillMessage.setWailNumber(wail_number);
+            waillMessage.setTagNumber(tagNumber);
+            lists.add(waillMessage);
+        }
+        mWaillMessageDao.saveInTx(lists);
+    }
 }

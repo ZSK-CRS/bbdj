@@ -27,12 +27,13 @@ public class IntegerUtil {
      * @return
      */
     public static int getStringChangeToNumber(String date) {
-        if (date == null || "".equals(date)) {
+        if (date == null || "".equals(date) || "null".equals(date)) {
             return 0;
         }
         int number = Integer.parseInt(date);
         return number;
     }
+
 
     public static float getStringChangeToFloat(String date) {
         if (date == null || "".equals(date)||"null".equals(date)) {

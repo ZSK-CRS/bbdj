@@ -309,11 +309,13 @@ public class SendResByHandActivity extends BaseActivity {
         intent.putExtra("book_province", start_province);
         intent.putExtra("book_city", start_city);
         intent.putExtra("book_area", mCountry);
+        intent.putExtra("type", 2);
         startActivityForResult(intent, CHANEE_RECEIVE_ADDRESS);
     }
 
     private void addReceiveAddress() {
         Intent intent = new Intent(this, ChangeMessageActivity.class);
+        intent.putExtra("type", 2);
         startActivityForResult(intent, ADD_RECEIVE_ADDRESS);
     }
 
@@ -525,6 +527,7 @@ public class SendResByHandActivity extends BaseActivity {
             try {
                 JSONObject jsonObject = new JSONObject(response.get());
                 String code = jsonObject.get("code").toString();
+                String msg = jsonObject.get("msg").toString();
                 if ("5001".equals(code)) {
                     handleRequestData(what, jsonObject);
                 } else {
@@ -533,6 +536,8 @@ public class SendResByHandActivity extends BaseActivity {
                         tvIdentifyStateHave.setVisibility(View.GONE);
                         identificationLayout.setVisibility(View.VISIBLE);
                         isIdentifyState = false;
+                    }else if (what == REQUEST_COMMIT_ORDER){
+                        ToastUtil.showShort(msg);
                     }
                 }
             } catch (JSONException e) {
