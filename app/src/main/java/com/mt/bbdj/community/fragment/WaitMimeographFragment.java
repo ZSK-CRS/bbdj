@@ -263,7 +263,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
         }
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject1 = (JSONObject) jsonArray.get(i);
-            String mail_id = jsonObject1.getString("mail_id");
+            String mail_id = jsonObject1.getString("number");
             String express_id = jsonObject1.getString("express_id");
             String send_name = jsonObject1.getString("send_name");
             String collect_name = jsonObject1.getString("collect_name");

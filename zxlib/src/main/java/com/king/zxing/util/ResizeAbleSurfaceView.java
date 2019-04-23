@@ -35,6 +35,8 @@ public class ResizeAbleSurfaceView extends SurfaceView {
         }
     }
 
+
+
     public void resize(int width, int height) {
         mWidth = width;
         mHeight = height;

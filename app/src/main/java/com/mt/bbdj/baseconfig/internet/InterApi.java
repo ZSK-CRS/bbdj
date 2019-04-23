@@ -12,7 +12,7 @@ public class InterApi {
     // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
      public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
     //  public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
-    //  public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
+    //   public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
     public static final String SERVER_ADDRESS_ENTER = "http://192.168.1.116/Pie/";
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
     //  public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";

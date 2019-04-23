@@ -116,6 +116,7 @@
         android:background="@color/grey_6" />
 
     <TextView
+        android:id="@+id/tv_tag_number"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:gravity="center"

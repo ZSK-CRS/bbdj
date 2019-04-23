@@ -63,6 +63,8 @@ public class PrintPreviewActivity extends AppCompatActivity {
     TextView tvEnterTime;    //录单时间
     @BindView(R.id.tv_date)
     TextView tvDate;
+    @BindView(R.id.tv_tag_number)
+    TextView tvTagNumber;     //三段码
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +106,7 @@ public class PrintPreviewActivity extends AppCompatActivity {
         String weight = sharedPreferences.getString("weight", "");    //计费重量
         String content = sharedPreferences.getString("content", "");    //备注
         String money = sharedPreferences.getString("money", "");    //运费
+        String code = sharedPreferences.getString("code", "");    //三段码
 
 
         String codeStr = StringUtil.changeStringFormat(yundanhao, 4, "   ");
@@ -111,6 +114,7 @@ public class PrintPreviewActivity extends AppCompatActivity {
 
         tvEnterTime.setText(dateStr.length>1?dateStr[1]:dateStr[0]);
         tvCodeNumber.setText(codeStr);
+        tvTagNumber.setText(code);
         tvRegion.setText(place);
         tvCollectName.setText(collect_name);
         tvCollectPhone.setText(collect_phone);
