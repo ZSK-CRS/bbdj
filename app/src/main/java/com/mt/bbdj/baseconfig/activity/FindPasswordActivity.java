@@ -157,15 +157,16 @@ public class FindPasswordActivity extends BaseActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(response.get());
                     String code = jsonObject.get("code").toString();
+                    String msg = jsonObject.get("msg").toString();
                     if ("5001".equals(code)) {
                         JSONObject dataObject = jsonObject.getJSONObject("data");
                         //验证码
                         mRandCode = dataObject.get("rand").toString();
                     }
+                    ToastUtil.showShort(msg);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mCountDownTimer.cancel();
             }
 
             @Override

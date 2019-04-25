@@ -169,7 +169,6 @@ public class EnterManagerActivity extends CaptureActivity {
                 enterRecorde();    //入库请求
             }
         });
-
     }
 
     private void enterRecorde() {

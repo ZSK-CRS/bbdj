@@ -24,9 +24,9 @@ import java.util.HashMap;
  * Description :  网络请求的封装
  */
 public class NoHttpRequest {
+
     /**
      * 获取验证码的请求
-     *
      * @param phoneNumber : 手机号码
      * @param type        : 1 注册  2 忘记密码  3 提现
      */
