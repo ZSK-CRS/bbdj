@@ -179,10 +179,10 @@ public class ComFirstFragment extends BaseFragment {
         mView = inflater.inflate(R.layout.layout_com_first_fragment, container, false);
         unbinder = ButterKnife.bind(this, mView);
         EventBus.getDefault().register(this);
-       /* initParams();
+     /*   initParams();
         initData();
-        initView();
-        initClick();*/
+        initView();*/
+        initClick();
         requestAreaData();    //下载省市县
         updataExpressState();   //更新快递公司状态
         return mView;
