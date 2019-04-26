@@ -17,7 +17,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,11 +25,8 @@ import android.widget.TextView;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.application.MyApplication;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
-import com.mt.bbdj.baseconfig.db.City;
-import com.mt.bbdj.baseconfig.db.County;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
 import com.mt.bbdj.baseconfig.db.MingleArea;
-import com.mt.bbdj.baseconfig.db.Province;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.CityDao;
 import com.mt.bbdj.baseconfig.db.gen.CountyDao;
@@ -41,10 +37,8 @@ import com.mt.bbdj.baseconfig.db.gen.ProvinceDao;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
 import com.mt.bbdj.baseconfig.internet.InterApi;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
-import com.mt.bbdj.baseconfig.model.AddressBean;
 import com.mt.bbdj.baseconfig.model.TargetEvent;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
-import com.mt.bbdj.baseconfig.utls.DialogUtil;
 import com.mt.bbdj.baseconfig.utls.DownloadUtil;
 import com.mt.bbdj.baseconfig.utls.FileUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
@@ -58,7 +52,6 @@ import com.mt.bbdj.baseconfig.view.HorizontalProgressBar;
 import com.mt.bbdj.baseconfig.view.MyGridView;
 import com.mt.bbdj.community.activity.ChangeManagerdActivity;
 import com.mt.bbdj.community.activity.ClientManagerActivity;
-import com.mt.bbdj.community.activity.CommunityActivity;
 import com.mt.bbdj.community.activity.ComplainManagerdActivity;
 import com.mt.bbdj.community.activity.EnterManagerActivity;
 import com.mt.bbdj.community.activity.GlobalSearchActivity;
@@ -87,10 +80,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -103,7 +94,7 @@ import butterknife.Unbinder;
  * Date : 2018/12/26
  * Description : 社区版首页
  */
-public class ComFirstFragment extends BaseFragment {
+public class ComFirstFragment_new extends BaseFragment {
 
     @BindView(R.id.gv_com_first)
     MyGridView mComGridView;
@@ -168,15 +159,15 @@ public class ComFirstFragment extends BaseFragment {
     private boolean isGetData = false;
     private HorizontalProgressBar progressBar;
 
-    public static ComFirstFragment getInstance() {
-        ComFirstFragment comFirstFragment = new ComFirstFragment();
+    public static ComFirstFragment_new getInstance() {
+        ComFirstFragment_new comFirstFragment = new ComFirstFragment_new();
         return comFirstFragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.layout_com_first_fragment, container, false);
+        mView = inflater.inflate(R.layout.layout_com_first_fragment_new, container, false);
         unbinder = ButterKnife.bind(this, mView);
         EventBus.getDefault().register(this);
         initParams();
@@ -606,7 +597,7 @@ public class ComFirstFragment extends BaseFragment {
     }
 
 
-    android.content.DialogInterface.OnClickListener DetermineListener = new android.content.DialogInterface.OnClickListener() {
+    DialogInterface.OnClickListener DetermineListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
@@ -686,7 +677,7 @@ public class ComFirstFragment extends BaseFragment {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    android.content.DialogInterface.OnClickListener throwListener = new android.content.DialogInterface.OnClickListener() {
+    DialogInterface.OnClickListener throwListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
             dialog.dismiss();
