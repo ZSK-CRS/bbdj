@@ -71,6 +71,30 @@
                 android:textColor="@color/grey_2"
                 android:textSize="13sp" />
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/ll_yundan"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="70dp"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="运单号:"
+                android:textColor="@color/grey_7"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_way_number"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/grey_2"
+                android:textSize="13sp" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

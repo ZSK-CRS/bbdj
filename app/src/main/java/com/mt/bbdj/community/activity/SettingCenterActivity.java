@@ -15,6 +15,7 @@ import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.utls.PackageUtils;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
+import com.mt.bbdj.baseconfig.utls.StringUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

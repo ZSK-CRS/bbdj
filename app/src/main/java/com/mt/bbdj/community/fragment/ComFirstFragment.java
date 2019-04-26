@@ -138,7 +138,7 @@ public class ComFirstFragment extends BaseFragment {
     @BindView(R.id.tv_test_tag)
     TextView tvTestTag;
 
-    private  String APP_PATH_ROOT   = FileUtil.getRootPath(MyApplication.getInstance()).getAbsolutePath() + File.separator +"bbdj";
+    private String APP_PATH_ROOT = FileUtil.getRootPath(MyApplication.getInstance()).getAbsolutePath() + File.separator + "bbdj";
 
 
     private List<HashMap<String, Object>> mList = new ArrayList<>();
@@ -219,7 +219,7 @@ public class ComFirstFragment extends BaseFragment {
                 .where(ExpressLogoDao.Properties.LogoLocalPath.eq(""))
                 .where(ExpressLogoDao.Properties.States.eq(1)).list();
         if (mExpressLogoList == null || mExpressLogoList.size() == 0) {
-            return ;
+            return;
         }
         for (ExpressLogo expressLogo : mExpressLogoList) {
             String localPath = expressLogo.getLogoLocalPath();
@@ -233,7 +233,7 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void uploadLogoPicture(String type) {
-        Request<String> request = NoHttpRequest.updateExpressState(user_id, express_id,type);
+        Request<String> request = NoHttpRequest.updateExpressState(user_id, express_id, type);
         mRequestQueue.add(REQUEST_UPLOAD_LOGO, request, mResponseListener);
     }
 
@@ -264,7 +264,7 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void requestAreaData() {
-      //  uploadGenealData();    //下载省市区数据
+        //  uploadGenealData();    //下载省市区数据
 
     }
 
@@ -330,12 +330,12 @@ public class ComFirstFragment extends BaseFragment {
                 handleChangeManagerEvent();
                 break;
             case "4":       //入库管理
-                // ToastUtil.showShort("暂不开放！");
-                  handleEnterManagerEvent();
-            break;
+                ToastUtil.showShort("暂不开放！");
+                //  handleEnterManagerEvent();
+                break;
             case "5":       //出库管理
-                //  ToastUtil.showShort("暂不开放！");
-                 handleOutManagerEvent();
+                ToastUtil.showShort("暂不开放！");
+                // handleOutManagerEvent();
                 break;
             case "6":       //财务管理
                 handleMoneyManagerEvent();
@@ -361,22 +361,22 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void handleOutManagerEvent() {
-        Intent intent = new Intent(getActivity(),OutManagerActivity.class);
+        Intent intent = new Intent(getActivity(), OutManagerActivity.class);
         startActivity(intent);
     }
 
     private void handleEnterManagerEvent() {
-        Intent intent = new Intent(getActivity(),EnterManagerActivity.class);
+        Intent intent = new Intent(getActivity(), EnterManagerActivity.class);
         startActivity(intent);
     }
 
     private void handleMoneyManagerEvent() {
-        Intent intent = new Intent(getActivity(),MoneyFormatManagerActivity.class);
+        Intent intent = new Intent(getActivity(), MoneyFormatManagerActivity.class);
         startActivity(intent);
     }
 
     private void handleChangeManagerEvent() {
-        Intent intent = new Intent(getActivity(),ChangeManagerdActivity.class);
+        Intent intent = new Intent(getActivity(), ChangeManagerdActivity.class);
         startActivity(intent);
     }
 
@@ -425,7 +425,7 @@ public class ComFirstFragment extends BaseFragment {
                 item.put("name", "寄件管理");
                 item.put("ic", R.drawable.ic_main_jijianguanli);
             }
-                
+
             if (i == 1) {
                 item.put("id", "1");
                 item.put("name", "手动寄件");
@@ -573,7 +573,7 @@ public class ComFirstFragment extends BaseFragment {
         upLoadNewVersion(version_number, version_url);    //更新最新版本
     }
 
-    private void upLoadNewVersion(String version_number,String version_url) {
+    private void upLoadNewVersion(String version_number, String version_url) {
         String version = SystemUtil.getVersion(getActivity());
         if (!version.equals(version_number)) {
             showDownLoadDialog(version_url);
@@ -581,14 +581,15 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void showDownLoadDialog(String version_url) {
-    /*    AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.layout_update_version,null);
         TextView updataNow = view.findViewById(R.id.id_update_now);
         updataNow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                dialog.dismiss();
+                download();
             }
         });
         dialog.show();
@@ -597,11 +598,11 @@ public class ComFirstFragment extends BaseFragment {
         windowManager.getDefaultDisplay().getMetrics(dm);   //是获取到Activity的实际屏幕信息
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.width = (int) (dm.widthPixels * 0.85);
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
 
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().setContentView(view);*/
-        DialogUtil.promptDialog1(getActivity(),"更新提示","有新版本上线，请先更新！", DetermineListener, throwListener);
+        dialog.getWindow().setContentView(view);
+      //  DialogUtil.promptDialog1(getActivity(), "更新提示", "有新版本上线，请先更新！", DetermineListener, throwListener);
     }
 
 
@@ -619,19 +620,12 @@ public class ComFirstFragment extends BaseFragment {
     };
 
     private void download() {
-
-     /*   AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+        AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.layout_update_version_procress,null);
         progressBar = view.findViewById(R.id.progress);
-        progressBar.setProgressWithAnimation(100);
-        TextView updataNow = view.findViewById(R.id.id_update_now);
-        updataNow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+       // progressBar.setProgressWithAnimation(100);
 
-            }
-        });
         dialog.show();
         DisplayMetrics dm = new DisplayMetrics();   //获取屏幕的大小
         WindowManager windowManager = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);//获取WindowManager
@@ -641,31 +635,31 @@ public class ComFirstFragment extends BaseFragment {
         dialog.setCanceledOnTouchOutside(false);
 
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().setContentView(view);*/
+        dialog.getWindow().setContentView(view);
 
-        mProgressBar = new ProgressDialog(getActivity());
+       /* mProgressBar = new ProgressDialog(getActivity());
         mProgressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressBar.setTitle("正在下载");
         mProgressBar.setMessage("请稍后...");
         mProgressBar.setProgress(0);
         mProgressBar.setMax(100);
         mProgressBar.show();
-        mProgressBar.setCancelable(false);
+        mProgressBar.setCancelable(false);*/
 
-        DownloadUtil.get().download(version_url, APP_PATH_ROOT,fileName, new DownloadUtil.OnDownloadListener() {
+        DownloadUtil.get().download(version_url, APP_PATH_ROOT, fileName, new DownloadUtil.OnDownloadListener() {
             @Override
             public void onDownloadSuccess(File file) {
-                if (mProgressBar != null && mProgressBar.isShowing()) {
+              /*  if (mProgressBar != null && mProgressBar.isShowing()) {
                     mProgressBar.dismiss();
-                }
+                }*/
                 //下载完成进行相关逻辑操作
                 installApk(file);// 安装
             }
 
             @Override
             public void onDownloading(int progress) {
-               mProgressBar.setProgress(progress);
-                //  progressBar.setCurrentProgress(progress);
+                //mProgressBar.setProgress(progress);
+                progressBar.setCurrentProgress(progress);
             }
 
             @Override
@@ -681,12 +675,12 @@ public class ComFirstFragment extends BaseFragment {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             Uri photoURI = FileProvider.getUriForFile(getActivity(), MyApplication.getInstance().getPackageName() + ".provider", file);
             intent.setDataAndType(photoURI, "application/vnd.android.package-archive");
         } else {
             intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-           // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         startActivity(intent);
         android.os.Process.killProcess(android.os.Process.myPid());
@@ -728,7 +722,7 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     @OnClick({R.id.tv_address, R.id.tv_time, R.id.tv_receive_wait, R.id.tv_receive_handle,
-            R.id.iv_message,R.id.tv_abnormal_wait,R.id.textview_serach})
+            R.id.iv_message, R.id.tv_abnormal_wait, R.id.textview_serach})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_address:
@@ -745,8 +739,8 @@ public class ComFirstFragment extends BaseFragment {
                 actionToMessagePannel();      //跳转到消息界面
                 break;
             case R.id.tv_abnormal_wait:     //仓库
-                // ToastUtil.showShort("暂不开放!");
-                  actionToRepertoryPannel();
+                 ToastUtil.showShort("暂不开放!");
+                // actionToRepertoryPannel();
                 break;
             case R.id.textview_serach:
                 actionToSearchPannel();    //搜索
@@ -756,7 +750,7 @@ public class ComFirstFragment extends BaseFragment {
 
 
     private void actionToSearchPannel() {
-        Intent intent = new Intent(getActivity(),GlobalSearchActivity.class);
+        Intent intent = new Intent(getActivity(), GlobalSearchActivity.class);
         startActivity(intent);
     }
 

@@ -260,8 +260,8 @@ public class HorizontalProgressBar extends View {
                 tipHeight + progressMarginTop,
                 progressPaint);
 
-        drawTipView(canvas);
-        drawText(canvas, textString);
+       /* drawTipView(canvas);
+        drawText(canvas, textString);*/
 
     }
 

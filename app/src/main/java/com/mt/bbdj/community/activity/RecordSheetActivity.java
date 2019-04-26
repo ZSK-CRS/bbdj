@@ -1,5 +1,6 @@
 package com.mt.bbdj.community.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.kongzue.dialog.v2.MessageDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
@@ -120,7 +122,8 @@ public class RecordSheetActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.bt_commit_next:
-                commitData();    //提交数据
+                showPromitDialog();
+
                 break;
         }
     }
@@ -186,6 +189,16 @@ public class RecordSheetActivity extends BaseActivity {
             @Override
             public void onFinish(int what) {
                 dialogLoading.cancel();
+            }
+        });
+    }
+
+    private void showPromitDialog() {
+        MessageDialog.show(this, "提示", "尊敬的驿站您好！此次订单是否已经进行实名认证和开箱验视！", "确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                commitData();    //提交数据
             }
         });
     }

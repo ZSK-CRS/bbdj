@@ -12,6 +12,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -97,6 +98,8 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
 
     private final int REQUEST_IDENTIFY = 2;    //验证是否实名
 
+    private boolean isGetData = false;
+
 
     public static WaitCollectFragment getInstance() {
         WaitCollectFragment sf = new WaitCollectFragment();
@@ -112,8 +115,13 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
         initData();
         initView(view);   //初始化视图
         initClickListener();
-        requestWaitCollectData();    //请求待收件
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        rlWaitCollect.refresh();
     }
 
     private void initClickListener() {
@@ -148,7 +156,7 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
             @Override
             public void OnClick(int position) {
                 HashMap<String, String> map = mList.get(position);
-                waitPrint  = false;
+                waitPrint = false;
                 mail_id = map.get("mail_id");
                 send_name = map.get("send_name");
                 goods_name = map.get("goods_name");
@@ -164,7 +172,7 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
         mAdapter.setOnPrintatOnceClickListener(new WaitCollectAdapter.OnPrintatOnceClickListener() {
             @Override
             public void OnPrint(int position) {
-                waitPrint  = true;
+                waitPrint = true;
                 HashMap<String, String> map = mList.get(position);
                 mail_id = map.get("mail_id");
                 send_name = map.get("send_name");
@@ -175,7 +183,7 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
 
                 //用来和“待打印”界面作区别
                 SharedPreferencesUtil.getEditor()
-                        .putString("printType","1")
+                        .putString("printType", "1")
                         .commit();
 
                 //验证身份寄件人是否实名
@@ -201,7 +209,7 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
     private OnResponseListener<String> mresponseListener = new OnResponseListener<String>() {
         @Override
         public void onStart(int what) {
-          //  dialogLoading.show();
+            //  dialogLoading.show();
         }
 
         @Override
@@ -223,17 +231,17 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-         //   dialogLoading.cancel();
+            //   dialogLoading.cancel();
         }
 
         @Override
         public void onFailed(int what, Response<String> response) {
-           // dialogLoading.cancel();
+            // dialogLoading.cancel();
         }
 
         @Override
         public void onFinish(int what) {
-         //   dialogLoading.cancel();
+            //   dialogLoading.cancel();
         }
     };
 
@@ -258,12 +266,17 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
         intent.putExtra("goods_weight", goods_weight);
         intent.putExtra("mailing_momey", mailing_momey);
         intent.putExtra("content", content);
-        intent.putExtra("waitPrint",waitPrint);
+        intent.putExtra("waitPrint", waitPrint);
         startActivity(intent);
     }
 
     private void setData(JSONObject jsonObject) throws JSONException {
         JSONArray jsonArray = jsonObject.getJSONArray("data");
+        if (isFresh) {
+            rlWaitCollect.refreshComplete();
+        } else {
+            rlWaitCollect.loadMoreComplete();
+        }
 
         if (page == 1) {
             mList.clear();
@@ -339,7 +352,7 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
     public void receiveEvent(TargetEvent targetEvent) {
         //打印完成、取消订单、时候刷新一下
         if (targetEvent.getTarget() == 0) {
-            rlWaitCollect.refresh();
+           // rlWaitCollect.refresh();
         }
 
         if (targetEvent.getTarget() == 200) {
@@ -367,38 +380,32 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
     private void showPromitDialog() {
         MessageDialog.show(getActivity(), "提示", "身份未验证！", "知道了",
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(getActivity(), IdentificationActivity.class);
-                intent.putExtra("come_type", false);
-                intent.putExtra("mail_id", mail_id);
-                intent.putExtra("send_name", send_name);
-                startActivity(intent);
-                dialog.dismiss();
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getActivity(), IdentificationActivity.class);
+                        intent.putExtra("come_type", false);
+                        intent.putExtra("mail_id", mail_id);
+                        intent.putExtra("send_name", send_name);
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
     }
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                page = 1;
-                requestWaitCollectData();
-                rlWaitCollect.refreshComplete();
-            }
-        }, 100);
+        isFresh = true;
+        page = 1;
+        requestWaitCollectData();
     }
+
+    private boolean isFresh = true;    //
 
     @Override
     public void onLoadMore() {
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                page++;
-                requestWaitCollectData();
-                rlWaitCollect.loadMoreComplete();
-            }
-        }, 100);
+        isFresh = false;
+        page++;
+        requestWaitCollectData();
     }
 
 }

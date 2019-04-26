@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -69,6 +70,10 @@ public class MailingdetailActivity extends AppCompatActivity {
     TextView btPrintAgain;      //原单重打
     @BindView(R.id.bt_cannel_order)
     TextView btCannel;    //取消订单
+    @BindView(R.id.tv_way_number)
+    TextView tvWayNubmer;    //运单号
+    @BindView(R.id.ll_yundan)
+    LinearLayout llYundan;
 
 
     private String user_id;    //用户id
@@ -100,8 +105,10 @@ public class MailingdetailActivity extends AppCompatActivity {
     private void initView() {
         if (mType == 1) {
             btPrintAgain.setVisibility(View.VISIBLE);
+            llYundan.setVisibility(View.VISIBLE);
         } else {
             btPrintAgain.setVisibility(View.GONE);
+            llYundan.setVisibility(View.GONE);
         }
     }
 
@@ -201,6 +208,8 @@ public class MailingdetailActivity extends AppCompatActivity {
         String collect_phone = jsonObject.getString("collect_phone");
         String collect_region = jsonObject.getString("collect_region");
         String collect_address = jsonObject.getString("collect_address");
+
+        String yundanhao = jsonObject.getString("yundanhao");    //运单号
         String goods_name = jsonObject.getString("goods_name");
         String weight = jsonObject.getString("weight");
         String content = jsonObject.getString("content");
@@ -218,13 +227,12 @@ public class MailingdetailActivity extends AppCompatActivity {
         tvGoodsName.setText(goods_name);
         tvGoodsWeiht.setText(weight);
         tvGoodsMark.setText(content);
-
+        tvWayNubmer.setText(yundanhao);
 
         //  JSONObject dataObj = jsonObject.getJSONObject("data");
         String mail_id = jsonObject.getString("mail_id");       //订单id
         String express_id = jsonObject.getString("express_id");     //快递公司id
         String number = jsonObject.getString("number");      //驿站代码
-        String yundanhao = jsonObject.getString("yundanhao");    //运单号
         String code = jsonObject.getString("code");   //标识码
         String place = jsonObject.getString("place");      //中转地
         String transit = jsonObject.getString("transit");     //中转地标识码和时间

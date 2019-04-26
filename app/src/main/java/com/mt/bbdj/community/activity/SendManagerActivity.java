@@ -280,9 +280,9 @@ public class SendManagerActivity extends BaseActivity {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveMessage(TargetEvent targetEvent) {
-        if (1 == targetEvent.getTarget()) {
+      /*  if (1 == targetEvent.getTarget()) {
             viewPager.setCurrentItem(2);
-        }
+        }*/
     }
 
     @Override
