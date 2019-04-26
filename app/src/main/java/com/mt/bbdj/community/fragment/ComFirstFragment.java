@@ -725,7 +725,7 @@ public class ComFirstFragment extends BaseFragment {
             R.id.iv_message, R.id.tv_abnormal_wait, R.id.textview_serach})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_address:
+            case R.id.tv_address:   //地址
                 break;
             case R.id.tv_time:
                 break;
