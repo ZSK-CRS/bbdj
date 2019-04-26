@@ -95,6 +95,7 @@ public class WaitCollectFragment extends BaseFragment implements XRecyclerView.L
     private boolean waitPrint = false;
 
     private final int REQUEST_GET_WAITCOLLECT = 1;    //获取待收件的数据
+    //private final int REQUEST_GET_WAITCOLLECT = 1;    //获取待收件的数据
 
     private final int REQUEST_IDENTIFY = 2;    //验证是否实名
 
