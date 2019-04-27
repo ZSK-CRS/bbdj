@@ -57,7 +57,7 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
                 .load(express_logo)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.ic);
-        holder.billNumber.setText(map.get("mail_id"));
+        holder.billNumber.setText(map.get("number"));
         holder.sendPerson.setText(map.get("send_name"));
         holder.receivePerson.setText(map.get("collect_name"));
         String createTime = map.get("create_time");

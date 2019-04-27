@@ -46,6 +46,7 @@ import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.fragment.ComDataFragment;
 import com.mt.bbdj.community.fragment.ComFirstFragment;
+import com.mt.bbdj.community.fragment.ComFirstFragment_new;
 import com.mt.bbdj.community.fragment.ComMymessageFragment;
 import com.mt.bbdj.community.fragment.ComOrderFragment;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -109,7 +110,7 @@ public class CommunityActivity extends BaseActivity {
     private String picturePath = "/bbdj/logo";
     private File f = new File(Environment.getExternalStorageDirectory(), picturePath);
 
-    private ComFirstFragment mComFirstFragment;     //社区版首页
+    private ComFirstFragment_new mComFirstFragment;     //社区版首页
     private ComOrderFragment mComOrderFragment;     //社区版订单
     private ComDataFragment mComDataFragment;     //社区版数据
     private ComMymessageFragment mComMymessageFragment;   //社区版我的
@@ -455,7 +456,7 @@ public class CommunityActivity extends BaseActivity {
         imgbtn_first.setSelected(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (mComFirstFragment == null) {
-            mComFirstFragment = ComFirstFragment.getInstance();
+            mComFirstFragment = ComFirstFragment_new.getInstance();
             transaction.add(R.id.main_fl_parent, mComFirstFragment);
         }
         //隐藏所有的界面

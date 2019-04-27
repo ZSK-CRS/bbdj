@@ -20,8 +20,9 @@
         android:background="#1A000000" />
 
     <LinearLayout
+        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
-        android:layout_height="50dip"
+        android:layout_height="60dip"
         android:layout_alignParentBottom="true"
         android:background="#ffffff">
 
@@ -44,7 +45,7 @@
                 android:id="@+id/main_tab_tv_first"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_tab_first_page"
+                android:text="待处理"
                 android:textColor="@drawable/main_tab_text_bg"
                 android:textSize="@dimen/standardTextSize" />
         </LinearLayout>
@@ -68,7 +69,7 @@
                 android:id="@+id/main_tab_tv_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/main_tab_first_order"
+                android:text="订单查询"
                 android:textColor="@drawable/main_tab_text_bg"
                 android:textSize="@dimen/standardTextSize" />
         </LinearLayout>

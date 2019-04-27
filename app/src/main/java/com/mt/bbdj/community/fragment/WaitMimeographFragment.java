@@ -81,6 +81,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
     private final int REQUEST_WAIT_PRINT = 102;     //待打印数据列表
 
     private String mail_id;     //订单id
+    private String number;     //
     private String send_name;   //寄件人
     private String goods_name;   //选中的商品价格
     private String goods_weight;   //选中的商品重量
@@ -123,6 +124,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
         }
     }
 
+
     private void initClickListener() {
         //立刻打印
         mAdapter.setOnPrintatOnceListner(new WaitPrintAdapter.OnPrintatOnceListner() {
@@ -130,6 +132,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
             public void onPrint(int positon) {
                 HashMap<String, String> map = mList.get(positon);
                 mail_id = map.get("mail_id");
+                number = map.get("number");
                 send_name = map.get("send_name");
                 goods_name = map.get("goods_name");
                 goods_weight = map.get("goods_weight");
@@ -218,6 +221,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
         intent.putExtra("waitPrint",true);
         intent.putExtra("mail_id", mail_id);
         intent.putExtra("user_id", user_id);
+        intent.putExtra("numer",number);
         intent.putExtra("goods_name", goods_name);
         intent.putExtra("goods_weight", goods_weight);
         intent.putExtra("mailing_momey", mailing_momey);
@@ -261,9 +265,11 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
         if (page == 1) {
             mList.clear();
         }
+
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject1 = (JSONObject) jsonArray.get(i);
-            String mail_id = jsonObject1.getString("number");
+            String number = jsonObject1.getString("number");
+            String mail_id = jsonObject1.getString("mail_id");
             String express_id = jsonObject1.getString("express_id");
             String send_name = jsonObject1.getString("send_name");
             String collect_name = jsonObject1.getString("collect_name");
@@ -276,6 +282,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
             String content = jsonObject1.getString("content");
 
             HashMap<String, String> map = new HashMap<>();
+            map.put("number", number);
             map.put("mail_id", mail_id);
             map.put("express_id", express_id);
             map.put("send_name", send_name);

@@ -2497,4 +2497,15 @@ public class NoHttpRequest {
         request.add("pie_id", pie_id);
         return request;
     }
+
+    public static Request<String> getTest() {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest("http://192.168.1.116/serviceOrders/index", RequestMethod.POST);
+        request.add("number", "1");
+        request.add("sum", "2");     //时间戳
+        return request;
+    }
 }
