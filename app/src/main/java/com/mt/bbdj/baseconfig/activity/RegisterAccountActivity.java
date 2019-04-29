@@ -192,8 +192,8 @@ public class RegisterAccountActivity extends BaseActivity {
                         JSONObject dataObject = jsonObject.getJSONObject("data");
                         //验证码
                         mRandCode = dataObject.get("rand").toString();
-                        ToastUtil.showShort(msg);
                     }
+                    ToastUtil.showShort(msg);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
