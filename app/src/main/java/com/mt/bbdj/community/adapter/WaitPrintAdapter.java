@@ -31,8 +31,14 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
 
     public  OnPrintatOnceListner onPrintatOnceListner;    //打印接口
 
+    private OnCannelOrderClickListener onCannelOrderClickListener;     //取消订单
+
     public void setOnPrintatOnceListner(OnPrintatOnceListner onPrintatOnceListner) {
        this.onPrintatOnceListner = onPrintatOnceListner;
+    }
+
+    public void setOnCannelOrderClickListener(OnCannelOrderClickListener cannelOrderClickListener) {
+        this.onCannelOrderClickListener = cannelOrderClickListener;
     }
 
     public WaitPrintAdapter(Context context, List<HashMap<String, String>> list) {
@@ -57,7 +63,7 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
                 .load(express_logo)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .into(holder.ic);
-        holder.billNumber.setText(map.get("mail_id"));
+        holder.billNumber.setText(map.get("number"));
         holder.sendPerson.setText(map.get("send_name"));
         holder.receivePerson.setText(map.get("collect_name"));
         String createTime = map.get("create_time");
@@ -69,6 +75,16 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
             public void onClick(View v) {
                 if (onPrintatOnceListner != null) {
                     onPrintatOnceListner.onPrint(position);
+                }
+            }
+        });
+
+        //取消订单
+        holder.btCannel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onCannelOrderClickListener != null) {
+                    onCannelOrderClickListener.OnCannelOrderClick(position);
                 }
             }
         });
@@ -86,6 +102,7 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
         private TextView receivePerson;   //收件人
         private TextView sendTime;   //寄件时间
         private Button btPrintOnce;  //立刻打印
+        private Button btCannel;   //取消
 
         public HaveFinishViewHolder(View itemView) {
             super(itemView);
@@ -95,6 +112,7 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
             receivePerson = itemView.findViewById(R.id.tv_receive_person);
             sendTime = itemView.findViewById(R.id.tv_receive_time);
             btPrintOnce = itemView.findViewById(R.id.bt_immediately_seal);
+            btCannel = itemView.findViewById(R.id.bt_cannel_order);
         }
     }
 
@@ -103,5 +121,10 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
     //立即打印
     public interface OnPrintatOnceListner{
         void onPrint(int positon);
+    }
+
+    //取消订单的点击事件
+    public interface  OnCannelOrderClickListener{
+        void OnCannelOrderClick(int position);
     }
 }
