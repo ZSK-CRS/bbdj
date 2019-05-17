@@ -444,6 +444,7 @@ public class CommunityActivity extends BaseActivity {
         hideFragment(transaction);
         transaction.show(mComOrderFragment);
         transaction.commit();
+
     }
 
     private void selectFragmentFirst() {
@@ -490,6 +491,7 @@ public class CommunityActivity extends BaseActivity {
         if (mComOrderFragment != null) {
             transaction.hide(mComOrderFragment);
         }
+
         if (mComMymessageFragment != null) {
             transaction.hide(mComMymessageFragment);
         }

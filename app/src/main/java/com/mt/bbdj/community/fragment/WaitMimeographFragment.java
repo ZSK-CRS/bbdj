@@ -29,6 +29,7 @@ import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
+import com.mt.bbdj.community.activity.CauseForcannelOrderActivity;
 import com.mt.bbdj.community.activity.IdentificationActivity;
 import com.mt.bbdj.community.activity.RecordSheetActivity;
 import com.mt.bbdj.community.adapter.HaveFinishAdapter;
@@ -51,6 +52,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import okhttp3.OkHttpClient;
+
 /**
  * Author : ZSK
  * Date : 2019/1/8
@@ -61,7 +64,6 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
     private XRecyclerView recyclerView;
 
     private TextView tv_no_address;
-
     private WaitPrintAdapter mAdapter;
     private RequestQueue mRequestQueue;
     private HkDialogLoading dialogLoading;
@@ -81,7 +83,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
     private final int REQUEST_WAIT_PRINT = 102;     //待打印数据列表
 
     private String mail_id;     //订单id
-    private String number;     //
+    private String number;
     private String send_name;   //寄件人
     private String goods_name;   //选中的商品价格
     private String goods_weight;   //选中的商品重量
@@ -107,7 +109,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void receiveEvent(TargetEvent targetEvent) {
-        if (targetEvent.getTarget() == 2) {
+        if (targetEvent.getTarget() == 2 || targetEvent.getTarget() == 1) {
             recyclerView.refresh();
         }
 
@@ -123,7 +125,6 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
             recyclerView.refresh();
         }
     }
-
 
     private void initClickListener() {
         //立刻打印
@@ -141,11 +142,23 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
 
                 //用来和“待收件”界面中的“立刻打印”作区别
                 SharedPreferencesUtil.getEditor()
-                        .putString("printType","2")
+                        .putString("printType", "2")
                         .commit();
 
                 //验证身份寄件人是否实名
                 identifyPerson(mail_id);
+            }
+        });
+
+        mAdapter.setOnCannelOrderClickListener(new WaitPrintAdapter.OnCannelOrderClickListener() {
+            @Override
+            public void OnCannelOrderClick(int position) {
+                HashMap<String, String> map = mList.get(position);
+                mail_id = map.get("mail_id");
+                Intent intent = new Intent(getActivity(), CauseForcannelOrderActivity.class);
+                intent.putExtra("user_id", user_id);
+                intent.putExtra("mail_id", mail_id);
+                startActivity(intent);
             }
         });
     }
@@ -171,7 +184,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
     private OnResponseListener<String> onResponseListener = new OnResponseListener<String>() {
         @Override
         public void onStart(int what) {
-          //  dialogLoading.show();
+            //  dialogLoading.show();
         }
 
         @Override
@@ -193,17 +206,17 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-          //  dialogLoading.cancel();
+            //  dialogLoading.cancel();
         }
 
         @Override
         public void onFailed(int what, Response<String> response) {
-           // dialogLoading.cancel();
+            // dialogLoading.cancel();
         }
 
         @Override
         public void onFinish(int what) {
-          //  dialogLoading.cancel();
+            //  dialogLoading.cancel();
         }
     };
 
@@ -218,10 +231,9 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
 
     private void startRecord() {
         Intent intent = new Intent(getActivity(), RecordSheetActivity.class);
-        intent.putExtra("waitPrint",true);
+        intent.putExtra("waitPrint", true);
         intent.putExtra("mail_id", mail_id);
         intent.putExtra("user_id", user_id);
-        intent.putExtra("numer",number);
         intent.putExtra("goods_name", goods_name);
         intent.putExtra("goods_weight", goods_weight);
         intent.putExtra("mailing_momey", mailing_momey);
@@ -240,7 +252,7 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
                         Intent intent = new Intent(getActivity(), IdentificationActivity.class);
                         intent.putExtra("come_type", false);
                         intent.putExtra("mail_id", mail_id);
-                        intent.putExtra("send_name",send_name);
+                        intent.putExtra("send_name", send_name);
                         startActivity(intent);
                         dialog.dismiss();
                     }
@@ -265,11 +277,10 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
         if (page == 1) {
             mList.clear();
         }
-
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject1 = (JSONObject) jsonArray.get(i);
-            String number = jsonObject1.getString("number");
             String mail_id = jsonObject1.getString("mail_id");
+            String number = jsonObject1.getString("number");
             String express_id = jsonObject1.getString("express_id");
             String send_name = jsonObject1.getString("send_name");
             String collect_name = jsonObject1.getString("collect_name");
@@ -282,8 +293,8 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
             String content = jsonObject1.getString("content");
 
             HashMap<String, String> map = new HashMap<>();
-            map.put("number", number);
             map.put("mail_id", mail_id);
+            map.put("number", number);
             map.put("express_id", express_id);
             map.put("send_name", send_name);
             map.put("create_time", create_time);
@@ -294,7 +305,6 @@ public class WaitMimeographFragment extends BaseFragment implements XRecyclerVie
             map.put("goods_weight", goods_weight);
             map.put("mailing_momey", mailing_momey);
             map.put("content", content);
-
             mList.add(map);
         }
         if (mList.size() == 0) {

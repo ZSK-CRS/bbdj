@@ -17,6 +17,7 @@ import com.yanzhenjie.nohttp.rest.Request;
 import java.io.File;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Author : ZSK
@@ -2498,6 +2499,20 @@ public class NoHttpRequest {
         return request;
     }
 
+    public static  Map<String, String> setHeaderParams(String user_id) {
+        Map<String, String> requestMap = new HashMap<>();
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        requestMap.put("signature", signature);
+        requestMap.put("timeStamp", timeStamp);
+        requestMap.put("randomStr", randomStr);
+        requestMap.put("distributor_id", user_id);
+        requestMap.put("Encryption", encryption);
+        return requestMap;
+    }
+
     public static Request<String> getTest() {
         String timeStamp = DateUtil.getCurrentTimeStamp();
         String randomStr = StringUtil.getRandomNumberString(7);
@@ -2508,4 +2523,6 @@ public class NoHttpRequest {
         request.add("sum", "2");     //时间戳
         return request;
     }
+
+
 }

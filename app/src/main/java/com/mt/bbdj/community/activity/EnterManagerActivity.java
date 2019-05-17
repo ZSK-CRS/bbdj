@@ -342,7 +342,6 @@ public class EnterManagerActivity extends CaptureActivity {
             mTempList.remove(resultCode);
             ToastUtil.showShort(msg);
         }
-
         tv_enter_number.setText("(" + mList.size() + "/30)");
     }
 

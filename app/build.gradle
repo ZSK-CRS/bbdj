@@ -88,6 +88,12 @@ android {
         implementation 'com.android.support:multidex:1.0.3'
         implementation 'com.google.code.gson:gson:2.8.1'
 
+        compile 'com.squareup.retrofit2:retrofit:2.0.2'
+        compile 'com.squareup.retrofit2:converter-gson:2.0.2'
+
+
+        compile 'com.github.simonpercic:oklog3:2.3.0'
+
     }
 }
 

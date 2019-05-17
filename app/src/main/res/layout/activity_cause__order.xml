@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/whilte"
+    android:orientation="vertical"
+    tools:context=".community.activity.CauseForcannelOrderActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl_address_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/iv_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_araw_left_grey" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_refause_title"
+            android:layout_width="150dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="取消订单"
+            android:textColor="@color/grey_10"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <View
+        android:background="@color/grey_6"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_vertical"
+        android:text="取消原因(可多选)"
+        android:textColor="@color/grey_10"
+        android:textSize="15sp" />
+
+    <View
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@color/grey_14"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rl_cause_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingBottom="10dp"
+        android:paddingRight="15dp">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+    <View
+        android:background="#FDFCFC"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/shap_ll_bg_2"
+        android:orientation="horizontal"
+        android:minHeight="45dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/ic_promit"
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center_vertical"
+            android:layout_width="20dp"
+            android:scaleType="fitCenter"
+            android:layout_height="20dp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:paddingRight="15dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="请勿与客户私下交易，一经发现，封禁帐号"
+            android:textColor="#fffe6909"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="65dp">
+
+        <TextView
+            android:id="@+id/bt_commit_no"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:text="暂不取消"
+            android:background="@drawable/shap_select_1"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="45dp" />
+
+        <TextView
+            android:id="@+id/bt_commit_next"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:text="取消订单"
+            android:textColor="@color/white"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/shap_select_2"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="45dp" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/bt_commit_refause"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:text="取消订单"
+            android:textColor="@color/white"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/shap_select_2"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="45dp" />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

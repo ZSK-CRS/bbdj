@@ -63,7 +63,6 @@
     <!-- SD卡读取权限，用户写入离线定位数据 -->
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
-
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
@@ -82,8 +81,7 @@
             android:name="com.amap.api.v2.apikey"
             android:value="ad46bd828313c14fdd3f0377bb2dd4b2" />
         <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService"></service>
-
+        <service android:name="com.amap.api.location.APSService" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -377,12 +375,49 @@
             android:name=".community.activity.BluetoothNumberActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".community.activity.SignatureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".community.activity.YesterdPaiActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".community.activity.ConfirmReceiveActivity" />
+        <activity
+            android:name=".community.activity.ReceiveExpressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.CannelOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.QuotedPriceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.WaterOrderDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ClearDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ClearStateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.WaterOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ClearOrderActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.HomemarkActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.WaterServiceDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ClearServiceDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.HomeServiceDetailActivity"
             android:screenOrientation="portrait" />
     </application>
 
