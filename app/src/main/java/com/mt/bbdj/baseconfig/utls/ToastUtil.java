@@ -1,5 +1,6 @@
 package com.mt.bbdj.baseconfig.utls;
 
+import android.app.Application;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.application.MyApplication;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Author : ZSK
  * Date : 2018/12/27
@@ -19,6 +22,12 @@ import com.mt.bbdj.baseconfig.application.MyApplication;
  */
 public class ToastUtil {
     private static Toast toast;
+
+    private static WeakReference<Application> mAppLication;
+
+    public static void init(Application application) {
+        mAppLication = new WeakReference<Application>(application);
+    }
 
     private static Toast initToast(CharSequence message, int duration) {
         if (toast == null) {
@@ -36,7 +45,14 @@ public class ToastUtil {
      * @param message
      */
     public static void showShort(CharSequence message) {
-        initToast(message, Toast.LENGTH_SHORT).show();
+
+        if (toast != null) {
+            toast.cancel();
+            toast = null;
+        }
+        toast = Toast.makeText(mAppLication.get(),message,Toast.LENGTH_SHORT);
+        toast.show();
+       // initToast(message, Toast.LENGTH_SHORT).show();
     }
 
 

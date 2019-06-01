@@ -1,14 +1,16 @@
-! 0 200 200 300 1
+ ! 0 200 200 300 1
 PAGE-WIDTH 580
 
 SETBOLD 1
-TEXT 7 0 420 20 签收码
-TEXT 7 0 110 130 取件码
+TEXT 7 0 420 10 签收码
+TEXT 7 0 35 85 取件码
+TEXT 7 0 35 190 运单号
+TEXT 7 0 35 230 [pie_number]
 SETBOLD 0
 
 SETBOLD 3
 SETMAG 3 3
-TEXT 5 0 40 180 [tag]
+TEXT 5 0 40 115 [tag]
 ;Restore default font sizes
 SETMAG 1 1
 

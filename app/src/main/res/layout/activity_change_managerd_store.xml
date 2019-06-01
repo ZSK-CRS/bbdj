@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context=".community.activity.SendManagerActivity">
+    <!--此布局只是一醉简单的方式隐藏光标-->
+    <LinearLayout
+        android:layout_width="0px"
+        android:layout_height="0px"
+        android:focusable="true"
+        android:focusableInTouchMode="true" />
+
+    <LinearLayout
+        android:id="@+id/ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/mainColor"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/iv_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="10dp"
+                android:layout_height="15dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="寄存管理"
+            android:textColor="@color/whilte"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/tv_fast_select"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="10dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_select" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F5F5"
+        android:orientation="vertical"
+        android:paddingBottom="15dp">
+
+        <TextView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:gravity="center"
+            android:text="交接数量(件)" />
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_number"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="-5dp"
+            android:gravity="center"
+            android:text="40"
+            android:textColor="@color/mainColor"
+            android:textSize="17sp" />
+
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:orientation="horizontal"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp">
+
+            <RelativeLayout
+                android:id="@+id/rl_select_time"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1.3"
+                android:background="@drawable/shap_white_circle"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/time_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="2019-04-09"
+                    android:textColor="@color/grey_7"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="3dp"
+                    android:layout_toRightOf="@+id/time_select"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/xiala" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_select_express"
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:background="@drawable/shap_white_circle"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/express_select"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="全部"
+                    android:textColor="@color/grey_7"
+                    android:textSize="15sp" />
+
+                <ImageView
+                    android:layout_marginLeft="3dp"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/express_select"
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/xiala" />
+
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/bt_select"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/bt_bg"
+                android:text="筛选"
+                android:textColor="#ffffff"
+                android:textSize="15sp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <com.flyco.tablayout.SlidingTabLayout
+        android:id="@+id/slt_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/whilte"
+        tl:tl_divider_color="#00000000"
+        tl:tl_divider_padding="13dp"
+        tl:tl_divider_width="1dp"
+        tl:tl_indicator_color="@color/mainColor"
+        tl:tl_indicator_height="2dp"
+        tl:tl_tab_padding="22dp"
+        tl:tl_tab_space_equal="true"
+        tl:tl_textSelectColor="@color/mainColor"
+        tl:tl_textUnselectColor="#656565"
+        tl:tl_textsize="14sp" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+
+    </android.support.v4.view.ViewPager>
+
+</LinearLayout>

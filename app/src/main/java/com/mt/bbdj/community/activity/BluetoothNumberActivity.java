@@ -104,6 +104,7 @@ public class BluetoothNumberActivity extends BaseActivity {
     private SharedPreferences mShared;
     private String fastLogoBig;
     private String fastLogoMini;
+    private PrintThread printDataThread;
 
     Handler handler = new Handler() {
         @Override
@@ -115,17 +116,25 @@ public class BluetoothNumberActivity extends BaseActivity {
             } else {
                 String bluetoothName = (String) msg.obj;
                 tvMateMache.setText(bluetoothName);
-
-                for (HashMap<String,String> data : dataList) {
-                    String code = data.get("code");
-                    String qrcode = data.get("qrcode");
-                    code = StringUtil.handleNullResultForString(code);
-                    qrcode = StringUtil.handleNullResultForString(qrcode);
-                    printPanel(code,qrcode);    //打印面单
-                }
+                printDataThread.start();
             }
         }
     };
+
+    public class PrintThread extends Thread{
+        @Override
+        public void run() {
+            for (HashMap<String,String> data : dataList) {
+                String code = data.get("code");
+                String qrcode = data.get("qrcode");
+                String pie_number = data.get("pie_number");
+                code = StringUtil.handleNullResultForString(code);
+                qrcode = StringUtil.handleNullResultForString(qrcode);
+                pie_number = StringUtil.handleNullResultForString(pie_number);
+                printPanel(code,qrcode,pie_number);    //打印面单
+            }
+        }
+    }
 
     private Timer mPrintTimer;
     private List<HashMap<String, String>> dataList;
@@ -141,6 +150,7 @@ public class BluetoothNumberActivity extends BaseActivity {
         initSetting();
         initView();
         initPannelData();   //面板信息
+        startSearch();
     }
 
 
@@ -159,6 +169,7 @@ public class BluetoothNumberActivity extends BaseActivity {
     }
 
     private void initView() {
+        printDataThread = new PrintThread();
         initPairedList();     //初始化已配对列表
         initNewList();      //初始化新设备的列表
         initClickListenr();   //给列表的中的蓝牙设备创建监听事件
@@ -511,11 +522,12 @@ public class BluetoothNumberActivity extends BaseActivity {
         dataList = printData.getData();
     }
 
-    private void printPanel(String code,String qrcode) {
+    private void printPanel(String code,String qrcode,String pie_number) {
         try {
             HashMap<String, String> pum = new HashMap<String, String>();
             // pum.put("[packageCode]", packageCode);
             pum.put("[tag]", code);
+            pum.put("[pie_number]", pie_number);
             Set<String> keySet = pum.keySet();
             Iterator<String> iterator = keySet.iterator();
             InputStream afis = this.getResources().getAssets().open("number.txt");//打印模版放在assets文件夹里
@@ -532,13 +544,13 @@ public class BluetoothNumberActivity extends BaseActivity {
 
             InputStream inbmp = this.getResources().getAssets().open("ic_logo_mini.png");
             Bitmap bitmap = BitmapFactory.decodeStream(inbmp);
-            HPRTPrinterHelper.Expanded("35", "30", bitmap, (byte) 0);//第一联 顶部兵兵logo
+            HPRTPrinterHelper.Expanded("35", "10", bitmap, (byte) 0);//第一联 顶部兵兵logo
 
             if ("1".equals(BluetoothNumberActivity.paper)) {
                 HPRTPrinterHelper.Form();
             }
 
-            HPRTPrinterHelper.PrintQR(HPRTPrinterHelper.BARCODE, "340", "55", "2", "6", qrcode);
+            HPRTPrinterHelper.PrintQR(HPRTPrinterHelper.BARCODE, "340", "45", "2", "6", qrcode);
 
             HPRTPrinterHelper.Form();
             HPRTPrinterHelper.Print();
@@ -594,6 +606,13 @@ public class BluetoothNumberActivity extends BaseActivity {
             printThread = null;
             dummy.interrupt();
         }
+
+        if (printDataThread != null) {
+            Thread printThread = printDataThread;
+            printDataThread = null;
+            printThread.interrupt();
+        }
+
         try {
             HPRTPrinterHelper.PortClose();
             if (mReceiver != null) {

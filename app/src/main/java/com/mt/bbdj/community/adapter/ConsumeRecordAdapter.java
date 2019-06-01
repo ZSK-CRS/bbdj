@@ -27,6 +27,12 @@ public class ConsumeRecordAdapter extends RecyclerView.Adapter<ConsumeRecordAdap
 
     private Context mContext;
 
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+        this.onItemClickListener = onItemClickListener;
+    }
+
     public ConsumeRecordAdapter(Context context, List<HashMap<String,String>> mList) {
         this.mContext = context;
         this.mList = mList;
@@ -50,6 +56,15 @@ public class ConsumeRecordAdapter extends RecyclerView.Adapter<ConsumeRecordAdap
         holder.consumeType.setText(map.get("title"));
         holder.time.setText(map.get("time"));
         holder.overplus.setText("余额："+map.get("con_balance"));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.OnItemClick(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -69,5 +84,12 @@ public class ConsumeRecordAdapter extends RecyclerView.Adapter<ConsumeRecordAdap
             time = itemView.findViewById(R.id.item_consume_time);
             overplus = itemView.findViewById(R.id.item_consume_overplus);
         }
+    }
+
+
+    //#############################################################
+
+    public interface OnItemClickListener {
+        void OnItemClick(int position);
     }
 }

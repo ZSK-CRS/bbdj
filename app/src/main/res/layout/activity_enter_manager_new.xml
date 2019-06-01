@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/capture_containter"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/mainColor">
+
+        <RelativeLayout
+            android:id="@+id/iv_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left" />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_expressage_select"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="中通快递"
+            android:textColor="@color/whilte"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
+            android:layout_toRightOf="@+id/tv_expressage_select"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_down" />
+        
+        <RelativeLayout
+
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_enter"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_toLeftOf="@+id/tv_enter_number"
+                android:gravity="center"
+                android:text="全部入库"
+                android:textColor="@color/whilte"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_enter_number"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:gravity="center"
+                android:text="(0/30)"
+                android:textColor="@color/whilte"
+                android:textSize="15sp" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <com.king.zxing.util.ResizeAbleSurfaceView
+        android:id="@+id/capture_preview"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_below="@+id/rl_title_layout"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true" />
+
+    <RelativeLayout
+        android:id="@+id/rl_scan"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:layout_below="@+id/rl_title_layout">
+
+        <RelativeLayout
+            android:id="@+id/capture_crop_layout"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/capture"
+            android:contentDescription="@string/app_name">
+
+            <ImageView
+                android:id="@+id/capture_scan_line"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/rxtool_scan_ray"
+                android:contentDescription="@string/app_name" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <include
+        android:layout_below="@+id/rl_scan"
+        android:id="@+id/ll_phone"
+        layout="@layout/layout_phone_tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ll_phone"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="提货码"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="运单号"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="手机号码"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@color/grey_6"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rl_order_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/capture_containter"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/rl_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@color/mainColor">
+
+        <RelativeLayout
+            android:id="@+id/iv_back"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:gravity="center">
+
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_arrow_left" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_expressage_select"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="极速出库"
+            android:textColor="@color/whilte"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_centerVertical="true"
+            android:id="@+id/tv_out"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@+id/tv_out_number"
+            android:gravity="center"
+            android:text="全部出库"
+            android:textColor="@color/whilte"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_out_number"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:text="(0)"
+            android:textColor="@color/whilte"
+            android:textSize="15sp" />
+
+
+    </RelativeLayout>
+
+    <com.king.zxing.util.ResizeAbleSurfaceView
+        android:layout_below="@+id/rl_title_layout"
+        android:id="@+id/capture_preview"
+        android:layout_width="match_parent"
+        android:layout_height="270dp"
+        android:clipToPadding="true"
+        android:fitsSystemWindows="true" />
+
+    <RelativeLayout
+        android:id="@+id/rl_scan"
+        android:layout_below="@+id/rl_title_layout"
+        android:layout_width="match_parent"
+        android:layout_height="260dp">
+
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/capture_crop_layout"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/capture"
+            android:contentDescription="@string/app_name">
+
+            <ImageView
+                android:id="@+id/capture_scan_line"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_margin="5dp"
+                android:background="@drawable/rxtool_scan_ray"
+                android:contentDescription="@string/app_name" />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_below="@+id/rl_scan"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="提货码"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/tv_package_number"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_6" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:gravity="center_vertical"
+                android:text="运单号"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:paddingRight="10dp"
+                android:id="@+id/tv_yundan"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="20dp"
+                android:background="@null"
+                android:gravity="center_vertical"
+                android:hint="请输入运单号"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="7dp"
+            android:background="@color/grey_6" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="提货码"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="运单号"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="快递公司"
+                android:textColor="@color/grey_7"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center_vertical"
+                android:src="@color/grey_6"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rl_order_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

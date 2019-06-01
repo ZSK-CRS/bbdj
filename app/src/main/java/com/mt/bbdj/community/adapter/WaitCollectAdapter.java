@@ -85,7 +85,7 @@ public class WaitCollectAdapter extends RecyclerView.Adapter<WaitCollectAdapter.
         String express_logo = map.get("express_logo");
         Glide.with(mContext)
                 .load(express_logo)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.ic);
 
         //点击事件

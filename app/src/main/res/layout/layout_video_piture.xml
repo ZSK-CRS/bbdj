@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_video_one"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="1、如何在兵兵到家公众号查询物流信息"
+        android:textColor="@color/grey_7" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/splite_view" />
+
+    <TextView
+        android:id="@+id/tv_video_two"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="2、如何在兵兵到家app查询物流信息"
+        android:textColor="@color/grey_7" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/splite_view" />
+
+    <TextView
+        android:id="@+id/tv_video_three"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="3、如何在门店下单寄件"
+        android:textColor="@color/grey_7" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/splite_view" />
+
+    <TextView
+        android:id="@+id/tv_video_four"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="4、如何在兵兵到家app下单寄件"
+        android:textColor="@color/grey_7" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/splite_view" />
+
+    <TextView
+        android:id="@+id/tv_video_five"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="10dp"
+        android:text="5、如何在兵兵到家app上交接管理"
+        android:textColor="@color/grey_7" />
+
+
+</LinearLayout>

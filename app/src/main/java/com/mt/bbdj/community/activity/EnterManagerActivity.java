@@ -23,9 +23,7 @@ import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.zxing.Result;
 import com.king.zxing.CaptureActivity;
-import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
-import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.WaillMessage;
@@ -505,17 +503,17 @@ public class EnterManagerActivity extends CaptureActivity {
                 SoundHelper.getInstance().playNotifiRepeatSound();
             } else {
                 mTempList.add(resultCode);
-                checkWaybillState(resultCode);    //检测运单号的状态
+                checkWaybillState(resultCode,"");    //检测运单号的状态
             }
         }
     }
 
-    private void checkWaybillState(String number) {
+    private void checkWaybillState(String number,String picturl) {
         if ("".equals(express_id)) {
             ToastUtil.showShort("请选择快递公司");
             return;
         }
-        Request<String> request = NoHttpRequest.checkWaybillRequest(user_id, express_id, number);
+        Request<String> request = NoHttpRequest.checkWaybillRequest(user_id, express_id, number,picturl);
         mRequestQueue.add(CHECK_WAY_BILL_STATE, request, mOnresponseListener);
     }
 

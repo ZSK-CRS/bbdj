@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * Author : ZSK
@@ -33,4 +35,22 @@ public class SystemUtil {
         }
         return versionName;
     }
+    //隐藏软键盘
+    public static void hideKeyBoard(Context context,View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != imm) {
+            view.requestFocus();
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    //显示软键盘
+    public static void showKeyBoard(Context context,View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (null != imm) {
+            view.requestFocus();
+            imm.showSoftInput(view, 0);
+        }
+    }
+
 }

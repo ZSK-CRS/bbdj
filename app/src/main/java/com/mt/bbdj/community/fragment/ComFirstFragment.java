@@ -24,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.mt.bbdj.R;
+import com.mt.bbdj.baseconfig.activity.LoginActivity;
 import com.mt.bbdj.baseconfig.application.MyApplication;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.City;
@@ -61,16 +62,21 @@ import com.mt.bbdj.community.activity.ClientManagerActivity;
 import com.mt.bbdj.community.activity.CommunityActivity;
 import com.mt.bbdj.community.activity.ComplainManagerdActivity;
 import com.mt.bbdj.community.activity.EnterManagerActivity;
+import com.mt.bbdj.community.activity.EnterManager_new_Activity;
 import com.mt.bbdj.community.activity.GlobalSearchActivity;
 import com.mt.bbdj.community.activity.MatterShopActivity;
 import com.mt.bbdj.community.activity.MessageAboutActivity;
 import com.mt.bbdj.community.activity.MessageManagerdActivity;
 import com.mt.bbdj.community.activity.MoneyFormatManagerActivity;
+import com.mt.bbdj.community.activity.OpearteActivity;
 import com.mt.bbdj.community.activity.OutManagerActivity;
+import com.mt.bbdj.community.activity.OutManager_new_Activity;
 import com.mt.bbdj.community.activity.RepertoryActivity;
+import com.mt.bbdj.community.activity.RepertoryStoreActivity;
 import com.mt.bbdj.community.activity.SearchPackageActivity;
 import com.mt.bbdj.community.activity.SendManagerActivity;
 import com.mt.bbdj.community.activity.SendResByHandActivity;
+import com.mt.bbdj.community.activity.StoreManagerdActivity;
 import com.mt.bbdj.community.activity.SystemMessageAboutActivity;
 import com.mt.bbdj.community.adapter.MyGridViewAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -189,7 +195,6 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void initParams() {
-
         //初始化请求队列
         mRequestQueue = NoHttp.newRequestQueue();
         dialogLoading = new HkDialogLoading(getActivity(), "请稍后...");
@@ -330,12 +335,12 @@ public class ComFirstFragment extends BaseFragment {
                 handleChangeManagerEvent();
                 break;
             case "4":       //入库管理
-                ToastUtil.showShort("暂不开放！");
-                //  handleEnterManagerEvent();
+                // ToastUtil.showShort("暂不开放！");
+                handleEnterManagerEvent();
                 break;
             case "5":       //出库管理
-                ToastUtil.showShort("暂不开放！");
-                // handleOutManagerEvent();
+                // ToastUtil.showShort("暂不开放！");
+                 handleOutManagerEvent();
                 break;
             case "6":       //财务管理
                 handleMoneyManagerEvent();
@@ -353,20 +358,34 @@ public class ComFirstFragment extends BaseFragment {
                 handleComplainEvent();
                 break;
             case "11":      //操作手册
-                //ToastUtil.showShort("该功能暂未开放！");
-                showDownLoadDialog("");
+                handleOperateEvent();
+                break;
+            case "12":     //寄存管理
+                handleStoreManageEvent();
                 break;
         }
 
     }
 
+    private void handleOperateEvent() {
+        Intent intent = new Intent(getActivity(), OpearteActivity.class);
+        startActivity(intent);
+    }
+
+    private void handleStoreManageEvent() {
+        Intent intent = new Intent(getActivity(), RepertoryStoreActivity.class);
+        startActivity(intent);
+    }
+
     private void handleOutManagerEvent() {
-        Intent intent = new Intent(getActivity(), OutManagerActivity.class);
+        //Intent intent = new Intent(getActivity(), OutManagerActivity.class);
+        Intent intent = new Intent(getActivity(), OutManager_new_Activity.class);
         startActivity(intent);
     }
 
     private void handleEnterManagerEvent() {
-        Intent intent = new Intent(getActivity(), EnterManagerActivity.class);
+        // Intent intent = new Intent(getActivity(), EnterManagerActivity.class);
+         Intent intent = new Intent(getActivity(), EnterManager_new_Activity.class);
         startActivity(intent);
     }
 
@@ -418,7 +437,7 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void initView() {
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             HashMap<String, Object> item = new HashMap<>();
             if (i == 0) {
                 item.put("id", "0");
@@ -482,6 +501,12 @@ public class ComFirstFragment extends BaseFragment {
                 item.put("id", "11");
                 item.put("name", "操作手册");
                 item.put("ic", R.drawable.ic_main_caozuo);
+            }
+
+            if (i == 12) {
+                item.put("id", "12");
+                item.put("name", "寄存管理");
+                item.put("ic", R.drawable.ic_money_manager);
             }
 
             mList.add(item);
@@ -553,6 +578,7 @@ public class ComFirstFragment extends BaseFragment {
         String money = dataObj.getString("money");   //账户余额
         String birthday = dataObj.getString("birthday");   //入驻天数
         String version_number = dataObj.getString("version_number");   //版本号
+        String prohibit = dataObj.getString("prohibit");   //状态 1：正常营业  其他：禁止登录
         //版本地址
         version_url = dataObj.getString("version_url");
         String unread_url = dataObj.getString("unread_url");   //未读消息
@@ -570,7 +596,25 @@ public class ComFirstFragment extends BaseFragment {
         editor.putString("address", username);
         editor.commit();
 
-        upLoadNewVersion(version_number, version_url);    //更新最新版本
+        if (!"1".equals(prohibit)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                    .setMessage("您的驿站已禁止登录，如有疑问请与客服人员联系")
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            Intent intent = new Intent(getActivity(),LoginActivity.class);
+                            startActivity(intent);
+                            getActivity().finish();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.setCanceledOnTouchOutside(false);
+            dialog.show();
+
+        } else {
+            upLoadNewVersion(version_number, version_url);    //更新最新版本
+        }
     }
 
     private void upLoadNewVersion(String version_number, String version_url) {
@@ -581,7 +625,7 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void showDownLoadDialog(String version_url) {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+      /*  AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.layout_update_version,null);
         TextView updataNow = view.findViewById(R.id.id_update_now);
@@ -601,8 +645,8 @@ public class ComFirstFragment extends BaseFragment {
         dialog.setCanceledOnTouchOutside(true);
 
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().setContentView(view);
-      //  DialogUtil.promptDialog1(getActivity(), "更新提示", "有新版本上线，请先更新！", DetermineListener, throwListener);
+        dialog.getWindow().setContentView(view);*/
+        DialogUtil.promptDialog1(getActivity(), "更新提示", "有新版本上线，请先更新！", DetermineListener, throwListener);
     }
 
 
@@ -620,7 +664,7 @@ public class ComFirstFragment extends BaseFragment {
     };
 
     private void download() {
-        AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
+       /* AlertDialog dialog = new AlertDialog.Builder(getActivity()).create();
         LayoutInflater inflater = LayoutInflater.from(getActivity());
         View view = inflater.inflate(R.layout.layout_update_version_procress,null);
         progressBar = view.findViewById(R.id.progress);
@@ -635,36 +679,37 @@ public class ComFirstFragment extends BaseFragment {
         dialog.setCanceledOnTouchOutside(false);
 
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().setContentView(view);
+        dialog.getWindow().setContentView(view);*/
 
-       /* mProgressBar = new ProgressDialog(getActivity());
+        mProgressBar = new ProgressDialog(getActivity());
         mProgressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressBar.setTitle("正在下载");
         mProgressBar.setMessage("请稍后...");
         mProgressBar.setProgress(0);
         mProgressBar.setMax(100);
         mProgressBar.show();
-        mProgressBar.setCancelable(false);*/
+        mProgressBar.setCancelable(false);
 
         DownloadUtil.get().download(version_url, APP_PATH_ROOT, fileName, new DownloadUtil.OnDownloadListener() {
             @Override
             public void onDownloadSuccess(File file) {
-              /*  if (mProgressBar != null && mProgressBar.isShowing()) {
+                if (mProgressBar != null && mProgressBar.isShowing()) {
                     mProgressBar.dismiss();
-                }*/
+                }
                 //下载完成进行相关逻辑操作
                 installApk(file);// 安装
             }
 
             @Override
             public void onDownloading(int progress) {
-                //mProgressBar.setProgress(progress);
-                progressBar.setCurrentProgress(progress);
+                mProgressBar.setProgress(progress);
+                //progressBar.setCurrentProgress(progress);
             }
 
             @Override
             public void onDownloadFailed(Exception e) {
                 //下载异常进行相关提示操作
+                ToastUtil.showShort(e.getMessage());
             }
         });
 
@@ -739,12 +784,13 @@ public class ComFirstFragment extends BaseFragment {
                 actionToMessagePannel();      //跳转到消息界面
                 break;
             case R.id.tv_abnormal_wait:     //仓库
-                 ToastUtil.showShort("暂不开放!");
-                // actionToRepertoryPannel();
+                // ToastUtil.showShort("暂不开放!");
+                 actionToRepertoryPannel();
                 break;
             case R.id.textview_serach:
                 actionToSearchPannel();    //搜索
                 break;
+
         }
     }
 

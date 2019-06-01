@@ -53,7 +53,7 @@ public class GlobalHaveFinishAdapter extends RecyclerView.Adapter<GlobalHaveFini
         String express_logo = map.get("express_logo");
         Glide.with(context)
                 .load(express_logo)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.ic);
         holder.billNumber.setText(map.get("waybill_number"));
         holder.sendPerson.setText(map.get("send_name"));

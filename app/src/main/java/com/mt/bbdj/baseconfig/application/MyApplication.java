@@ -17,9 +17,11 @@ import com.mt.bbdj.baseconfig.model.Constant;
 import com.mt.bbdj.baseconfig.utls.CrashHandler;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.IntegerUtil;
+import com.mt.bbdj.baseconfig.utls.RxTool;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.SoundHelper;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
+import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.yanzhenjie.nohttp.InitializationConfig;
 import com.yanzhenjie.nohttp.Logger;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -59,6 +61,9 @@ public class MyApplication extends Application {
         DialogSettings.style = STYLE_IOS;
 
         initPushSetting();    //初始化推送
+
+        RxTool.init(this);
+        ToastUtil.init(this);
 
         //bug收集
        // CrashHandler.getInstance().init(this);

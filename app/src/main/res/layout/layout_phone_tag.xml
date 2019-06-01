@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:background="#7f7f7f"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="105dp"
+        android:background="@drawable/shap_ll_circle"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/theme_tv_base"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_height="25dp"
+                    android:textSize="14sp"
+                    android:text="提货码" />
+
+                <TextView
+                    android:id="@+id/tv_package_number"
+                    style="@style/theme_tv_base"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textColor="@color/grey_7" />
+
+            </LinearLayout>
+
+            <View
+                style="@style/theme_splite_view"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="5dp">
+
+                <TextView
+                    style="@style/theme_tv_base"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:gravity="center_vertical"
+                    android:textSize="14sp"
+                    android:text="运单号"
+                    android:textColor="@color/grey_7" />
+
+                <TextView
+                    android:id="@+id/tv_yundan"
+                    style="@style/theme_tv_base"
+                    android:gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:textSize="14sp"
+                    android:hint="请输入运单号"
+                    android:textColor="@color/grey_7" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            style="@style/theme_splite_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp">
+
+            <TextView
+                style="@style/theme_tv_base"
+                android:layout_width="80dp"
+                android:layout_height="25dp"
+                android:gravity="center_vertical"
+                android:text="电话号码"
+                android:textSize="14sp" />
+
+            <EditText
+                style="@style/theme_et_base"
+                android:layout_width="match_parent"
+                android:id="@+id/tv_phone"
+                android:inputType="number"
+                android:layout_height="30dp"
+                android:paddingLeft="20dp"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:textSize="14sp"
+                android:hint="请输入手机号码"
+                android:textColor="@color/grey_7" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

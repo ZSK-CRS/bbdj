@@ -619,8 +619,8 @@ public class BluetoothSearchActivity extends BaseActivity {
             Bitmap bitmap3 = BitmapFactory.decodeStream(inbmp3);
             HPRTPrinterHelper.Expanded("20", "960", bitmap3, (byte) 0);//第二联 兵兵logo
 
-            HPRTPrinterHelper.AutLine("65","365",500,3,false,false,Receiver_address + Receiver_address1);
-            HPRTPrinterHelper.AutLine("65","748",500,3,false,false,Receiver_address + Receiver_address1);
+            HPRTPrinterHelper.AutLine("65","365",500,3,true,false,Receiver_address + Receiver_address1);
+            HPRTPrinterHelper.AutLine("65","748",500,3,true,false,Receiver_address + Receiver_address1);
 
             fastLogoBig = "";
             fastLogoMini = "";

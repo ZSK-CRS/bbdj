@@ -127,7 +127,7 @@ public class RecordSheetDetailActivity extends BaseActivity {
     }
 
     private void initParams() {
-        mail_id = SharedPreferencesUtil.getSharedPreference().getString("mail_id","");
+        mail_id = SharedPreferencesUtil.getSharedPreference().getString("mail_id", "");
         mDaoSession = GreenDaoManager.getInstance().getSession();
         mUserMessageDao = mDaoSession.getUserBaseMessageDao();
         List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
@@ -221,7 +221,7 @@ public class RecordSheetDetailActivity extends BaseActivity {
         String yundanhao = dataObj.getString("yundanhao");    //运单号
         String code = dataObj.getString("code");   //标识码
         String place = dataObj.getString("place");      //中转地
-                      String transit = dataObj.getString("transit");     //中转地标识码和时间
+        String transit = dataObj.getString("transit");     //中转地标识码和时间
         String send_name = dataObj.getString("send_name");    //寄送名称
         String send_phone = dataObj.getString("send_phone");    //寄送电话
         String send_region = dataObj.getString("send_region");    //寄送区域
@@ -234,26 +234,26 @@ public class RecordSheetDetailActivity extends BaseActivity {
         String weight = dataObj.getString("weight"); //计费重量
 
         SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
-        editor.putString("mail_id",StringUtil.handleNullResultForString(mail_id));
-        editor.putString("express_id",StringUtil.handleNullResultForString(express_id));
-        editor.putString("express_name",StringUtil.handleNullResultForString(express_name));
-        editor.putString("number",StringUtil.handleNullResultForString(number));
-        editor.putString("yundanhao",StringUtil.handleNullResultForString(yundanhao));
-        editor.putString("code",StringUtil.handleNullResultForString(code));
-        editor.putString("place",StringUtil.handleNullResultForString(place));
-        editor.putString("transit",StringUtil.handleNullResultForString(transit));
-        editor.putString("send_name",StringUtil.handleNullResultForString(send_name));
-        editor.putString("send_phone",StringUtil.handleNullResultForString(send_phone));
-        editor.putString("send_region",StringUtil.handleNullResultForString(send_region));
-        editor.putString("send_address",StringUtil.handleNullResultForString(send_address));
-        editor.putString("collect_name",StringUtil.handleNullResultForString(collect_name));
-        editor.putString("collect_phone",StringUtil.handleNullResultForString(collect_phone));
-        editor.putString("collect_region",StringUtil.handleNullResultForString(collect_region));
-        editor.putString("collect_address",StringUtil.handleNullResultForString(collect_address));
-        editor.putString("goods_name",StringUtil.handleNullResultForString(goods_name));
-        editor.putString("weight",StringUtil.handleNullResultForString(weight));
-        editor.putString("content",etMark.getText().toString());
-        editor.putString("money",etGoodsMoney.getText().toString());
+        editor.putString("mail_id", StringUtil.handleNullResultForString(mail_id));
+        editor.putString("express_id", StringUtil.handleNullResultForString(express_id));
+        editor.putString("express_name", StringUtil.handleNullResultForString(express_name));
+        editor.putString("number", StringUtil.handleNullResultForString(number));
+        editor.putString("yundanhao", StringUtil.handleNullResultForString(yundanhao));
+        editor.putString("code", StringUtil.handleNullResultForString(code));
+        editor.putString("place", StringUtil.handleNullResultForString(place));
+        editor.putString("transit", StringUtil.handleNullResultForString(transit));
+        editor.putString("send_name", StringUtil.handleNullResultForString(send_name));
+        editor.putString("send_phone", StringUtil.handleNullResultForString(send_phone));
+        editor.putString("send_region", StringUtil.handleNullResultForString(send_region));
+        editor.putString("send_address", StringUtil.handleNullResultForString(send_address));
+        editor.putString("collect_name", StringUtil.handleNullResultForString(collect_name));
+        editor.putString("collect_phone", StringUtil.handleNullResultForString(collect_phone));
+        editor.putString("collect_region", StringUtil.handleNullResultForString(collect_region));
+        editor.putString("collect_address", StringUtil.handleNullResultForString(collect_address));
+        editor.putString("goods_name", StringUtil.handleNullResultForString(goods_name));
+        editor.putString("weight", StringUtil.handleNullResultForString(weight));
+        editor.putString("content", etMark.getText().toString());
+        editor.putString("money", etGoodsMoney.getText().toString());
         editor.apply();
     }
 

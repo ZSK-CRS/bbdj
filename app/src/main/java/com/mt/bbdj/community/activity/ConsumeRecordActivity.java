@@ -1,5 +1,6 @@
 package com.mt.bbdj.community.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -66,7 +67,7 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
     private String startTime,endTime;
     private final int REQUEST_CONSUME_REQUEST = 300;
     private TimePickerView timePicker;
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +75,24 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
         ButterKnife.bind(this);
         initParams();
         initRecycler();     //初始化列表
+        initListener();
         initDialog();
+    }
+
+    private void initListener() {
+        mAdapter.setOnItemClickListener(new ConsumeRecordAdapter.OnItemClickListener() {
+            @Override
+            public void OnItemClick(int position) {
+                HashMap<String,String> map = mList.get(position);
+                String id = map.get("id");
+                String title = map.get("title");
+                Intent intent = new Intent(ConsumeRecordActivity.this,ConsumeDetailActivity.class);
+                intent.putExtra("con_id",id);
+                intent.putExtra("user_id",user_id);
+                intent.putExtra("title",title);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initDialog() {
@@ -165,6 +183,8 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
         rlRecord.setAdapter(mAdapter);
     }
 
+
+
     @OnClick({R.id.iv_back, R.id.tv_fast_select})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -232,6 +252,7 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
             String title = jsonObject1.getString("title");
+            String id = jsonObject1.getString("id");
             String con_amount = jsonObject1.getString("con_amount");
             String con_balance = jsonObject1.getString("con_balance");
             String time = jsonObject1.getString("time");
@@ -243,6 +264,7 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
             map.put("con_balance",StringUtil.handleNullResultForString(con_balance));
             map.put("time",time);
             map.put("budget",budget);
+            map.put("id",id);
             mList.add(map);
             map = null;
         }

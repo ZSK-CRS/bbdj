@@ -619,7 +619,6 @@ public class RegisterCompleteActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(File file) {
-                        Glide.with(RegisterCompleteActivity.this).load(file.getPath()).into(imageViews[clickType]);
                         uploadPicture(file.getAbsolutePath());    //上传图片
                     }
 
@@ -641,7 +640,7 @@ public class RegisterCompleteActivity extends BaseActivity {
 
                     @Override
                     public void onSuccess(File file) {
-                        Glide.with(RegisterCompleteActivity.this).load(file.getPath()).into(imageViews[clickType]);
+                   //     Glide.with(RegisterCompleteActivity.this).load(file.getPath()).into(imageViews[clickType]);
                         uploadPicture(file.getAbsolutePath());    //上传图片
                     }
 
@@ -740,17 +739,18 @@ public class RegisterCompleteActivity extends BaseActivity {
                         JSONObject dataObject = jsonObject.getJSONObject("data");
                         String pictureUrl = dataObject.getString("picurl");
                         String message = jsonObject.get("msg").toString();
+                        Glide.with(RegisterCompleteActivity.this).load(pictureUrl).into(imageViews[clickType]);
                         mEditor.putString(pictureType, pictureUrl);
                         mEditor.commit();
                     } else {
                         ToastUtil.showShort("上传失败，请重试！");
-                        restorePictureState();    //还原图片位
+                     // restorePictureState();    //还原图片位
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     dialogLoading.cancel();
                     ToastUtil.showShort("上传失败，请重试！");
-                    restorePictureState();
+                  //  restorePictureState();
                 }
                 dialogLoading.cancel();
             }
@@ -877,10 +877,10 @@ public class RegisterCompleteActivity extends BaseActivity {
             return false;
         }
 
-        if (!StringUtil.isID(idNumber)) {
+       /* if (!StringUtil.isID(idNumber)) {
             ToastUtil.showShort("身份证不合法！");
             return false;
-        }
+        }*/
 
         if (!StringUtil.isMobile(contactPhone)) {
             ToastUtil.showShort("手机号码不合法！");

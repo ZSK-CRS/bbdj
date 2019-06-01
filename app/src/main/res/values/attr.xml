@@ -3,7 +3,7 @@
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
+    You may obtain a copy of the License atattrs.xml
 
        http://www.apache.org/licenses/LICENSE-2.0
 
@@ -253,6 +253,40 @@
 
     </declare-styleable>
 
+    <declare-styleable name="ticker_TickerView">
+        <attr name="ticker_animationDuration" format="reference|integer"/>
+        <attr name="ticker_animateMeasurementChange" format="reference|boolean"/>
+
+        <!-- Custom implementations of common android text attributes -->
+        <attr name="android:gravity" tools:ignore="ResourceName"/>
+        <attr name="android:textAppearance" tools:ignore="ResourceName"/>
+        <attr name="android:textColor" tools:ignore="ResourceName"/>
+        <attr name="android:textSize" tools:ignore="ResourceName"/>
+    </declare-styleable>
+
+    <declare-styleable name="RxTitle">
+        <attr name="title" format="string"/>
+        <attr name="titleColor" format="color"/>
+        <attr name="titleSize" format="dimension"/>
+        <attr name="titleVisibility" format="boolean"/>
+
+        <attr name="leftText" format="string"/>
+        <attr name="leftTextColor" format="color"/>
+        <attr name="leftTextSize" format="dimension"/>
+        <attr name="leftTextVisibility" format="boolean"/>
+
+        <attr name="rightText" format="string"/>
+        <attr name="rightTextColor" format="color"/>
+        <attr name="rightTextSize" format="dimension"/>
+        <attr name="rightTextVisibility" format="boolean"/>
+
+        <attr name="leftIcon" format="reference"/>
+        <attr name="leftIconVisibility" format="boolean"/>
+
+        <attr name="rightIcon" format="reference"/>
+        <attr name="rightIconVisibility" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="durban_CropView">
 
         <!--Durban image view-->
@@ -275,9 +309,6 @@
         <attr name="durban_show_frame" format="boolean" />
 
     </declare-styleable>
-    <!--<declare-styleable name="RoundImageView">-->
-        <!--<attr name="circle" format="boolean" />-->
-        <!--&lt;!&ndash;<attr name="radius" format="dimension" />&ndash;&gt;-->
-    <!--</declare-styleable>-->
+
 
 </resources>

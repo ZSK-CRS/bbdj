@@ -60,7 +60,6 @@ TEXT 8 0 15 455 件
 TEXT 8 0 15 495 服
 TEXT 8 0 15 525 务
 TEXT 3 0 65 345 [Receiver] [Receiver_Phone]
-
 TEXT 3 0 65  430 [Sender] [Sender_Phone]
 TEXT 3 0 65  453 [Sender_address_all]
 

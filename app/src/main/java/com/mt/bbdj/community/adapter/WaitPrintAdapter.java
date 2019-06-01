@@ -61,7 +61,7 @@ public class WaitPrintAdapter extends RecyclerView.Adapter<WaitPrintAdapter.Have
         String express_logo = map.get("express_logo");
         Glide.with(context)
                 .load(express_logo)
-                .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.ic);
         holder.billNumber.setText(map.get("number"));
         holder.sendPerson.setText(map.get("send_name"));

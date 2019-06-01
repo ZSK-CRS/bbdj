@@ -10,6 +10,7 @@ import android.os.Build;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.application.MyApplication;
 
+
 /**
  * Author : ZSK
  * Date : 2019/1/26
@@ -21,16 +22,18 @@ public class SoundHelper {
     private int idReceive;
     private int idRepeat;
     private int idSuccess;
+    private int idNotify;
+    private int idChange;
+    private int idEnter;
     private static SoundHelper helper;
 
     @SuppressLint("NewApi")
     @SuppressWarnings("deprecation")
     public SoundHelper() {
         Context context = MyApplication.getInstance();
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             SoundPool.Builder spb = new SoundPool.Builder();
-            spb.setMaxStreams(2);
+            spb.setMaxStreams(1);
             // spb.setAudioAttributes(null); // 转换音频格式
             soundPool = spb.build(); // 创建SoundPool对象
         } else {
@@ -39,6 +42,9 @@ public class SoundHelper {
         idReceive = soundPool.load(context, R.raw.mp_promit, 1);
         idRepeat = soundPool.load(context, R.raw.reapeat, 1);
         idSuccess = soundPool.load(context, R.raw.success, 1);
+        idNotify = soundPool.load(context, R.raw.beep, 1);
+        idChange = soundPool.load(context, R.raw.ic_change, 1);
+        idEnter = soundPool.load(context, R.raw.ic_enter, 1);
     }
 
     public static void  init() {
@@ -74,6 +80,24 @@ public class SoundHelper {
     public void playNotifiSuccessSound() {
         soundPool.play(idSuccess,1,1,10,0,1);
     }
+
+
+    //入库成功提示音
+    public void playNotifiSound() {
+        soundPool.play(idNotify,1,1,10,0,1);
+    }
+
+    //无订单
+    public void playChangeSound() {
+        soundPool.play(idChange,1,1,10,0,1);
+    }
+
+    //已入库
+    public void playEnterSound() {
+        soundPool.play(idEnter,1,1,10,0,1);
+    }
+
+
 
     public void release() {
         soundPool.unload(idReceive);

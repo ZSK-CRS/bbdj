@@ -9,14 +9,12 @@ public class InterApi {
     /**
      * 服务器地址
      */
-    // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
-    //  public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
-     public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
-    //  public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
-    public static final String SERVER_ADDRESS_ENTER = "http://192.168.1.116/Pie/";
+    //public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
+    public static final String SERVER_ADDRESS = "http://cs.81bb.cn/BbdjApi/";
+    // public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
+     public static final String SERVER_ADDRESS_ENTER = "http://cs.81bb.cn/Pie/";
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
     //  public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
-    // public static final String SERVER_ADDRESS = "http://web1.mingtaikeji.cn/BbdjApi/";
 
     /**
      * 获取验证码
@@ -32,6 +30,12 @@ public class InterApi {
      * 上传图片
      */
     public static final String ACTION_COMMIT_PICTURE = "upload100";
+
+    /**
+     * 上传扫描图片
+     */
+    public static final String ACTION_COMMIT_SCAN_PICTURE = "uploadDistinguishImg";
+
 
     /**
      * 提交注册信息
@@ -284,6 +288,11 @@ public class InterApi {
     public static final String ACTION_CONSUME_RECORD_REQUEST = "getConsumelist700";
 
     /**
+     * 消费记录
+     */
+    public static final String ACTION_CONSUME_DETAIL_REQUEST = "getConsumptionInfo";
+
+    /**
      * 充值记录
      */
     public static final String ACTION_RECHARGE_RECORD_REQUEST = "getRechargelist1060";
@@ -477,5 +486,15 @@ public class InterApi {
      * 获取派件详情
      */
     public static final String ACTION_EXPRESS_DETAIL_REQUEST = "getOutWarehouseinfo2010";
+
+    /**
+     * 待入库
+     */
+    public static final String ACTION_EXPRESS_WAIT_STORE = "getPackageList";
+
+    /**
+     * 确认入库
+     */
+    public static final String ACTION_CONFIRM_ENTER_STORE = "confirmCourierPackage";
 
 }

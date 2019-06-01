@@ -3,15 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mt.bbdj">
 
+    <uses-sdk tools:overrideLibrary="cn.jzvd,org.raphets.roundimageview" />
+
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.SEND_SMS" />
-
-    <!-- 往SDCard写入数据权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- 访问internet权限 -->
+    <uses-permission android:name="android.permission.SEND_SMS" /> <!-- 往SDCard写入数据权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 访问internet权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera" />
@@ -27,44 +25,24 @@
 
     <permission
         android:name="com.mt.bbdj.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
-
-    <!-- 解锁屏幕需要的权限 -->
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <!-- 申请电源锁需要的权限 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- Required -->
+        android:protectionLevel="signature" /> <!-- 解锁屏幕需要的权限 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" /> <!-- 申请电源锁需要的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- Required -->
     <uses-permission android:name="com.mt.bbdj.permission.JPUSH_MESSAGE" />
     <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-
-    <!-- Optional. Required for location feature -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" /> <!-- Optional. Required for location feature -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
-
-    <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 这个权限用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 访问网络，网络定位需要上网 -->
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- SD卡读取权限，用户写入离线定位数据 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-
-
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.GET_TASKS" /> <!-- 这个权限用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 这个权限用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /> <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> <!-- 访问网络，网络定位需要上网 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- SD卡读取权限，用户写入离线定位数据 -->
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" /> <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 
     <application
@@ -76,14 +54,12 @@
         android:theme="@style/MainTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:label,theme,icon">
-
+        <activity android:name=".community.activity.OperaVideoActivity"></activity>
         <!-- 设置key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="ad46bd828313c14fdd3f0377bb2dd4b2" />
-        <!-- 定位需要的服务 -->
-        <service android:name="com.amap.api.location.APSService"></service>
-
+            android:value="ad46bd828313c14fdd3f0377bb2dd4b2" /> <!-- 定位需要的服务 -->
+        <service android:name="com.amap.api.location.APSService" />
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -377,13 +353,40 @@
             android:name=".community.activity.BluetoothNumberActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:name=".community.activity.SignatureActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="landscape" />
+            android:screenOrientation="landscape"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
         <activity
             android:name=".community.activity.YesterdPaiActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.EnterManager_new_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.rxfeature.activity.ActivityScanerCode"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.OutManager_new_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.StoreManagerdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.RepertoryStoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.ConsumeDetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.OpearteActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.OpearPictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".community.activity.OpearVideoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 
 </manifest>
