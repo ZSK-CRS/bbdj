@@ -6,7 +6,7 @@ package com.mt.bbdj.baseconfig.model;
  * Description :
  */
 public class OperaterUrl {
-
+    public static String PICTURE_1 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/1.jpg";
     public static String PICTURE_2 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/2.jpg";
     public static String PICTURE_3 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/3.jpg";
     public static String PICTURE_4 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/4.jpg";
@@ -27,7 +27,7 @@ public class OperaterUrl {
     public static String VIDEO_1 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/1.mp4";
     public static String VIDEO_2 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/2.mp4";
     public static String VIDEO_3 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/3.mp4";
-    public static String VIDEO_4 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/4.mp4";
-    public static String VIDEO_5 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/5.mp4";
+    public static String VIDEO_4 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/5.mp4";
+    public static String VIDEO_5 = "https://bbsh-com.oss-cn-beijing.aliyuncs.com/Uploads/images/caoz/6.mp4";
 
 }
