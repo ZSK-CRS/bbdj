@@ -664,7 +664,7 @@ public class ComFirstFragment extends BaseFragment {
 
     private void showNOmoneyAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setMessage("账户余额不足，请充值")
+                .setMessage("账户余额小于警戒余额，请充值")
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
