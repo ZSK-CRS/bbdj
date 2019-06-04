@@ -41,6 +41,7 @@ import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -70,6 +71,15 @@ public class EditAddressActivity extends BaseActivity {
     EditText tvSelectDetailAddress;     //详细地址
     @BindView(R.id.bt_save_address)
     Button btSaveAddress;      //保存按钮
+
+
+    @BindView(R.id.tv_clear)
+    TextView tv_clear;    //清除
+    @BindView(R.id.bt_decode)
+    Button bt_decode;    //解析
+    @BindView(R.id.et_decode_message)
+    EditText et_decode_message;
+
     private Intent mIntent;
     private DaoSession mDaoSession;
     private UserBaseMessageDao mUserMessageDao;
@@ -96,6 +106,7 @@ public class EditAddressActivity extends BaseActivity {
 
     private final int TYPE_CHANGE_ADDRESS = 1;    //修改地址
     private final int TYPE_ADD_ADDRESS = 2;    //新添地址
+    private final int TYPE_DECODE_ADDRESS = 3;    //新添地址
 
     private boolean isChange = false;    // false : 添加  true : 修改
     private int mType;
@@ -142,7 +153,8 @@ public class EditAddressActivity extends BaseActivity {
         //book_id
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_select_genel_address, R.id.tv_select_arrow, R.id.bt_save_address})
+    @OnClick({R.id.iv_back, R.id.tv_select_genel_address, R.id.tv_select_arrow, R.id.bt_save_address,
+            R.id.tv_clear, R.id.bt_decode, R.id.et_decode_message})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -155,7 +167,66 @@ public class EditAddressActivity extends BaseActivity {
             case R.id.bt_save_address:       //保存
                 handleMessageEvent();
                 break;
+            case R.id.tv_clear:
+                et_decode_message.setText("");
+                break;
+            case R.id.bt_decode:
+                decodeMessage();
+                break;
         }
+    }
+
+    private void decodeMessage() {
+        String message = et_decode_message.getText().toString();
+        if ("".equals(message)) {
+            ToastUtil.showShort("内容不可为空！");
+            return ;
+        }
+        Request<String> request = NoHttpRequest.decodeMessage(message);
+        mRequestQueue.add(TYPE_DECODE_ADDRESS, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.get());
+                    JSONObject result = jsonObject.getJSONObject("result");
+                    JSONArray itemsArray = result.getJSONArray("items");
+                    if (itemsArray.length() == 0) {
+                        ToastUtil.showShort("解析出错！");
+                    }else {
+                        JSONObject item = itemsArray.getJSONObject(0);
+                        mProvince = item.getString("province");
+                        mCity = item.getString("city");
+                        String phone = item.getString("phone");
+                        mCountry = item.getString("district");
+                        String name = item.getString("name");
+                        String address = item.getString("address");
+                        tvSelectGenelAddress.setText(mProvince + mCity + mCountry);
+                        tvSelectDetailAddress.setText(address);
+                        etInputName.setText(name);
+                        etInputPhone.setText(phone);
+
+                        et_decode_message.setText("");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                ToastUtil.showShort(response.get());
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private void handleMessageEvent() {
@@ -184,7 +255,7 @@ public class EditAddressActivity extends BaseActivity {
             return;
         }
 
-        Request<String> request = NoHttpRequest.addMyAddressBook(user_id, realName, telephone, mProvince,mCity,mCountry, address, mType + "");
+        Request<String> request = NoHttpRequest.addMyAddressBook(user_id, realName, telephone, mProvince, mCity, mCountry, address, mType + "");
         mRequestQueue.add(TYPE_ADD_ADDRESS, request, mResponseListener);
     }
 
@@ -203,7 +274,7 @@ public class EditAddressActivity extends BaseActivity {
         if (!isRightAboutMessage(realName, telephone, region, address)) {
             return;
         }
-        Request<String> request = NoHttpRequest.changeMyAddressBook(user_id, realName, telephone, mProvince,mCity,mCountry, address, book_id);
+        Request<String> request = NoHttpRequest.changeMyAddressBook(user_id, realName, telephone, mProvince, mCity, mCountry, address, book_id);
         mRequestQueue.add(TYPE_CHANGE_ADDRESS, request, mResponseListener);
     }
 
@@ -387,9 +458,9 @@ public class EditAddressActivity extends BaseActivity {
         return onTouchEvent(ev);
     }
 
-    public  boolean isShouldHideInput(View v, MotionEvent event) {
+    public boolean isShouldHideInput(View v, MotionEvent event) {
         if (v != null && (v instanceof EditText)) {
-            int[] leftTop = { 0, 0 };
+            int[] leftTop = {0, 0};
             //获取输入框当前的location位置
             v.getLocationInWindow(leftTop);
 

@@ -50,6 +50,7 @@ import com.mt.bbdj.baseconfig.utls.DownloadUtil;
 import com.mt.bbdj.baseconfig.utls.FileUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
+import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
@@ -67,10 +68,13 @@ import com.mt.bbdj.community.activity.GlobalSearchActivity;
 import com.mt.bbdj.community.activity.MatterShopActivity;
 import com.mt.bbdj.community.activity.MessageAboutActivity;
 import com.mt.bbdj.community.activity.MessageManagerdActivity;
+import com.mt.bbdj.community.activity.MessageRechargePannelActivity;
 import com.mt.bbdj.community.activity.MoneyFormatManagerActivity;
 import com.mt.bbdj.community.activity.OpearteActivity;
 import com.mt.bbdj.community.activity.OutManagerActivity;
 import com.mt.bbdj.community.activity.OutManager_new_Activity;
+import com.mt.bbdj.community.activity.PannelRechargeActivity;
+import com.mt.bbdj.community.activity.RechargeActivity;
 import com.mt.bbdj.community.activity.RepertoryActivity;
 import com.mt.bbdj.community.activity.RepertoryStoreActivity;
 import com.mt.bbdj.community.activity.SearchPackageActivity;
@@ -576,6 +580,7 @@ public class ComFirstFragment extends BaseFragment {
         String face_number = dataObj.getString("face_number");   //面单余额
         String username = dataObj.getString("username");   //位置
         String money = dataObj.getString("money");   //账户余额
+        String min_money = dataObj.getString("min_money");   //警戒余额
         String birthday = dataObj.getString("birthday");   //入驻天数
         String version_number = dataObj.getString("version_number");   //版本号
         String prohibit = dataObj.getString("prohibit");   //状态 1：正常营业  其他：禁止登录
@@ -597,24 +602,97 @@ public class ComFirstFragment extends BaseFragment {
         editor.commit();
 
         if (!"1".equals(prohibit)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setMessage("您的驿站已禁止登录，如有疑问请与客服人员联系")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            Intent intent = new Intent(getActivity(),LoginActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
-                        }
-                    });
-            AlertDialog dialog = builder.create();
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-
+            //显示禁止登录
+            showProhibitDialog();
         } else {
-            upLoadNewVersion(version_number, version_url);    //更新最新版本
+            float moneyInt =IntegerUtil.getStringChangeToFloat(money);
+            float min_moneyInt =IntegerUtil.getStringChangeToFloat(min_money);
+            //账户余额不足
+            if (moneyInt < min_moneyInt) {
+                showNOmoneyAlertDialog();
+            } else {
+
+                float messageNumber = IntegerUtil.getStringChangeToFloat(sms_number);
+                if (messageNumber <= 0) {
+                    showNoMessageAlterDialog();    //短信不足
+                } else {
+                    float face_numberNumber = IntegerUtil.getStringChangeToFloat(face_number);
+                    if (face_numberNumber <= 0) {
+                        showNoPannelDialog();       //面单不足
+                    } else {
+                        upLoadNewVersion(version_number, version_url);    //更新最新版本
+                    }
+                }
+
+            }
         }
+
+    }
+
+    private void showNoPannelDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("面单数量不足，请充值")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),PannelRechargeActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showNoMessageAlterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("短信数量不足，请充值")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),MessageRechargePannelActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+
+    }
+
+    private void showNOmoneyAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("账户余额不足，请充值")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),RechargeActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showProhibitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("您的驿站已禁止登录，如有疑问请与客服人员联系")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private void upLoadNewVersion(String version_number, String version_url) {

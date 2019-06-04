@@ -3,6 +3,7 @@
 buildscript {
 
     repositories {
+        mavenCentral()
         maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
         google()
         jcenter()
@@ -24,6 +25,7 @@ allprojects {
         flatDir {
             dirs 'libs'
         }
+        mavenCentral()
         google()
         jcenter()
         maven { url "https://jitpack.io" }

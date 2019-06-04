@@ -97,6 +97,7 @@ public class OpearPictureActivity extends BaseActivity {
             } else {
                 progressView2.setVisibility(View.VISIBLE);
                 progressView2.setProgress(percentage);
+
             }
         });
 

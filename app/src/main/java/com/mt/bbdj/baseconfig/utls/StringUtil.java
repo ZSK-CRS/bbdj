@@ -245,7 +245,7 @@ public class StringUtil {
 
     //处理字符串类型但是为null的数据
     public static String handleNullResultForString(String data) {
-        if (data == null || "null".equals(data)) {
+        if (data == null || "null".equals(data)||"nullnull".equals(data)) {
             return "";
         } else {
             return data;

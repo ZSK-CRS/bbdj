@@ -32,6 +32,7 @@ import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.activity.AboutAppActivity;
 import com.mt.bbdj.community.activity.BaseMessageActivity;
+import com.mt.bbdj.community.activity.ConsumeRecordActivity;
 import com.mt.bbdj.community.activity.MyAddressActivity;
 import com.mt.bbdj.community.activity.MyOrderActivity;
 import com.mt.bbdj.community.activity.MywalletActivity;
@@ -75,6 +76,8 @@ public class ComMymessageFragment extends BaseFragment {
     LinearLayout llConnectService;
     @BindView(R.id.ll_connect_manager)
     LinearLayout llConnectManager;
+    @BindView(R.id.ll_my_consume)
+    LinearLayout ll_my_consume;
     @BindView(R.id.bt_cannel)
     Button btCannel;
     Unbinder unbinder;
@@ -123,7 +126,7 @@ public class ComMymessageFragment extends BaseFragment {
 
     @OnClick({R.id.ll_base_message, R.id.ll_my_wallet, R.id.ll_center_sitting,
             R.id.ll_about_app, R.id.ll_connect_service, R.id.ll_connect_manager,
-            R.id.bt_cannel, R.id.ll_my_order, R.id.ll_address_manager})
+            R.id.bt_cannel, R.id.ll_my_order, R.id.ll_address_manager,R.id.ll_my_consume})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_base_message:
@@ -149,6 +152,9 @@ public class ComMymessageFragment extends BaseFragment {
                 break;
             case R.id.ll_connect_manager:
                 showConnectMaster();     //联系管家
+                break;
+            case R.id.ll_my_consume:
+                showConsumeRecordPannel();
                 break;
             case R.id.bt_cannel:
                 takeoutLogin();     //退出登录
@@ -188,6 +194,11 @@ public class ComMymessageFragment extends BaseFragment {
 
             }
         }).setCanCancel(true);
+    }
+
+    private void showConsumeRecordPannel() {
+        Intent intent = new Intent(getActivity(), ConsumeRecordActivity.class);
+        startActivity(intent);
     }
 
     private void showAddressManagerPannel() {
