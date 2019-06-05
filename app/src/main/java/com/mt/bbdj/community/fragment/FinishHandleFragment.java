@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
@@ -30,6 +31,7 @@ import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.community.activity.MailingdetailActivity;
+import com.mt.bbdj.community.activity.OutManager_new_Activity;
 import com.mt.bbdj.community.adapter.HaveFinishAdapter;
 import com.mt.bbdj.community.adapter.WaitCollectAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -65,7 +67,7 @@ public class FinishHandleFragment extends BaseFragment implements XRecyclerView.
     private TextView tv_no_address;
 
     private RequestQueue mRequestQueue;
-    private HkDialogLoading dialogLoading;
+    private WaitDialog dialogLoading;
     private DaoSession mDaoSession;
     private UserBaseMessageDao mUserMessageDao;
     private String express_id = "";      //快递公司id
@@ -134,13 +136,62 @@ public class FinishHandleFragment extends BaseFragment implements XRecyclerView.
                 SharedPreferencesUtil.getEditor().putString("printType","3").commit();
                 startActivity(intent);
             }
+
+            //催单
+            @Override
+            public void onHandleNow(int position) {
+                HashMap<String, String> map = mList.get(position);
+                String mail_id = map.get("mail_id");
+                requestHandleNow(mail_id);
+            }
+        });
+    }
+
+    private void requestHandleNow(String mail_id) {
+
+        Request<String> request = NoHttpRequest.getHandleEventRequest(user_id,mail_id);
+
+        mRequestQueue.add(2, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+                dialogLoading = WaitDialog.show(getActivity(), "催单中...").setCanCancel(true);
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                LogUtil.i("photoFile", "WaitCollectFragment::" + response.get());
+                try {
+                    JSONObject jsonObject = new JSONObject(response.get());
+                    String code = jsonObject.get("code").toString();
+                    String msg = jsonObject.get("msg").toString();
+
+                    if ("5001".equals(code)) {
+                        recyclerView.refresh();
+                    } else {
+                        ToastUtil.showShort(msg);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    dialogLoading.doDismiss();
+                }
+                dialogLoading.doDismiss();
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                dialogLoading.doDismiss();
+            }
+
+            @Override
+            public void onFinish(int what) {
+               dialogLoading.doDismiss();
+            }
         });
     }
 
     private void initData() {
         //初始化请求队列
         mRequestQueue = NoHttp.newRequestQueue();
-        dialogLoading = new HkDialogLoading(getActivity(), "请稍后...");
 
         mDaoSession = GreenDaoManager.getInstance().getSession();
         mUserMessageDao = mDaoSession.getUserBaseMessageDao();
@@ -206,6 +257,11 @@ public class FinishHandleFragment extends BaseFragment implements XRecyclerView.
                     String code = jsonObject.get("code").toString();
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
 
+                    if (isFresh) {
+                        recyclerView.refreshComplete();
+                    } else {
+                        recyclerView.loadMoreComplete();
+                    }
                     if ("5001".equals(code)) {
                         setData(jsonArray);
                     } else {
@@ -246,6 +302,7 @@ public class FinishHandleFragment extends BaseFragment implements XRecyclerView.
             String collect_name = jsonObject1.getString("collect_name");
             String create_time = jsonObject1.getString("create_time");
             String express_logo = jsonObject1.getString("express_logo");
+            String is_reminder = jsonObject1.getString("is_reminder");
             String mail_id = jsonObject1.getString("mail_id");
             HashMap<String, String> map = new HashMap<>();
             map.put("mail_id", mail_id);
@@ -255,6 +312,7 @@ public class FinishHandleFragment extends BaseFragment implements XRecyclerView.
             map.put("create_time", create_time);
             map.put("express_logo", express_logo);
             map.put("collect_name", collect_name);
+            map.put("is_reminder", is_reminder);
             mList.add(map);
         }
         if (mList.size() == 0) {
@@ -312,26 +370,19 @@ public class FinishHandleFragment extends BaseFragment implements XRecyclerView.
         return 0;
     }
 
+    private boolean isFresh = true;
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                page = 1;
-                requestFinishHandleData();
-                recyclerView.refreshComplete();
-            }
-        }, 100);
+        isFresh = true;
+        page = 1;
+        requestFinishHandleData();
     }
 
     @Override
     public void onLoadMore() {
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                page++;
-                requestFinishHandleData();
-                recyclerView.loadMoreComplete();
-            }
-        }, 100);
+        isFresh = false;
+        page++;
+        requestFinishHandleData();
     }
 
     @Override

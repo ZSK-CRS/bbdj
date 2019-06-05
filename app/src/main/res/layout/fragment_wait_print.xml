@@ -123,7 +123,6 @@
                 android:textSize="13sp" />
         </LinearLayout>
     </LinearLayout>
-    
     <LinearLayout
         android:gravity="center_vertical"
         android:layout_alignParentRight="true"
@@ -131,7 +130,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="45dp">
-        
+
         <View
             android:layout_weight="1"
             android:layout_width="0dp"
@@ -158,6 +157,7 @@
             android:textSize="13sp" />
 
     </LinearLayout>
+
 
 
 

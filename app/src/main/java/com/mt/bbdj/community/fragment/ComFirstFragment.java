@@ -540,7 +540,7 @@ public class ComFirstFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
                 // dialogLoading.cancel();
-                ToastUtil.showShort("更新失败！");
+                ToastUtil.showShort(e.getMessage());
             }
             //  dialogLoading.cancel();
         }
@@ -611,7 +611,6 @@ public class ComFirstFragment extends BaseFragment {
             if (moneyInt < min_moneyInt) {
                 showNOmoneyAlertDialog();
             } else {
-
                 float messageNumber = IntegerUtil.getStringChangeToFloat(sms_number);
                 if (messageNumber <= 0) {
                     showNoMessageAlterDialog();    //短信不足
@@ -623,7 +622,6 @@ public class ComFirstFragment extends BaseFragment {
                         upLoadNewVersion(version_number, version_url);    //更新最新版本
                     }
                 }
-
             }
         }
 

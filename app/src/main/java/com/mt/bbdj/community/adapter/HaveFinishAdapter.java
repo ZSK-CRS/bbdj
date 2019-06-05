@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,7 @@ public class HaveFinishAdapter extends RecyclerView.Adapter<HaveFinishAdapter.Ha
         }
         HashMap<String,String> map = mList.get(position);
         String express_logo = map.get("express_logo");
+        String is_reminder = map.get("is_reminder");
         Glide.with(context)
                 .load(express_logo)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
@@ -63,11 +65,31 @@ public class HaveFinishAdapter extends RecyclerView.Adapter<HaveFinishAdapter.Ha
         createTime = DateUtil.changeStampToStandrdTime("MM-dd  HH:mm ",createTime);
         holder.sendTime.setText(createTime);
 
+        if ("2".equals(is_reminder)) {
+            holder.tv_state.setText("已催单");
+            holder.handleNow.setEnabled(false);
+            holder.handleNow.setBackgroundResource(R.drawable.bt_bg_2);
+        } else {
+            holder.tv_state.setText("已揽件");
+            holder.handleNow.setEnabled(true);
+            holder.handleNow.setBackgroundResource(R.drawable.bt_bg_1);
+        }
+
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onItemClick(position);
+                }
+            }
+        });
+
+        //催单
+        holder.handleNow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onHandleNow(position);
                 }
             }
         });
@@ -84,6 +106,8 @@ public class HaveFinishAdapter extends RecyclerView.Adapter<HaveFinishAdapter.Ha
         private TextView sendPerson;     //寄件人
         private TextView receivePerson;   //收件人
         private TextView sendTime;   //寄件时间
+        private Button handleNow;    //催单
+        private TextView tv_state;    //催单状态
 
         public HaveFinishViewHolder(View itemView) {
             super(itemView);
@@ -92,11 +116,15 @@ public class HaveFinishAdapter extends RecyclerView.Adapter<HaveFinishAdapter.Ha
             sendPerson = itemView.findViewById(R.id.tv_send_person);
             receivePerson = itemView.findViewById(R.id.tv_receive_person);
             sendTime = itemView.findViewById(R.id.tv_receive_time);
+            handleNow = itemView.findViewById(R.id.bt_hanlde_now);
+            tv_state = itemView.findViewById(R.id.tv_state);
         }
     }
 
     //################################### 接口回调 #################################
     public interface OnItemClickListener{
         void onItemClick(int position);
+        void onHandleNow(int position);    //催单
     }
+
 }
