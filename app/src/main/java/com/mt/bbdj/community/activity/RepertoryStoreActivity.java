@@ -254,7 +254,8 @@ public class RepertoryStoreActivity extends BaseActivity implements XRecyclerVie
                             mList.clear();
                             mAdapter.notifyDataSetChanged();
                         }
-                        setPrintData(jsonObject);    //设置打印数据
+                        ToastUtil.showShort("揽收成功");
+                      //  setPrintData(jsonObject);    //设置打印数据
 
                     } else {
                         ToastUtil.showShort(msg);

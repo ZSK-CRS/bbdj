@@ -304,6 +304,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        android:orientation="vertical"
         android:layout_weight="1">
 
         <com.mt.bbdj.baseconfig.view.MyGridView
@@ -321,6 +322,5 @@
         </com.mt.bbdj.baseconfig.view.MyGridView>
 
     </LinearLayout>
-
 
 </LinearLayout>

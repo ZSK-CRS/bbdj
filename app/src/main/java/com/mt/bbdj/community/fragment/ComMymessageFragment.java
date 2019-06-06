@@ -291,7 +291,7 @@ public class ComMymessageFragment extends BaseFragment {
                     String contact_account = dataObj.getString("contact_account");
                     String birthday = StringUtil.handleNullResultForNumber(dataObj.getString("birthday"));
                     String balance = StringUtil.handleNullResultForNumber(dataObj.getString("balance"));
-                    String min_balance = StringUtil.handleNullResultForNumber(dataObj.getString("min_balance"));    //境界余额
+                  //  String min_balance = StringUtil.handleNullResultForNumber(dataObj.getString("min_balance"));    //境界余额
                     UserBaseMessage userBaseMessage = new UserBaseMessage();
                     userBaseMessage.setUser_id(user_id);
                     userBaseMessage.setHeadimg(headimg);
@@ -303,10 +303,10 @@ public class ComMymessageFragment extends BaseFragment {
                     userBaseMessage.setBalance(balance);
                     userBaseMessage.setContact_account(contact_account);
                     tvShopLocal.setText(mingcheng);
-                    tvMoney.setText("账户余额  " + balance);
+                    tvMoney.setText("账户余额  " + balance+"元");
                     tvBirthday.setText("入驻天数  " + birthday + "天");
                     userBaseMessageDao.save(userBaseMessage);
-                    tvMingMoney.setText("警戒余额 : " + min_balance);
+                  //  tvMingMoney.setText("警戒余额 : " + min_balance);
                 } else {
                     ToastUtil.showShort(msg);
                 }

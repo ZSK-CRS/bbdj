@@ -65,6 +65,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_ming_money"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"

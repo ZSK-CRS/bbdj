@@ -339,12 +339,12 @@ public class ComFirstFragment extends BaseFragment {
                 handleChangeManagerEvent();
                 break;
             case "4":       //入库管理
-                // ToastUtil.showShort("暂不开放！");
-                handleEnterManagerEvent();
+                 ToastUtil.showShort("暂不开放！");
+                // handleEnterManagerEvent();
                 break;
             case "5":       //出库管理
-                // ToastUtil.showShort("暂不开放！");
-                 handleOutManagerEvent();
+                ToastUtil.showShort("暂不开放！");
+                //  handleOutManagerEvent();
                 break;
             case "6":       //财务管理
                 handleMoneyManagerEvent();
@@ -365,7 +365,8 @@ public class ComFirstFragment extends BaseFragment {
                 handleOperateEvent();
                 break;
             case "12":     //寄存管理
-                handleStoreManageEvent();
+                //  ToastUtil.showShort("暂不开放");
+               handleStoreManageEvent();
                 break;
         }
 
@@ -860,8 +861,8 @@ public class ComFirstFragment extends BaseFragment {
                 actionToMessagePannel();      //跳转到消息界面
                 break;
             case R.id.tv_abnormal_wait:     //仓库
-                // ToastUtil.showShort("暂不开放!");
-                 actionToRepertoryPannel();
+                 ToastUtil.showShort("暂不开放!");
+                // actionToRepertoryPannel();
                 break;
             case R.id.textview_serach:
                 actionToSearchPannel();    //搜索
