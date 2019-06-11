@@ -10,7 +10,8 @@ public class InterApi {
      * 服务器地址
      */
     // public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
-    public static final String BASE_URL = "http://www.81dja.com";
+   // public static final String BASE_URL = "http://www.81dja.com";
+    public static final String BASE_URL = "http://cs.81bb.cn";
     public static final String SERVER_ADDRESS = BASE_URL + "/BbdjApi/";
     //public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
     public static final String SERVER_ADDRESS_ENTER = BASE_URL + "/Pie/";
@@ -504,5 +505,11 @@ public class InterApi {
      * 确认入库
      */
     public static final String ACTION_CONFIRM_ENTER_STORE = "confirmCourierPackage";
+
+    /**
+     * 确认入库
+     */
+    public static final String ACTION_DELETE_ENTER_STORE = "delectPackage";
+
 
 }

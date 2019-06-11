@@ -121,11 +121,12 @@ public class ConsumeDetailActivity extends BaseActivity {
                         String types = dataObj.getString("types");
 
                         String con_amount = dataObj.getString("con_amount");
+                        con_amount = StringUtil.handleNullResultForNumber(con_amount);
                         String budget = dataObj.getString("budget");
                         if ("1".equals(budget)) {
-                            con_amount = "-" + con_amount+"元";
+                            con_amount = "-" + con_amount + "元";
                         } else {
-                            con_amount = "+" + con_amount+"元";
+                            con_amount = "+" + con_amount + "元";
                         }
                         tv_shouzhi.setText(con_amount);
 
@@ -187,7 +188,7 @@ public class ConsumeDetailActivity extends BaseActivity {
         if ("null".equals(dot_weight) || null == dot_weight) {
             dot_weight = "(快递公司未返回重量)";
         } else {
-            dot_weight = dot_weight + "kg"+"(快递公司返回重量)";
+            dot_weight = dot_weight + "kg" + "(快递公司返回重量)";
         }
         tvGoodsName.setText(StringUtil.handleNullResultForString(goods_name));
         tvGoodsWeiht.setText(dot_weight);

@@ -99,6 +99,11 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
                 intent.putExtra("tag_number", map.get("tag_number"));
                 startActivity(intent);
             }
+
+            @Override
+            public void onItemDelate(int position) {
+
+            }
         });
     }
 
@@ -146,7 +151,7 @@ public class RepertoryFragment extends BaseFragment implements XRecyclerView.Loa
 
         rlRepertory = view.findViewById(R.id.rl_repertory);
         mList = new ArrayList<>();
-        mAdapter = new RepertoryAdapter(getActivity(), mList);
+        mAdapter = new RepertoryAdapter(getActivity(), mList,false);
         // initListData();
         rlRepertory.setFocusable(false);
         rlRepertory.setNestedScrollingEnabled(false);

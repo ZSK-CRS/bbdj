@@ -1,6 +1,7 @@
 package com.mt.bbdj.community.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
+import com.mt.bbdj.baseconfig.view.MyDecoration;
 import com.mt.bbdj.community.adapter.ConsumeRecordAdapter;
 import com.mt.bbdj.community.adapter.WithdrawCashRecordAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
@@ -77,6 +79,7 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
         initRecycler();     //初始化列表
         initListener();
         initDialog();
+        rlRecord.refresh();
     }
 
     private void initListener() {
@@ -168,7 +171,7 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
     @Override
     protected void onResume() {
         super.onResume();
-        rlRecord.refresh();
+
     }
 
     private void initRecycler() {
@@ -179,10 +182,10 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         rlRecord.setLayoutManager(mLayoutManager);
         rlRecord.setLoadingListener(this);
+        rlRecord.addItemDecoration(new MyDecoration(this, LinearLayoutManager.VERTICAL, Color.parseColor("#f4f4f4"), 1));
         mAdapter = new ConsumeRecordAdapter(this, mList);
         rlRecord.setAdapter(mAdapter);
     }
-
 
 
     @OnClick({R.id.iv_back, R.id.tv_fast_select})
@@ -260,7 +263,7 @@ public class ConsumeRecordActivity extends BaseActivity implements XRecyclerView
             String budget = jsonObject1.getString("budget");
             HashMap<String,String> map = new HashMap<>();
             map.put("title",title);
-            map.put("con_amount",StringUtil.handleNullResultForString(con_amount));
+            map.put("con_amount",StringUtil.handleNullResultForNumber(con_amount));
             map.put("con_balance",StringUtil.handleNullResultForString(con_balance));
             map.put("time",time);
             map.put("budget",budget);
