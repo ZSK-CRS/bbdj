@@ -3,8 +3,10 @@ package com.mt.bbdj.community.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -41,6 +43,7 @@ import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 import com.yanzhenjie.nohttp.rest.Response;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,6 +72,15 @@ public class ChangeMessageActivity extends AppCompatActivity {
     EditText tvSelectDetailAddress;     //详细地址
     @BindView(R.id.bt_save_address)
     Button btSaveAddress;      //保存按钮
+
+    @BindView(R.id.tv_clear)
+    TextView tv_clear;    //清除
+    @BindView(R.id.bt_decode)
+    Button bt_decode;    //解析
+    @BindView(R.id.et_decode_message)
+    EditText et_decode_message;
+
+
     private Intent mIntent;
     private DaoSession mDaoSession;
     private UserBaseMessageDao mUserMessageDao;
@@ -95,6 +107,7 @@ public class ChangeMessageActivity extends AppCompatActivity {
 
     private final int TYPE_CHANGE_ADDRESS = 1;    //修改地址
     private final int TYPE_ADD_ADDRESS = 2;    //新添地址
+    private final int TYPE_DECODE_ADDRESS = 3;    //新添地址
 
     private boolean isChange = false;    // false : 添加  true : 修改
     private int mType;
@@ -141,7 +154,8 @@ public class ChangeMessageActivity extends AppCompatActivity {
         //book_id
     }
 
-    @OnClick({R.id.iv_back, R.id.tv_select_genel_address, R.id.tv_select_arrow, R.id.bt_save_address})
+    @OnClick({R.id.iv_back, R.id.tv_select_genel_address, R.id.tv_select_arrow, R.id.bt_save_address,
+            R.id.tv_clear, R.id.bt_decode,R.id.et_decode_message})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_back:
@@ -154,7 +168,65 @@ public class ChangeMessageActivity extends AppCompatActivity {
             case R.id.bt_save_address:       //保存
                 handleMessageEvent();
                 break;
+            case R.id.tv_clear:
+                et_decode_message.setText("");
+                break;
+            case R.id.bt_decode:
+                decodeMessage();
+                break;
         }
+    }
+
+    private void decodeMessage() {
+        String message = et_decode_message.getText().toString();
+        if ("".equals(message)) {
+            ToastUtil.showShort("内容不可为空！");
+            return ;
+        }
+        Request<String> request = NoHttpRequest.decodeMessage(message);
+        mRequestQueue.add(TYPE_DECODE_ADDRESS, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.get());
+                    JSONObject result = jsonObject.getJSONObject("result");
+                    JSONArray itemsArray = result.getJSONArray("items");
+                    if (itemsArray.length() == 0) {
+                        ToastUtil.showShort("解析出错！");
+                    }else {
+                        JSONObject item = itemsArray.getJSONObject(0);
+                        mProvince = item.getString("province");
+                        mCity = item.getString("city");
+                        String phone = item.getString("phone");
+                        mCountry = item.getString("district");
+                        String name = item.getString("name");
+                        String address = item.getString("address");
+                        tvSelectGenelAddress.setText(mProvince + mCity + mCountry);
+                        tvSelectDetailAddress.setText(address);
+                        etInputName.setText(name);
+                        etInputPhone.setText(phone);
+                        et_decode_message.setText("");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+                ToastUtil.showShort(response.get());
+            }
+
+            @Override
+            public void onFinish(int what) {
+
+            }
+        });
     }
 
     private void handleMessageEvent() {
@@ -182,7 +254,7 @@ public class ChangeMessageActivity extends AppCompatActivity {
         if (!isRightAboutMessage(realName, telephone, region, address)) {
             return;
         }
-        Request<String> request = NoHttpRequest.addAddressBook(user_id, realName, telephone, mProvince,mCity,mCountry, address, mType + "");
+        Request<String> request = NoHttpRequest.addAddressBook(user_id, realName, telephone, mProvince, mCity, mCountry, address, mType + "");
         mRequestQueue.add(TYPE_ADD_ADDRESS, request, mResponseListener);
     }
 
@@ -201,7 +273,7 @@ public class ChangeMessageActivity extends AppCompatActivity {
         if (!isRightAboutMessage(realName, telephone, region, address)) {
             return;
         }
-        Request<String> request = NoHttpRequest.changeAddressBook(user_id, realName, telephone, mProvince,mCity,mCountry, address, book_id);
+        Request<String> request = NoHttpRequest.changeAddressBook(user_id, realName, telephone, mProvince, mCity, mCountry, address, book_id);
         mRequestQueue.add(TYPE_CHANGE_ADDRESS, request, mResponseListener);
     }
 
@@ -219,20 +291,20 @@ public class ChangeMessageActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(response.get());
                 String code = jsonObject.get("code").toString();
                 String msg = jsonObject.get("msg").toString();
-                JSONObject  data = jsonObject.getJSONObject("data");
+                JSONObject data = jsonObject.getJSONObject("data");
                 String book_id = data.getString("book_id");
                 ToastUtil.showShort(msg);
                 if ("5001".equals(code)) {
                     Intent intent = new Intent();
-                    intent.putExtra("book_id",book_id);
-                    intent.putExtra("book_name",etInputName.getText().toString());
-                    intent.putExtra("book_telephone",etInputPhone.getText().toString());
-                    intent.putExtra("book_region",tvSelectGenelAddress.getText().toString());
-                    intent.putExtra("book_address",tvSelectDetailAddress.getText().toString());
-                    intent.putExtra("book_province",mProvince);
-                    intent.putExtra("book_city",mCity);
-                    intent.putExtra("book_area",mCountry);
-                    setResult(RESULT_OK,intent);
+                    intent.putExtra("book_id", book_id);
+                    intent.putExtra("book_name", etInputName.getText().toString());
+                    intent.putExtra("book_telephone", etInputPhone.getText().toString());
+                    intent.putExtra("book_region", tvSelectGenelAddress.getText().toString());
+                    intent.putExtra("book_address", tvSelectDetailAddress.getText().toString());
+                    intent.putExtra("book_province", mProvince);
+                    intent.putExtra("book_city", mCity);
+                    intent.putExtra("book_area", mCountry);
+                    setResult(RESULT_OK, intent);
                     finish();
                 }
             } catch (JSONException e) {
@@ -396,9 +468,9 @@ public class ChangeMessageActivity extends AppCompatActivity {
         return onTouchEvent(ev);
     }
 
-    public  boolean isShouldHideInput(View v, MotionEvent event) {
+    public boolean isShouldHideInput(View v, MotionEvent event) {
         if (v != null && (v instanceof EditText)) {
-            int[] leftTop = { 0, 0 };
+            int[] leftTop = {0, 0};
             //获取输入框当前的location位置
             v.getLocationInWindow(leftTop);
 

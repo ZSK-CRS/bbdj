@@ -2593,4 +2593,13 @@ public class NoHttpRequest {
         request.add("Encryption", encryption);    //加密值
         return request;
     }
+
+    /**
+     * 智能解析
+     */
+    public static Request<String> decodeMessage(@NonNull String address) {
+        Request<String> request = NoHttp.createStringRequest("https://hdgateway.zto.com/Word_AnalysisAddress", RequestMethod.POST);
+        request.add("address", address);
+        return request;
+    }
 }
