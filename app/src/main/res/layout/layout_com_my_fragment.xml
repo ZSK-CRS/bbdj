@@ -65,6 +65,7 @@
                 android:textSize="14sp" />
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/tv_ming_money"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
@@ -159,6 +160,44 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:text="我的钱包"
+                    android:textColor="@color/grey_7"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_arrow_right" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_6" />
+
+            <LinearLayout
+                android:id="@+id/ll_my_consume"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_consume_" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="10dp"
+                    android:text="消费记录"
                     android:textColor="@color/grey_7"
                     android:textSize="16sp" />
 

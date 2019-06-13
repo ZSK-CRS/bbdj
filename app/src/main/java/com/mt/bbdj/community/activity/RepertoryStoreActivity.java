@@ -1,5 +1,6 @@
 package com.mt.bbdj.community.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 
 import com.flyco.tablayout.SlidingTabLayout;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.kongzue.dialog.v2.SelectDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.ExpressLogo;
@@ -33,6 +35,7 @@ import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.view.MarginDecoration;
+import com.mt.bbdj.baseconfig.view.MyDecoration;
 import com.mt.bbdj.baseconfig.view.MyPopuwindow;
 import com.mt.bbdj.community.adapter.RepertoryAdapter;
 import com.mt.bbdj.community.adapter.SimpleFragmentPagerAdapter;
@@ -85,6 +88,7 @@ public class RepertoryStoreActivity extends BaseActivity implements XRecyclerVie
     private String express_id = "";   //快递公司id
     private RepertoryAdapter mAdapter;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +96,8 @@ public class RepertoryStoreActivity extends BaseActivity implements XRecyclerVie
         ButterKnife.bind(this);
         initParams();
         initData();
-        initListener();
         initView();
+        initListener();
     }
 
     @Override
@@ -112,6 +116,74 @@ public class RepertoryStoreActivity extends BaseActivity implements XRecyclerVie
                 showSelectPop(view);
             }
         });
+
+        mAdapter.setOnItemClickListener(new RepertoryAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+
+            }
+
+            @Override
+            public void onItemDelate(int position) {
+                showSelectDialog(position);
+            }
+        });
+    }
+
+    private void showSelectDialog(int position) {
+        SelectDialog.show(this, "提示", "确定删除该数据吗", "确定",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteRecorde(position);   //删除该信息
+                        dialog.dismiss();
+                    }
+                }, "取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).setCanCancel(true);
+    }
+
+    private void deleteRecorde(int position) {
+        String package_id = mList.get(position).get("id");
+        Request<String> request = NoHttpRequest.confirmEnterStoreRequest(user_id, package_id);
+        mRequestQueue.add(1, request, new OnResponseListener<String>() {
+            @Override
+            public void onStart(int what) {
+
+            }
+
+            @Override
+            public void onSucceed(int what, Response<String> response) {
+                LogUtil.i("photoFile", "RepertoryStoreActivity::" + response.get());
+                try {
+
+                    JSONObject jsonObject = new JSONObject(response.get());
+                    String code = jsonObject.get("code").toString();
+                    String msg = jsonObject.get("msg").toString();
+
+                    if ("5001".equals(code)) {
+
+                        recyclerView.refresh();
+                    }
+                    ToastUtil.showShort(msg);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailed(int what, Response<String> response) {
+            }
+
+            @Override
+            public void onFinish(int what) {
+            }
+        });
+
     }
 
 
@@ -206,13 +278,15 @@ public class RepertoryStoreActivity extends BaseActivity implements XRecyclerVie
 
     private void initDataRecycler() {
         mList = new ArrayList<>();
-        mAdapter = new RepertoryAdapter(this, mList);
+        mAdapter = new RepertoryAdapter(this, mList,true);
         // initListData();
         recyclerView.setFocusable(false);
         recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setLoadingListener(this);
+        recyclerView.addItemDecoration(new MyDecoration(this, LinearLayoutManager.VERTICAL, Color.parseColor("#f4f4f4"), 1));
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(mAdapter);
+
     }
 
 
@@ -254,7 +328,8 @@ public class RepertoryStoreActivity extends BaseActivity implements XRecyclerVie
                             mList.clear();
                             mAdapter.notifyDataSetChanged();
                         }
-                        setPrintData(jsonObject);    //设置打印数据
+                        ToastUtil.showShort("揽收成功");
+                        //  setPrintData(jsonObject);    //设置打印数据
 
                     } else {
                         ToastUtil.showShort(msg);

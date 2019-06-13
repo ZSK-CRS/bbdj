@@ -299,28 +299,97 @@
 
     </FrameLayout>
 
-
-    <LinearLayout
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="10dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content">
 
-        <com.mt.bbdj.baseconfig.view.MyGridView
-            android:id="@+id/gv_com_first"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:horizontalSpacing="10dip"
-            android:listSelector="@null"
-            android:numColumns="4"
-            android:scrollbars="none"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="8dip">
+            android:layout_height="0dp"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
-        </com.mt.bbdj.baseconfig.view.MyGridView>
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text="快递寄出"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey_7"
+                android:layout_width="match_parent"
+                android:layout_height="25dp" />
 
-    </LinearLayout>
+            <com.mt.bbdj.baseconfig.view.MyGridView
+                android:id="@+id/gv_com_first"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="10dip"
+                android:listSelector="@null"
+                android:numColumns="4"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dip">
+
+            </com.mt.bbdj.baseconfig.view.MyGridView>
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text="快递存放"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey_7"
+                android:layout_width="match_parent"
+                android:layout_height="25dp" />
+
+            <com.mt.bbdj.baseconfig.view.MyGridView
+                android:id="@+id/gv_com_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:horizontalSpacing="10dip"
+                android:listSelector="@null"
+                android:numColumns="4"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dip">
+
+            </com.mt.bbdj.baseconfig.view.MyGridView>
+
+
+            <TextView
+                android:layout_marginLeft="10dp"
+                android:text="其他"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:textColor="@color/grey_7"
+                android:layout_width="match_parent"
+                android:layout_height="25dp" />
+
+            <com.mt.bbdj.baseconfig.view.MyGridView
+                android:id="@+id/gv_com_three"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:horizontalSpacing="10dip"
+                android:listSelector="@null"
+                android:numColumns="4"
+                android:scrollbars="none"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="8dip">
+
+            </com.mt.bbdj.baseconfig.view.MyGridView>
+
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
 
 
 </LinearLayout>

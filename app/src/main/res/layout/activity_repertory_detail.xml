@@ -123,6 +123,7 @@
                 android:text="提 货  码:"
                 android:textSize="15sp" />
 
+
             <TextView
                 android:id="@+id/tv_tag_number"
                 android:layout_width="match_parent"

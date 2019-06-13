@@ -50,6 +50,7 @@ import com.mt.bbdj.baseconfig.utls.DownloadUtil;
 import com.mt.bbdj.baseconfig.utls.FileUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
+import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
 import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
 import com.mt.bbdj.baseconfig.utls.StringUtil;
@@ -67,10 +68,13 @@ import com.mt.bbdj.community.activity.GlobalSearchActivity;
 import com.mt.bbdj.community.activity.MatterShopActivity;
 import com.mt.bbdj.community.activity.MessageAboutActivity;
 import com.mt.bbdj.community.activity.MessageManagerdActivity;
+import com.mt.bbdj.community.activity.MessageRechargePannelActivity;
 import com.mt.bbdj.community.activity.MoneyFormatManagerActivity;
 import com.mt.bbdj.community.activity.OpearteActivity;
 import com.mt.bbdj.community.activity.OutManagerActivity;
 import com.mt.bbdj.community.activity.OutManager_new_Activity;
+import com.mt.bbdj.community.activity.PannelRechargeActivity;
+import com.mt.bbdj.community.activity.RechargeActivity;
 import com.mt.bbdj.community.activity.RepertoryActivity;
 import com.mt.bbdj.community.activity.RepertoryStoreActivity;
 import com.mt.bbdj.community.activity.SearchPackageActivity;
@@ -113,6 +117,10 @@ public class ComFirstFragment extends BaseFragment {
 
     @BindView(R.id.gv_com_first)
     MyGridView mComGridView;
+    @BindView(R.id.gv_com_two)
+    MyGridView mComGridViewTwo;
+    @BindView(R.id.gv_com_three)
+    MyGridView mComGridViewThree;
     @BindView(R.id.com_ll_message_about)
     LinearLayout messageAbout;    //短信信息
     @BindView(R.id.com_ll_pannel_about)
@@ -148,6 +156,8 @@ public class ComFirstFragment extends BaseFragment {
 
 
     private List<HashMap<String, Object>> mList = new ArrayList<>();
+    private List<HashMap<String, Object>> mListTwo = new ArrayList<>();
+    private List<HashMap<String, Object>> mListThree = new ArrayList<>();
     private DaoSession mDaoSession;
     private UserBaseMessageDao mUserMessageDao;
     private RequestQueue mRequestQueue;
@@ -281,6 +291,8 @@ public class ComFirstFragment extends BaseFragment {
 
     private void initClick() {
         mComGridView.setOnItemClickListener(mGrideClickListener);
+        mComGridViewTwo.setOnItemClickListener(mGrideClickListener);
+        mComGridViewThree.setOnItemClickListener(mGrideClickListener);
         messageAbout.setOnClickListener(mOnClickListenre);
         pannelAbout.setOnClickListener(mOnClickListenre);
     }
@@ -313,13 +325,73 @@ public class ComFirstFragment extends BaseFragment {
     private AdapterView.OnItemClickListener mGrideClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            HashMap<String, Object> item = mList.get(position);
-            //处理点击实事件
-            handleItemClick(item);
+            switch (parent.getId()) {
+                case R.id.gv_com_first:
+                    handleItemClickFirst(position);
+                    break;
+                case R.id.gv_com_two:
+                    handleItemClickTwo(position);
+                    break;
+                case R.id.gv_com_three:
+                    handleItemClickThree(position);
+                    break;
+            }
+
         }
     };
 
-    private void handleItemClick(HashMap<String, Object> item) {
+    private void handleItemClickThree(int position) {
+        HashMap<String, Object> item = mListThree.get(position);
+        String id = item.get("id").toString();
+        switch (id) {
+            case "0":       //物流查询
+                handleSearchPackageEvent();
+                break;
+            case "1":       //交接管理
+                handleChangeManagerEvent();
+                break;
+            case "2":       //财务管理
+                handleMoneyManagerEvent();
+                break;
+            case "3":       //客户管理
+                handleClientManagerEvent();
+                break;
+            case "4":       //短信管理
+                handleMessageEvent();
+                break;
+            case "5":       //物料商城
+                handleShopEvent();
+                break;
+            case "6":      //投诉
+                handleComplainEvent();
+                break;
+            case "7":      //操作手册
+                handleOperateEvent();
+                break;
+        }
+    }
+
+    private void handleItemClickTwo(int position) {
+        HashMap<String, Object> item = mListTwo.get(position);
+        String id = item.get("id").toString();
+        switch (id) {
+            case "0":     //寄存管理
+                //ToastUtil.showShort("暂不开放");
+               handleStoreManageEvent();
+                break;
+            case "1":       //入库管理
+                //ToastUtil.showShort("暂不开放！");
+                handleEnterManagerEvent();
+                break;
+            case "2":       //出库管理
+                // ToastUtil.showShort("暂不开放！");
+                  handleOutManagerEvent();
+                break;
+        }
+    }
+
+    private void handleItemClickFirst(int position) {
+        HashMap<String, Object> item = mList.get(position);
         String id = item.get("id").toString();
         switch (id) {
             case "0":       //寄件管理
@@ -327,44 +399,7 @@ public class ComFirstFragment extends BaseFragment {
                 break;
             case "1":       //手动寄件
                 handleSendByhandEvent();
-                break;
-            case "2":       //物流查询
-                handleSearchPackageEvent();
-                break;
-            case "3":       //交接管理
-                handleChangeManagerEvent();
-                break;
-            case "4":       //入库管理
-                // ToastUtil.showShort("暂不开放！");
-                handleEnterManagerEvent();
-                break;
-            case "5":       //出库管理
-                // ToastUtil.showShort("暂不开放！");
-                 handleOutManagerEvent();
-                break;
-            case "6":       //财务管理
-                handleMoneyManagerEvent();
-                break;
-            case "7":       //客户管理
-                handleClientManagerEvent();
-                break;
-            case "8":       //短信管理
-                handleMessageEvent();
-                break;
-            case "9":       //物料商城
-                handleShopEvent();
-                break;
-            case "10":      //投诉
-                handleComplainEvent();
-                break;
-            case "11":      //操作手册
-                handleOperateEvent();
-                break;
-            case "12":     //寄存管理
-                handleStoreManageEvent();
-                break;
         }
-
     }
 
     private void handleOperateEvent() {
@@ -437,82 +472,120 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void initView() {
-        for (int i = 0; i < 13; i++) {
+
+        setFirstItemData();    //设置快递寄出
+        setTwoItemData();    //设置快递存放
+        setThreeItemData();    //设置其他
+
+
+    }
+
+    private void setThreeItemData() {
+        for (int i = 0; i < 8; i++) {
+            HashMap<String, Object> item = new HashMap<>();
+
+            if (i == 0) {
+                item.put("id", "0");
+                item.put("name", "物流查询");
+                item.put("ic", R.drawable.ic_main_wuliuchaxun);
+            }
+            if (i == 1) {
+                item.put("id", "1");
+                item.put("name", "交接管理");
+                item.put("ic", R.drawable.ic_jiaojieguanli);
+            }
+
+
+            if (i == 2) {
+                item.put("id", "2");
+                item.put("name", "财务管理");
+                item.put("ic", R.drawable.ic_money_manager);
+            }
+            if (i == 3) {
+                item.put("id", "3");
+                item.put("name", "客户管理");
+                item.put("ic", R.drawable.ic_main_kehuguanli);
+            }
+            if (i == 4) {
+                item.put("id", "4");
+                item.put("name", "短信管理");
+                item.put("ic", R.drawable.ic_main_duanxin);
+            }
+            if (i == 5) {
+                item.put("id", "5");
+                item.put("name", "物料商城");
+                item.put("ic", R.drawable.ic_main_wuliao);
+            }
+            if (i == 6) {
+                item.put("id", "6");
+                item.put("name", "投诉管理");
+                item.put("ic", R.drawable.ic_main_tousu);
+            }
+            if (i == 7) {
+                item.put("id", "7");
+                item.put("name", "操作手册");
+                item.put("ic", R.drawable.ic_main_caozuo);
+            }
+
+            if (i == 8) {
+                item.put("id", "8");
+                item.put("name", "寄存管理");
+                item.put("ic", R.drawable.ic_money_manager);
+            }
+
+            mListThree.add(item);
+        }
+        MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter(mListThree);
+        mComGridViewThree.setAdapter(myGridViewAdapter);
+
+    }
+
+    private void setTwoItemData() {
+        for (int i = 0; i < 3; i++) {
+            HashMap<String, Object> item = new HashMap<>();
+
+            if (i == 0) {
+                item.put("id", "0");
+                item.put("name", "寄存管理");
+                item.put("ic", R.drawable.ic_money_manager);
+            }
+
+            if (i == 1) {
+                item.put("id", "1");
+                item.put("name", "入库管理");
+                item.put("ic", R.drawable.ic_main_ruku);
+            }
+            if (i == 2) {
+                item.put("id", "2");
+                item.put("name", "出库管理");
+                item.put("ic", R.drawable.ic_main_chuku);
+            }
+
+            mListTwo.add(item);
+        }
+        MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter(mListTwo);
+        mComGridViewTwo.setAdapter(myGridViewAdapter);
+
+    }
+
+    private void setFirstItemData() {
+        for (int i = 0; i < 2; i++) {
             HashMap<String, Object> item = new HashMap<>();
             if (i == 0) {
                 item.put("id", "0");
                 item.put("name", "寄件管理");
                 item.put("ic", R.drawable.ic_main_jijianguanli);
             }
-
             if (i == 1) {
                 item.put("id", "1");
-                item.put("name", "手动寄件");
+                item.put("name", "客户寄件");
                 item.put("ic", R.drawable.ic_main_shoudongjijian);
             }
-
-            if (i == 2) {
-                item.put("id", "2");
-                item.put("name", "物流查询");
-                item.put("ic", R.drawable.ic_main_wuliuchaxun);
-            }
-
-            if (i == 3) {
-                item.put("id", "3");
-                item.put("name", "交接管理");
-                item.put("ic", R.drawable.ic_jiaojieguanli);
-            }
-            if (i == 4) {
-                item.put("id", "4");
-                item.put("name", "入库管理");
-                item.put("ic", R.drawable.ic_main_ruku);
-            }
-            if (i == 5) {
-                item.put("id", "5");
-                item.put("name", "出库管理");
-                item.put("ic", R.drawable.ic_main_chuku);
-            }
-            if (i == 6) {
-                item.put("id", "6");
-                item.put("name", "财务管理");
-                item.put("ic", R.drawable.ic_money_manager);
-            }
-            if (i == 7) {
-                item.put("id", "7");
-                item.put("name", "客户管理");
-                item.put("ic", R.drawable.ic_main_kehuguanli);
-            }
-            if (i == 8) {
-                item.put("id", "8");
-                item.put("name", "短信管理");
-                item.put("ic", R.drawable.ic_main_duanxin);
-            }
-            if (i == 9) {
-                item.put("id", "9");
-                item.put("name", "物料商城");
-                item.put("ic", R.drawable.ic_main_wuliao);
-            }
-            if (i == 10) {
-                item.put("id", "10");
-                item.put("name", "投诉管理");
-                item.put("ic", R.drawable.ic_main_tousu);
-            }
-            if (i == 11) {
-                item.put("id", "11");
-                item.put("name", "操作手册");
-                item.put("ic", R.drawable.ic_main_caozuo);
-            }
-
-            if (i == 12) {
-                item.put("id", "12");
-                item.put("name", "寄存管理");
-                item.put("ic", R.drawable.ic_money_manager);
-            }
-
             mList.add(item);
         }
         MyGridViewAdapter myGridViewAdapter = new MyGridViewAdapter(mList);
         mComGridView.setAdapter(myGridViewAdapter);
+
     }
 
     private OnResponseListener<String> mResponseListener = new OnResponseListener<String>() {
@@ -536,7 +609,7 @@ public class ComFirstFragment extends BaseFragment {
             } catch (JSONException e) {
                 e.printStackTrace();
                 // dialogLoading.cancel();
-                ToastUtil.showShort("更新失败！");
+                ToastUtil.showShort(e.getMessage());
             }
             //  dialogLoading.cancel();
         }
@@ -576,6 +649,7 @@ public class ComFirstFragment extends BaseFragment {
         String face_number = dataObj.getString("face_number");   //面单余额
         String username = dataObj.getString("username");   //位置
         String money = dataObj.getString("money");   //账户余额
+        String min_money = dataObj.getString("min_money");   //警戒余额
         String birthday = dataObj.getString("birthday");   //入驻天数
         String version_number = dataObj.getString("version_number");   //版本号
         String prohibit = dataObj.getString("prohibit");   //状态 1：正常营业  其他：禁止登录
@@ -597,24 +671,95 @@ public class ComFirstFragment extends BaseFragment {
         editor.commit();
 
         if (!"1".equals(prohibit)) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                    .setMessage("您的驿站已禁止登录，如有疑问请与客服人员联系")
-                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                            Intent intent = new Intent(getActivity(),LoginActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
-                        }
-                    });
-            AlertDialog dialog = builder.create();
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.show();
-
+            //显示禁止登录
+            showProhibitDialog();
         } else {
-            upLoadNewVersion(version_number, version_url);    //更新最新版本
+            float moneyInt =IntegerUtil.getStringChangeToFloat(money);
+            float min_moneyInt =IntegerUtil.getStringChangeToFloat(min_money);
+            //账户余额不足
+            if (moneyInt < min_moneyInt) {
+                showNOmoneyAlertDialog(moneyInt,min_moneyInt);
+            } else {
+                float messageNumber = IntegerUtil.getStringChangeToFloat(sms_number);
+                if (messageNumber <= 0) {
+                    showNoMessageAlterDialog();    //短信不足
+                } else {
+                    float face_numberNumber = IntegerUtil.getStringChangeToFloat(face_number);
+                    if (face_numberNumber <= 0) {
+                        showNoPannelDialog();       //面单不足
+                    } else {
+                        upLoadNewVersion(version_number, version_url);    //更新最新版本
+                    }
+                }
+            }
         }
+
+    }
+
+    private void showNoPannelDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("面单数量不足，请充值")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),PannelRechargeActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showNoMessageAlterDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("短信数量不足，请充值")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),MessageRechargePannelActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+
+    }
+
+    private void showNOmoneyAlertDialog(float moneyInt, float min_moneyInt) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("当前账户余额为"+moneyInt+",低于警戒余额"+min_moneyInt+",请先充值")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),RechargeActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
+    }
+
+    private void showProhibitDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
+                .setMessage("您的驿站已禁止登录，如有疑问请与客服人员联系")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Intent intent = new Intent(getActivity(),LoginActivity.class);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.setCancelable(false);
+        dialog.show();
     }
 
     private void upLoadNewVersion(String version_number, String version_url) {

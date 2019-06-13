@@ -64,8 +64,8 @@
                 android:paddingRight="10dp">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="27dp"
+                    android:layout_height="27dp"
                     android:background="@drawable/ic_picture"
                     android:scaleType="centerInside" />
 
@@ -300,63 +300,6 @@
                 android:orientation="vertical">
 
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/ic_video_"
-                        android:scaleType="centerInside" />
-
-                    <TextView
-                        android:id="@+id/tv_video_one"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="5dp"
-                        android:text="如何在兵兵到家公众号查询物流信息"
-                        android:textColor="@color/grey_7" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/splite_view" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_gravity="center"
-                        android:background="@drawable/ic_video_"
-                        android:scaleType="centerInside" />
-
-                    <TextView
-                        android:id="@+id/tv_video_two"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:gravity="center_vertical"
-                        android:paddingLeft="5dp"
-                        android:text="如何在兵兵到家app查询物流信息"
-                        android:textColor="@color/grey_7" />
-
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/splite_view" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -417,6 +360,65 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="@color/splite_view" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_video_"
+                        android:scaleType="centerInside" />
+
+                    <TextView
+                        android:id="@+id/tv_video_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:text="如何在兵兵到家公众号查询物流信息"
+                        android:textColor="@color/grey_7" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/splite_view" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_video_"
+                        android:scaleType="centerInside" />
+
+                    <TextView
+                        android:id="@+id/tv_video_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:text="如何在兵兵到家app查询物流信息"
+                        android:textColor="@color/grey_7" />
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/splite_view" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

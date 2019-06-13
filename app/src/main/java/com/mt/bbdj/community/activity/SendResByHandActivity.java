@@ -636,6 +636,14 @@ public class SendResByHandActivity extends BaseActivity {
             }
         }
         goodsAdapter.notifyDataSetChanged();
+
+        if (mGoodsData.size() != 0) {
+            type_id = mGoodsData.get(0).get("goods_id");
+            String name = mGoodsData.get(0).get("name");
+            mWeight = "1";
+            tvGoodsSelect.setText(name+" "+mWeight+"kg");
+        }
+
     }
 
     private void initPopuStyle() {

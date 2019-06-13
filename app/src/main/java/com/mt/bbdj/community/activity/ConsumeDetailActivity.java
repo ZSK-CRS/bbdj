@@ -12,6 +12,7 @@ import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.StringUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.OnResponseListener;
@@ -116,22 +117,25 @@ public class ConsumeDetailActivity extends BaseActivity {
                     String msg = jsonObject.get("msg").toString();
                     if ("5001".equals(code)) {
                         JSONObject dataObj = jsonObject.getJSONObject("data");
-                        JSONObject peopleObj = dataObj.getJSONObject("people");
+
+                        String types = dataObj.getString("types");
 
                         String con_amount = dataObj.getString("con_amount");
+                        con_amount = StringUtil.handleNullResultForNumber(con_amount);
                         String budget = dataObj.getString("budget");
                         if ("1".equals(budget)) {
-                            con_amount = "-" + con_amount;
+                            con_amount = "-" + con_amount + "元";
                         } else {
-                            con_amount = "+" + con_amount;
+                            con_amount = "+" + con_amount + "元";
                         }
                         tv_shouzhi.setText(con_amount);
-                        if (peopleObj == null) {
-                            ll_message.setVisibility(View.GONE);
-                        } else {
-                            ll_message.setVisibility(View.VISIBLE);
 
+                        if ("1".equals(types) || "2".equals(types)) {
+                            ll_message.setVisibility(View.VISIBLE);
+                            JSONObject peopleObj = dataObj.getJSONObject("people");
                             setMessage(peopleObj);
+                        } else {
+                            ll_message.setVisibility(View.GONE);
                         }
 
                     } else {
@@ -170,20 +174,25 @@ public class ConsumeDetailActivity extends BaseActivity {
         String goods_name = peopleObj.getString("goods_name");
         String content = peopleObj.getString("content");
 
-        tv_dingdan.setText(order_number);
-        tv_yundan.setText(waybill_number);
-        tvSendName.setText(send_name);
-        tvSendPhone.setText(send_phone);
-        tvSendAddress.setText(send_address);
+        tv_dingdan.setText(StringUtil.handleNullResultForString(order_number));
+        tv_yundan.setText(StringUtil.handleNullResultForString(waybill_number));
+        tvSendName.setText(StringUtil.handleNullResultForString(send_name));
+        tvSendPhone.setText(StringUtil.handleNullResultForString(send_phone));
+        String address = StringUtil.handleNullResultForString(send_address);
+        tvSendAddress.setText(StringUtil.handleNullResultForString(send_address));
 
-        tvReceiveName.setText(collect_name);
-        tvReceiveAddress.setText(collect_address);
-        tvReceivePhone.setText(collect_phone);
+        tvReceiveName.setText(StringUtil.handleNullResultForString(collect_name));
+        tvReceiveAddress.setText(StringUtil.handleNullResultForString(collect_address));
+        tvReceivePhone.setText(StringUtil.handleNullResultForString(collect_phone));
 
-        tvGoodsName.setText(goods_name);
-        tvGoodsWeiht.setText(goods_weight + "kg");
-        tvMarkTitle.setText(content);
-
+        if ("null".equals(dot_weight) || null == dot_weight) {
+            dot_weight = "(快递公司未返回重量)";
+        } else {
+            dot_weight = dot_weight + "kg" + "(快递公司返回重量)";
+        }
+        tvGoodsName.setText(StringUtil.handleNullResultForString(goods_name));
+        tvGoodsWeiht.setText(dot_weight);
+        tvMarkTitle.setText(StringUtil.handleNullResultForString(content));
 
     }
 

@@ -569,6 +569,7 @@ public class SendResByHand_Activity extends BaseActivity {
 
         setLogo();   //设置logo
         goodsAdapter.notifyDataSetChanged();
+
     }
 
     private void setLogo() {

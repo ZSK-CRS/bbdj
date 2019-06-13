@@ -840,6 +840,29 @@ public class NoHttpRequest {
     }
 
     /**
+     * 催单
+     *
+     * @param user_id    用户id
+     * @return
+     */
+    public static Request<String> getHandleEventRequest(String user_id, String  mail_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_HANDLE
+                + InterApi.ACTION_HANDLE_FINISH, RequestMethod.POST);
+        request.add("method", InterApi.ACTION_HANDLE_FINISH);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("distributor_id", user_id);
+        request.add("mail_id", mail_id);
+        return request;
+    }
+
+    /**
      * 待打印请求
      *
      * @param user_id    用户id
@@ -1982,6 +2005,30 @@ public class NoHttpRequest {
      * @return
      */
     public static Request<String> confirmEnterStoreRequest(String user_id,String package_id) {
+        String timeStamp = DateUtil.getCurrentTimeStamp();
+        String randomStr = StringUtil.getRandomNumberString(7);
+        String encryption = StringUtil.splitStringFromLast(timeStamp, 4);
+        String signature = StringUtil.getSignatureString(timeStamp, randomStr, encryption);
+        Request<String> request = NoHttp.createStringRequest(InterApi.SERVER_ADDRESS_ENTER
+                + InterApi.ACTION_DELETE_ENTER_STORE, RequestMethod.GET);
+        request.add("method", InterApi.ACTION_DELETE_ENTER_STORE);
+        request.add("signature", signature);
+        request.add("timeStamp", timeStamp);     //时间戳
+        request.add("randomStr", randomStr);     //随机值
+        request.add("Encryption", encryption);    //加密值
+        request.add("distributor_id", user_id);
+        request.add("package_id", package_id);
+        return request;
+    }
+
+
+    /**
+     * 去除业务员入错的包裹
+     * @param user_id   用户id
+     * @param package_id  入库的数据
+     * @return
+     */
+    public static Request<String> deleteEnterRecorde(String user_id,String package_id) {
         String timeStamp = DateUtil.getCurrentTimeStamp();
         String randomStr = StringUtil.getRandomNumberString(7);
         String encryption = StringUtil.splitStringFromLast(timeStamp, 4);

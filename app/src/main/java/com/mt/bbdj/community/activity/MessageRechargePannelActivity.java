@@ -109,11 +109,16 @@ public class MessageRechargePannelActivity extends BaseActivity {
         }
     }
 
+
     private void rechargeMessage() {
         String user_id = "";
         List<UserBaseMessage> list = mUserMessageDao.queryBuilder().list();
         if (list != null && list.size() != 0) {
             user_id = list.get(0).getUser_id();
+        }
+        if ("0".equals(message_id)) {
+            ToastUtil.showShort("请选择充值条数");
+            return ;
         }
         Request<String> request = NoHttpRequest.getRechargeMoneyRequest(user_id,message_id);
         mRequestQueue.add(RECHARGE_MESSAGE, request,mResponseListener);

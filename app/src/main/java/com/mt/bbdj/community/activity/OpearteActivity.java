@@ -62,31 +62,18 @@ public class OpearteActivity extends BaseActivity {
     }
 
     private void initParams() {
-
-        setLayoutView(); //设置界面属性
+        layout_teacher.setVisibility(View.VISIBLE);
+        layout_video.setVisibility(View.GONE);
     }
 
-    //设置界面属性
-    private void setLayoutView() {
-        if (isPictureShow) {
-            layout_teacher.setVisibility(View.VISIBLE);
-        } else {
-            layout_teacher.setVisibility(View.GONE);
-        }
 
-        if (isVideoShow) {
-            layout_video.setVisibility(View.VISIBLE);
-        } else {
-            layout_video.setVisibility(View.GONE);
-        }
-    }
 
     private boolean isPictureShow = true;
     private boolean isVideoShow = false;
 
     @OnClick({R.id.iv_back, R.id.ll_picture_teacher, R.id.ll_video_teacher, R.id.tv_picture_one,
             R.id.tv_picture_two, R.id.tv_picture_three, R.id.tv_picture_four, R.id.tv_picture_five,
-            R.id.tv_picture_six,R.id.tv_video_one, R.id.tv_video_two, R.id.tv_video_three, R.id.tv_video_four,
+            R.id.tv_picture_six, R.id.tv_video_one, R.id.tv_video_two, R.id.tv_video_three, R.id.tv_video_four,
             R.id.tv_video_five})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -94,12 +81,10 @@ public class OpearteActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.ll_picture_teacher:
-                isPictureShow = !isPictureShow;
-                setLayoutView();
+                setPictureView();
                 break;
             case R.id.ll_video_teacher:
-                isVideoShow = !isVideoShow;
-                setLayoutView();
+                setVideoView();
                 break;
             case R.id.tv_picture_one:
                 OpearPictureActivity.actionTo(this, 1);
@@ -120,21 +105,43 @@ public class OpearteActivity extends BaseActivity {
                 OpearPictureActivity.actionTo(this, 6);
                 break;
             case R.id.tv_video_one:
-                OperaVideoActivity.actionTo(this,OperaterUrl.VIDEO_1,"如何在兵兵到家公众号查询物流信息");
+                OperaVideoActivity.actionTo(this, OperaterUrl.VIDEO_1, "如何在兵兵到家公众号查询物流信息");
                 break;
             case R.id.tv_video_two:
-                OperaVideoActivity.actionTo(this,OperaterUrl.VIDEO_2,"如何在兵兵到家app查询物流信息");
+                OperaVideoActivity.actionTo(this, OperaterUrl.VIDEO_2, "如何在兵兵到家app查询物流信息");
                 break;
             case R.id.tv_video_three:
-                OperaVideoActivity.actionTo(this,OperaterUrl.VIDEO_3,"如何在门店下单寄件");
+                OperaVideoActivity.actionTo(this, OperaterUrl.VIDEO_3, "如何在门店下单寄件");
                 break;
             case R.id.tv_video_four:
-                OperaVideoActivity.actionTo(this,OperaterUrl.VIDEO_4,"如何在兵兵到家app下单寄件");
+                OperaVideoActivity.actionTo(this, OperaterUrl.VIDEO_4, "如何在兵兵到家app下单寄件");
                 break;
             case R.id.tv_video_five:
-                OperaVideoActivity.actionTo(this,OperaterUrl.VIDEO_5,"如何在兵兵到家app上交接管理");
+                OperaVideoActivity.actionTo(this, OperaterUrl.VIDEO_5, "如何在兵兵到家app上交接管理");
                 break;
         }
+    }
+
+    private void setVideoView() {
+        if (isVideoShow == true) {
+            isVideoShow = false;
+            layout_video.setVisibility(View.GONE);
+        } else {
+            isVideoShow = true;
+            layout_video.setVisibility(View.VISIBLE);
+        }
+        layout_teacher.setVisibility(View.GONE);
+    }
+
+    private void setPictureView() {
+        if (isPictureShow == true) {
+            isPictureShow = false;
+            layout_teacher.setVisibility(View.GONE);
+        } else {
+            isPictureShow = true;
+            layout_teacher.setVisibility(View.VISIBLE);
+        }
+        layout_video.setVisibility(View.GONE);
     }
 
 }

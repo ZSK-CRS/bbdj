@@ -82,7 +82,7 @@ public class OpearPictureActivity extends BaseActivity {
     }
 
     private void setPictrure() {
-        imageView1.centerCrop().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url1, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
+        imageView1.fitCenter().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url1, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
             if (isComplete) {
                 progressView1.setVisibility(View.GONE);
             } else {
@@ -91,16 +91,17 @@ public class OpearPictureActivity extends BaseActivity {
             }
         });
 
-        imageView2.centerCrop().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url2, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
+        imageView2.fitCenter().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url2, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
             if (isComplete) {
                 progressView2.setVisibility(View.GONE);
             } else {
                 progressView2.setVisibility(View.VISIBLE);
                 progressView2.setProgress(percentage);
+
             }
         });
 
-        imageView3.centerCrop().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url3, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
+        imageView3.fitCenter().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url3, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
             if (isComplete) {
                 progressView3.setVisibility(View.GONE);
             } else {
@@ -109,7 +110,7 @@ public class OpearPictureActivity extends BaseActivity {
             }
         });
 
-        imageView4.centerCrop().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url4, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
+        imageView4.fitCenter().error(R.mipmap.image_load_err).diskCacheStrategy(DiskCacheStrategy.NONE).load(url4, R.color.placeholder, (isComplete, percentage, bytesRead, totalBytes) -> {
             if (isComplete) {
                 progressView4.setVisibility(View.GONE);
             } else {
