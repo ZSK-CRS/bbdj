@@ -556,6 +556,7 @@ public class RegisterCompleteActivity extends BaseActivity {
 
 
     private void handleIdcardPicture(Intent data) {
+
         final String filePath = CameraActivity.getImagePath(data);
         Glide.with(this)
                 .load(filePath)
@@ -595,6 +596,7 @@ public class RegisterCompleteActivity extends BaseActivity {
             compressFile(pickPath);
             return;
         }
+
         Durban.with(RegisterCompleteActivity.this)
                 .requestCode(PHOTORESOULT)
                 .statusBarColor(ContextCompat.getColor(RegisterCompleteActivity.this, R.color.colorPrimary))

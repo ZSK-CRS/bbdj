@@ -21,6 +21,7 @@ public class SoundHelper {
     private int idReceive;
     private int idRepeat;
     private int idSuccess;
+    private int idNotify;
     private static SoundHelper helper;
 
     @SuppressLint("NewApi")
@@ -39,6 +40,7 @@ public class SoundHelper {
         idReceive = soundPool.load(context, R.raw.mp_promit, 1);
         idRepeat = soundPool.load(context, R.raw.reapeat, 1);
         idSuccess = soundPool.load(context, R.raw.success, 1);
+        idNotify = soundPool.load(context, R.raw.beep, 1);
     }
 
     public static void  init() {
@@ -72,7 +74,7 @@ public class SoundHelper {
 
     //入库成功提示音
     public void playNotifiSuccessSound() {
-        soundPool.play(idSuccess,1,1,10,0,1);
+        soundPool.play(idNotify,1,1,10,0,1);
     }
 
     public void release() {

@@ -17,6 +17,7 @@ import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
+import com.mt.bbdj.baseconfig.internet.InterApi;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.internet.RetrofitApi;
 import com.mt.bbdj.baseconfig.internet.RetrofitConfig;
@@ -116,7 +117,7 @@ public class QuotedPriceActivity extends BaseActivity {
 
     private void requestClearType() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -230,9 +231,8 @@ public class QuotedPriceActivity extends BaseActivity {
     }
 
     private void commitPrice() {
-        dialogLoading = WaitDialog.show(this, "提交中...").setCanCancel(true);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -242,6 +242,12 @@ public class QuotedPriceActivity extends BaseActivity {
 
         String commodity_id = getGoodsId();
         String goods_number = getGoodsNumber();
+
+        if ("".equals(commodity_id) || "".equals(goods_number)) {
+            ToastUtil.showShort("请选择干洗类目");
+            return ;
+        }
+        dialogLoading = WaitDialog.show(this, "提交中...").setCanCancel(true);
         //传入请求参数
         Call<ResponseBody> call = retrofitApi.commitGoodsCategory(requestMap, orders_id,commodity_id,goods_number);
         call.enqueue(new Callback<ResponseBody>() {
@@ -283,7 +289,10 @@ public class QuotedPriceActivity extends BaseActivity {
             }
         }
         String result = sb.toString();
-        String realResult = result.substring(0,result.lastIndexOf(","));
+        String realResult = "";
+        if (result.length() != 0) {
+           realResult = result.substring(0,result.lastIndexOf(","));
+        }
         return realResult;
     }
 
@@ -296,7 +305,11 @@ public class QuotedPriceActivity extends BaseActivity {
             }
         }
         String result = sb.toString();
-        String realResult = result.substring(0,result.lastIndexOf(","));
+        String realResult = "";
+        if (result.length() != 0) {
+           realResult = result.substring(0,result.lastIndexOf(","));
+        }
+
         return realResult;
     }
 }

@@ -17,6 +17,7 @@ import com.mt.bbdj.baseconfig.base.BaseActivity;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
+import com.mt.bbdj.baseconfig.internet.InterApi;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.internet.RetrofitApi;
 import com.mt.bbdj.baseconfig.internet.RetrofitConfig;
@@ -206,7 +207,7 @@ public class WaterOrderDetailActivity extends BaseActivity {
 
     private void confirmWaterSend() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -247,7 +248,7 @@ public class WaterOrderDetailActivity extends BaseActivity {
 
     private void confirmWaterReive() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

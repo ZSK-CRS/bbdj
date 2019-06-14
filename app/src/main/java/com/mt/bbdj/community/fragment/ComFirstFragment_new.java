@@ -1,48 +1,70 @@
 package com.mt.bbdj.community.fragment;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSmoothScroller;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.simonpercic.oklog3.OkLogInterceptor;
 import com.jcodecraeer.xrecyclerview.ArrowRefreshHeader;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.kongzue.dialog.v2.MessageDialog;
 import com.mt.bbdj.R;
+import com.mt.bbdj.baseconfig.activity.LoginActivity;
 import com.mt.bbdj.baseconfig.application.MyApplication;
 import com.mt.bbdj.baseconfig.base.BaseFragment;
 import com.mt.bbdj.baseconfig.db.UserBaseMessage;
 import com.mt.bbdj.baseconfig.db.gen.DaoSession;
 import com.mt.bbdj.baseconfig.db.gen.UserBaseMessageDao;
+import com.mt.bbdj.baseconfig.internet.InterApi;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.internet.RetrofitApi;
 import com.mt.bbdj.baseconfig.internet.RetrofitConfig;
 import com.mt.bbdj.baseconfig.model.ProductModel;
 import com.mt.bbdj.baseconfig.utls.DateUtil;
+import com.mt.bbdj.baseconfig.utls.DialogUtil;
+import com.mt.bbdj.baseconfig.utls.DownloadUtil;
 import com.mt.bbdj.baseconfig.utls.FileUtil;
 import com.mt.bbdj.baseconfig.utls.GreenDaoManager;
 import com.mt.bbdj.baseconfig.utls.HkDialogLoading;
 import com.mt.bbdj.baseconfig.utls.IntegerUtil;
 import com.mt.bbdj.baseconfig.utls.LogUtil;
+import com.mt.bbdj.baseconfig.utls.SharedPreferencesUtil;
+import com.mt.bbdj.baseconfig.utls.StringUtil;
+import com.mt.bbdj.baseconfig.utls.SystemUtil;
 import com.mt.bbdj.baseconfig.utls.ToastUtil;
 import com.mt.bbdj.baseconfig.utls.TopSmoothScroller;
 import com.mt.bbdj.community.activity.CannelOrderActivity;
 import com.mt.bbdj.community.activity.ClearDetailActivity;
 import com.mt.bbdj.community.activity.ClearStateActivity;
 import com.mt.bbdj.community.activity.ConfirmReceiveActivity;
+import com.mt.bbdj.community.activity.IdentificationActivity;
 import com.mt.bbdj.community.activity.MailingdetailActivity;
 import com.mt.bbdj.community.activity.QuotedPriceActivity;
+import com.mt.bbdj.community.activity.RechargeActivity;
 import com.mt.bbdj.community.activity.SendResByHandActivity;
 import com.mt.bbdj.community.activity.WaterOrderDetailActivity;
 import com.mt.bbdj.community.adapter.WaitHandleAdapter;
 import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.rest.OnResponseListener;
+import com.yanzhenjie.nohttp.rest.Request;
 import com.yanzhenjie.nohttp.rest.RequestQueue;
 
 import org.json.JSONArray;
@@ -55,6 +77,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -71,6 +95,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ComFirstFragment_new extends BaseFragment implements View.OnClickListener, XRecyclerView.LoadingListener {
 
     private String APP_PATH_ROOT = FileUtil.getRootPath(MyApplication.getInstance()).getAbsolutePath() + File.separator + "bbdj";
+    final String fileName = "bbdj.apk";
 
     private WaitHandleAdapter mAdapter;
 
@@ -80,6 +105,8 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
     private RequestQueue mRequestQueue;
     private HkDialogLoading dialogLoading;
     private String user_id;
+    private int REQUEST_IDENTIFY = 101;
+    private final int REQUEST_PANNEL_MESSAGE = 102;    //获取面板信息
 
     private LinearLayout ll_express;    //快递
     private LinearLayout ll_water;    //桶装水
@@ -92,6 +119,9 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
     private int water_number;
     private int clean_number;
     private OkHttpClient okHttpClient;
+    private String mail_id;
+    private String version_url;
+    private ProgressDialog mProgressBar;
 
 
     public static ComFirstFragment_new getInstance() {
@@ -113,7 +143,10 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
     public void onResume() {
         super.onResume();
         recyclerView.refresh();
+        requestPannelMessage();
     }
+
+
 
     private void initListener() {
 
@@ -132,10 +165,9 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
             @Override
             public void OnReceiveExpressClick(int position) {
                 ProductModel productModel = mList.get(position);
-                String mail_id = productModel.getMail_id();
+                mail_id = productModel.getMail_id();
                 //验证身份寄件人是否实名
                 identifyPerson(mail_id);
-
             }
 
             @Override
@@ -174,7 +206,6 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
                 String order_id = productModel.getOrders_id();
                 confirmClearSend(order_id);
             }
-
 
             @Override
             public void OnConfirmRefauseClick(int position) {
@@ -269,7 +300,7 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
 
     private void confirmClearSend(String order_id) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -306,7 +337,7 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
 
     private void receiveClearOrder(String order_id) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -343,7 +374,7 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
 
     private void confirmWaterSend(String order_id) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -380,7 +411,7 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
 
     private void confirmWaterReive(String order_id) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -417,50 +448,11 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
         });
     }
 
-    //验证身份是否实名
-    private void identifyPerson(String mail_id) {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
-                .client(okHttpClient)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
 
-        RetrofitApi retrofitApi = retrofit.create(RetrofitApi.class);
-        Map<String, String> requestMap = NoHttpRequest.setHeaderParams(user_id);
-
-        //传入请求参数
-        Call<ResponseBody> call = retrofitApi.getOrderList(requestMap);
-
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
-                try {
-                    String json = response.body().string();
-                    LogUtil.d("ComFirstFragment_new::", json);
-                    JSONObject jsonObject = new JSONObject(json);
-                    String code = jsonObject.getString("code");
-                    String msg = jsonObject.getString("msg");
-                    if ("5001".equals(code)) {
-
-                    } else {
-                        ToastUtil.showShort(msg);
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                LogUtil.d("ComFirstFragment_new::", t.getMessage());
-            }
-        });
-    }
 
     private void requestData() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -582,16 +574,15 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
                 productModel.setClearStateName("等待用户取件");
             }
 
-
-            productModel.setShowType(i == 0);
-            productModel.setAccountPrice(zongjia);
-            productModel.setCreateTime(create_time);
-
             if("2".equals(overtime)) {
                 juli_time = "已超时"+juli_time;
             } else {
                 juli_time = "剩余"+juli_time;
             }
+
+            productModel.setShowType(i == 0);
+            productModel.setAccountPrice(zongjia);
+            productModel.setCreateTime(create_time);
             productModel.setJuli_time(juli_time);
             productModel.setOrderNumber(order_number);
             productModel.setClearState(stateTag);
@@ -657,6 +648,7 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
             } else {
                 juli_time = "剩余"+juli_time;
             }
+
             productModel.setWaterMessageList(list);
             productModel.setShowType(i == 0);
             productModel.setJuli_time(juli_time);
@@ -711,6 +703,64 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
         }
     }
 
+    private void identifyPerson(String mail_id) {
+        Request<String> request = NoHttpRequest.identifySealRequest(user_id, mail_id);
+        mRequestQueue.add(REQUEST_IDENTIFY, request, mresponseListener);
+    }
+
+    private OnResponseListener<String> mresponseListener = new OnResponseListener<String>() {
+        @Override
+        public void onStart(int what) {
+            //  dialogLoading.show();
+        }
+
+        @Override
+        public void onSucceed(int what, com.yanzhenjie.nohttp.rest.Response<String> response) {
+            LogUtil.i("photoFile", "WaitCollectFragment::" + response.get());
+            try {
+                JSONObject jsonObject = new JSONObject(response.get());
+                String code = jsonObject.get("code").toString();
+                if ("5001".equals(code)) {
+                    confirmReceive(mail_id);
+                } else {
+                    if (what == REQUEST_IDENTIFY) {
+                        //提示身份验证
+                        showPromitDialog();
+                    } else {
+                        ToastUtil.showShort("查询失败，请重试！");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //   dialogLoading.cancel();
+        }
+
+        @Override
+        public void onFailed(int what, com.yanzhenjie.nohttp.rest.Response<String> response) {
+            // dialogLoading.cancel();
+        }
+
+        @Override
+        public void onFinish(int what) {
+            //   dialogLoading.cancel();
+        }
+    };
+
+    private void showPromitDialog() {
+        MessageDialog.show(getActivity(), "提示", "身份未验证！", "知道了",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(getActivity(), IdentificationActivity.class);
+                        intent.putExtra("come_type", false);
+                        intent.putExtra("mail_id", mail_id);
+                       // intent.putExtra("send_name", send_name);
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+    }
 
     private void initView() {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
@@ -770,6 +820,179 @@ public class ComFirstFragment_new extends BaseFragment implements View.OnClickLi
                 mLinearLayoutManager.startSmoothScroll(s3);
                 break;
         }
+    }
+
+    private void requestPannelMessage() {
+        Request<String> request = NoHttpRequest.getPannelmessageRequest(user_id);
+        mRequestQueue.add(REQUEST_PANNEL_MESSAGE, request, mResponseListener);
+    }
+
+    private OnResponseListener<String> mResponseListener = new OnResponseListener<String>() {
+        @Override
+        public void onStart(int what) {
+            //   dialogLoading.show();
+        }
+
+        @Override
+        public void onSucceed(int what, com.yanzhenjie.nohttp.rest.Response<String> response) {
+            LogUtil.i("photoFile", "ComFirstFragment_new::" + response.get());
+            try {
+                JSONObject jsonObject = new JSONObject(response.get());
+                String code = jsonObject.get("code").toString();
+                String msg = jsonObject.get("msg").toString();
+                if ("5001".equals(code)) {
+                    handleEvent(what, jsonObject);
+                } else {
+                    ToastUtil.showShort(msg);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                // dialogLoading.cancel();
+                ToastUtil.showShort("更新失败！");
+            }
+            //  dialogLoading.cancel();
+        }
+
+        @Override
+        public void onFailed(int what, com.yanzhenjie.nohttp.rest.Response<String> response) {
+            //  dialogLoading.cancel();
+            ToastUtil.showShort("连接服务器失败！");
+        }
+
+        @Override
+        public void onFinish(int what) {
+            //  dialogLoading.cancel();
+        }
+    };
+
+    private void handleEvent(int what, JSONObject jsonObject) throws JSONException {
+        switch (what) {
+            case REQUEST_PANNEL_MESSAGE:      //更新主界面的信息
+                chnagePannelMessage(jsonObject);
+                break;
+        }
+    }
+
+    private void chnagePannelMessage(JSONObject jsonObject) throws JSONException {
+        JSONObject dataObj = jsonObject.getJSONObject("data");
+        String money = dataObj.getString("money");   //账户余额
+        String prohibit = dataObj.getString("prohibit");   //用户状态
+        String version_number = dataObj.getString("version_number");   //版本号
+        //版本地址
+        version_url = dataObj.getString("version_url");
+
+        money = StringUtil.handleNullResultForNumber(money);
+        float moneyNumber = Float.parseFloat(money);
+
+        if ("2".equals(prohibit)) {
+            SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
+            editor.remove("userName");
+            editor.remove("password");
+            editor.commit();
+            ToastUtil.showShort("您的驿站已禁止登录!");
+            Intent intent = new Intent(getActivity(),LoginActivity.class);
+            startActivity(intent);
+            getActivity().finish();
+        } else if (moneyNumber == 0) {
+            showRechargeDiaolog();   //提示充值
+        } else {
+            upLoadNewVersion(version_number, version_url);    //更新最新版本
+        }
+    }
+
+    private void showRechargeDiaolog() {
+        MessageDialog.show(getActivity(), "提示", "余额不足，请充值", "去充值", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(getActivity(),RechargeActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void upLoadNewVersion(String version_number, String version_url) {
+        String version = SystemUtil.getVersion(getActivity());
+        if (!version.equals(version_number)) {
+            showDownLoadDialog(version_url);
+        }
+    }
+
+    private void showDownLoadDialog(String version_url) {
+
+        DialogUtil.promptDialog1(getActivity(), "更新提示", "有新版本上线，请先更新！", DetermineListener, throwListener);
+    }
+
+
+    android.content.DialogInterface.OnClickListener DetermineListener = new android.content.DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            SharedPreferences.Editor editor = SharedPreferencesUtil.getEditor();
+           /* editor.putString("userName","");
+            editor.putString("password","");*/
+            editor.remove("userName");
+            editor.remove("password");
+            editor.commit();
+            download();
+        }
+    };
+    private void download() {
+        mProgressBar = new ProgressDialog(getActivity());
+        mProgressBar.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressBar.setTitle("正在下载");
+        mProgressBar.setMessage("请稍后...");
+        mProgressBar.setProgress(0);
+        mProgressBar.setMax(100);
+        mProgressBar.show();
+        mProgressBar.setCancelable(false);
+
+        DownloadUtil.get().download(version_url, APP_PATH_ROOT, fileName, new DownloadUtil.OnDownloadListener() {
+            @Override
+            public void onDownloadSuccess(File file) {
+                if (mProgressBar != null && mProgressBar.isShowing()) {
+                    mProgressBar.dismiss();
+                }
+                //下载完成进行相关逻辑操作
+                installApk(file);// 安装
+            }
+
+            @Override
+            public void onDownloading(int progress) {
+                mProgressBar.setProgress(progress);
+            }
+
+            @Override
+            public void onDownloadFailed(Exception e) {
+                //下载异常进行相关提示操作
+            }
+        });
+
+    }
+
+
+
+    android.content.DialogInterface.OnClickListener throwListener = new android.content.DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            dialog.dismiss();
+            dialogLoading.cancel();
+        }
+    };
+
+    private void installApk(File file) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            Uri photoURI = FileProvider.getUriForFile(getActivity(), MyApplication.getInstance().getPackageName() + ".provider", file);
+            intent.setDataAndType(photoURI, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        startActivity(intent);
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     private boolean isFresh = true;

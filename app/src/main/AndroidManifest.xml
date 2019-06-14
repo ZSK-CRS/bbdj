@@ -419,6 +419,7 @@
         <activity
             android:name=".community.activity.HomeServiceDetailActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".community.activity.DataActivity"></activity>
     </application>
 
 </manifest>

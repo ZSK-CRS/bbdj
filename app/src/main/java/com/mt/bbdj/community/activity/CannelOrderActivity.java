@@ -15,6 +15,7 @@ import com.github.simonpercic.oklog3.OkLogInterceptor;
 import com.kongzue.dialog.v2.WaitDialog;
 import com.mt.bbdj.R;
 import com.mt.bbdj.baseconfig.base.BaseActivity;
+import com.mt.bbdj.baseconfig.internet.InterApi;
 import com.mt.bbdj.baseconfig.internet.NoHttpRequest;
 import com.mt.bbdj.baseconfig.internet.RetrofitApi;
 import com.mt.bbdj.baseconfig.internet.RetrofitConfig;
@@ -211,7 +212,7 @@ public class CannelOrderActivity extends BaseActivity {
 
     private void getCannelCause() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -295,7 +296,7 @@ public class CannelOrderActivity extends BaseActivity {
     private void cannmeServiceOrder() {
         dialogLoading = WaitDialog.show(this, "提交中...").setCanCancel(true);
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(RetrofitConfig.BaseURL)
+                .baseUrl(InterApi.BaseURL)
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();

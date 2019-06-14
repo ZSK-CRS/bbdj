@@ -9,10 +9,12 @@ public class InterApi {
     /**
      * 服务器地址
      */
-    // public static final String SERVER_ADDRESS = "http://web2.mingtaikeji.cn/BbdjApi/";
-    public static final String SERVER_ADDRESS = "http://192.168.1.116/BbdjApi/";
+    // public static final String BaseURL = "http://192.168.1.116/";
+     public static final String BaseURL = "http://www.81dja.com/";
+    //  public static final String BaseURL = "http://cs.81bb.cn/";
+    public static final String SERVER_ADDRESS = BaseURL+"BbdjApi/";
     // public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";
-      public static final String SERVER_ADDRESS_ENTER = "http://www.81dja.com/Pie/";
+      public static final String SERVER_ADDRESS_ENTER = BaseURL+"Pie/";
  // public static final String SERVER_ADDRESS_ENTER = "http://192.168.1.116/Pie/";
     // public static final String SERVER_ADDRESS = "http://yanshi.81dja.com/BbdjApi/";
     //  public static final String SERVER_ADDRESS = "http://www.81dja.com/BbdjApi/";

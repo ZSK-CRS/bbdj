@@ -30,6 +30,7 @@ public class ConsumeRecordAdapter extends RecyclerView.Adapter<ConsumeRecordAdap
     public ConsumeRecordAdapter(Context context, List<HashMap<String,String>> mList) {
         this.mContext = context;
         this.mList = mList;
+        notifyDataSetChanged();
     }
     @Override
     public WithdrawViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -111,8 +111,9 @@ public class CommunityActivity extends BaseActivity {
     private File f = new File(Environment.getExternalStorageDirectory(), picturePath);
 
     private ComFirstFragment_new mComFirstFragment;     //社区版首页
+    private ComFirstFragment mComFirstFragment_old;     //社区版首页
     private ComOrderFragment mComOrderFragment;     //社区版订单
-    private ComDataFragment mComDataFragment;     //社区版数据
+   // private ComDataFragment mComDataFragment;     //社区版数据
     private ComMymessageFragment mComMymessageFragment;   //社区版我的
     private List<ExpressLogo> mExpressLogoList;
 
@@ -421,12 +422,12 @@ public class CommunityActivity extends BaseActivity {
         mtv_data.setSelected(true);
         imgbtn_data.setSelected(true);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (mComDataFragment == null) {
-            mComDataFragment = ComDataFragment.getInstance();
-            transaction.add(R.id.main_fl_parent, mComDataFragment);
+        if (mComFirstFragment_old == null) {
+            mComFirstFragment_old = ComFirstFragment.getInstance();
+            transaction.add(R.id.main_fl_parent, mComFirstFragment_old);
         }
         hideFragment(transaction);
-        transaction.show(mComDataFragment);
+        transaction.show(mComFirstFragment_old);
         transaction.commit();
     }
 
@@ -485,8 +486,8 @@ public class CommunityActivity extends BaseActivity {
         if (mComFirstFragment != null) {
             transaction.hide(mComFirstFragment);
         }
-        if (mComDataFragment != null) {
-            transaction.hide(mComDataFragment);
+        if (mComFirstFragment_old != null) {
+            transaction.hide(mComFirstFragment_old);
         }
         if (mComOrderFragment != null) {
             transaction.hide(mComOrderFragment);

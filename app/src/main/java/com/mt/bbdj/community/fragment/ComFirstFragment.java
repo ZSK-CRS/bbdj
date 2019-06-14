@@ -60,6 +60,7 @@ import com.mt.bbdj.community.activity.ChangeManagerdActivity;
 import com.mt.bbdj.community.activity.ClientManagerActivity;
 import com.mt.bbdj.community.activity.CommunityActivity;
 import com.mt.bbdj.community.activity.ComplainManagerdActivity;
+import com.mt.bbdj.community.activity.DataActivity;
 import com.mt.bbdj.community.activity.EnterManagerActivity;
 import com.mt.bbdj.community.activity.GlobalSearchActivity;
 import com.mt.bbdj.community.activity.MatterShopActivity;
@@ -252,6 +253,7 @@ public class ComFirstFragment extends BaseFragment {
         requestPannelMessage();
     }
 
+
     private void requestPannelMessage() {
         Request<String> request = NoHttpRequest.getPannelmessageRequest(user_id);
         mRequestQueue.add(REQUEST_PANNEL_MESSAGE, request, mResponseListener);
@@ -356,8 +358,17 @@ public class ComFirstFragment extends BaseFragment {
                 //ToastUtil.showShort("该功能暂未开放！");
                 showDownLoadDialog("");
                 break;
+            case "12":      //数据
+                //ToastUtil.showShort("该功能暂未开放！");
+                handleData();
+                break;
         }
 
+    }
+
+    private void handleData() {
+        Intent intent = new Intent(getActivity(),DataActivity.class);
+        startActivity(intent);
     }
 
     private void handleOutManagerEvent() {
@@ -418,7 +429,7 @@ public class ComFirstFragment extends BaseFragment {
     }
 
     private void initView() {
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 13; i++) {
             HashMap<String, Object> item = new HashMap<>();
             if (i == 0) {
                 item.put("id", "0");
@@ -482,6 +493,11 @@ public class ComFirstFragment extends BaseFragment {
                 item.put("id", "11");
                 item.put("name", "操作手册");
                 item.put("ic", R.drawable.ic_main_caozuo);
+            }
+            if (i == 12) {
+                item.put("id", "12");
+                item.put("name", "数据");
+                item.put("ic", R.drawable.ic_money_manager);
             }
 
             mList.add(item);
@@ -576,7 +592,7 @@ public class ComFirstFragment extends BaseFragment {
     private void upLoadNewVersion(String version_number, String version_url) {
         String version = SystemUtil.getVersion(getActivity());
         if (!version.equals(version_number)) {
-            showDownLoadDialog(version_url);
+           // showDownLoadDialog(version_url);
         }
     }
 
@@ -599,7 +615,6 @@ public class ComFirstFragment extends BaseFragment {
         WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.width = (int) (dm.widthPixels * 0.85);
         dialog.setCanceledOnTouchOutside(true);
-
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().setContentView(view);
       //  DialogUtil.promptDialog1(getActivity(), "更新提示", "有新版本上线，请先更新！", DetermineListener, throwListener);
@@ -615,7 +630,7 @@ public class ComFirstFragment extends BaseFragment {
             editor.remove("userName");
             editor.remove("password");
             editor.commit();
-            download();
+          //  download();
         }
     };
 
